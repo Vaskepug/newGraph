@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/brick.png</file>
+        <file>icons/circle.png</file>
+        <file>icons/cross.png</file>
+        <file>icons/crossed.png</file>
+        <file>icons/exit.png</file>
+        <file>icons/grid.png</file>
+        <file>icons/m.png</file>
+        <file>icons/middle.png</file>
+        <file>icons/minus.png</file>
+        <file>icons/plus.png</file>
+        <file>icons/save.png</file>
+        <file>icons/select.png</file>
+        <file>icons/upload.png</file>
+    </qresource>
+</RCC>
