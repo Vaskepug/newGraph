@@ -12,8 +12,8 @@
 class MakeSelected: public QGraphicsItem
 {
 public:
-    typedef void DrawFunctions( QPainter *painter);
-    typedef void (MakeSelected::*DrawFunctionsPtr)(QPainter *painter);
+    typedef void DrawFunctions( QPainter *painter,int,int,int,int);
+    typedef void (MakeSelected::*DrawFunctionsPtr)(QPainter *painter,int,int,int,int);
     DrawFunctionsPtr drawFunctions[6];
     //DrawFunctionsPtr drawFunctions[2];
   //  drawFunctionsPtr *drawFunctions;
@@ -72,11 +72,15 @@ private:
    void drawCross1(QPainter *painter,int,int,int,int);
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
+   DrawFunctions drawCrossed;
+   DrawFunctions drawMiddle;
+   DrawFunctions drawM;
+   DrawFunctions drawBrick;
    //void drawCorn(QPainter *painter);
-   void drawCrossed(QPainter *painter);
-   void drawMiddle(QPainter *painter);
-   void drawM(QPainter *painter);
-   void drawBrick(QPainter *painter);
+  // void drawCrossed(QPainter *painter);
+ //  void drawMiddle(QPainter *painter);
+  // void drawM(QPainter *painter);
+  // void drawBrick(QPainter *painter);
 
 
   //  virtual bool sceneEventFilter ( QGraphicsItem * watched, QEvent * event ) ;

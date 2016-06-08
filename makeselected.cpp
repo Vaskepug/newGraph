@@ -470,53 +470,70 @@ void MakeSelected ::drawCross1( QPainter *painter, int xb, int yb, int xe, int y
     qDebug() << "cross cross";
 }
 
-void MakeSelected ::drawCross(QPainter *painter)
+void MakeSelected ::drawCross(QPainter *painter, int xb, int yb, int xe, int ye)
 {
-      //painter->drawLine(xb,yb,xe,ye);
-     // painter->drawLine(xe,yb,xb,ye);
-     painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
-     painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
-    qDebug() << "cross cross";
+    painter->drawLine(xb,yb,xe,ye);
+    painter->drawLine(xe,yb,xb,ye);
+    // painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+    // painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
+   // qDebug() << "cross cross";
 }
 
-void MakeSelected ::drawCorn(QPainter *painter)
+void MakeSelected ::drawCorn(QPainter *painter, int xb, int yb, int xe, int ye)
 {
     QPointF centerEllipse;
-    centerEllipse.setX(startPoint.x()+del / 2);
+    centerEllipse.setX(xb+del / 2);
+    centerEllipse.setY(yb + del / 2);
+    painter->drawEllipse(centerEllipse,del/2 - 2,del/2 - 1);
+  /*  centerEllipse.setX(startPoint.x()+del / 2);
     centerEllipse.setY(startPoint.y() + del / 2);
     qDebug() << "xssx=" << centerEllipse.x() << ' ' << centerEllipse.y();
-    painter->drawEllipse(centerEllipse,del/2 - 2,del/2 - 1);
+    painter->drawEllipse(centerEllipse,del/2 - 2,del/2 - 1);*/
 }
 
-void MakeSelected ::drawCrossed(QPainter *painter)
+void MakeSelected ::drawCrossed(QPainter *painter, int xb, int yb, int xe, int ye)
 {
-    painter->drawLine(startPoint.x() + del/2,startPoint.y()+1,
+    painter->drawLine(xb + del/2,yb+1,
+                       xe-1,ye-2);
+        painter->drawLine(xb + del/2,yb+1,
+                       xb+1,ye-2);
+        painter->drawLine(xb+1,ye-1,xe-2,ye-2);
+  /*  painter->drawLine(startPoint.x() + del/2,startPoint.y()+1,
                    endPoint.x()-1,endPoint.y()-2);
     painter->drawLine(startPoint.x() + del/2,startPoint.y()+1,
                    startPoint.x()+1,endPoint.y()-2);
-    painter->drawLine(startPoint.x()+1,endPoint.y()-1,endPoint.x()-2,endPoint.y()-2);
+    painter->drawLine(startPoint.x()+1,endPoint.y()-1,endPoint.x()-2,endPoint.y()-2);*/
 }
 
-void MakeSelected ::drawMiddle(QPainter *painter)
+void MakeSelected ::drawMiddle(QPainter *painter, int xb, int yb, int xe, int ye)
 {
-    endPoint.setY(startPoint.y() + del);
-    painter->drawLine(startPoint.x() + del/2, startPoint.y()+1,
-         startPoint.x() + del/2, endPoint.y() - 1);
+    ye = yb + del;
+     painter->drawLine(xb + del/2, yb+1,
+        xb + del/2, ye - 1);
+   // endPoint.setY(startPoint.y() + del);
+   // painter->drawLine(startPoint.x() + del/2, startPoint.y()+1,
+     //    startPoint.x() + del/2, endPoint.y() - 1);
 }
 
-void MakeSelected ::drawM(QPainter *painter)
+void MakeSelected ::drawM(QPainter *painter, int xb, int yb, int xe, int ye)
 {
-    endPoint.setX(startPoint.x() + del);
+    xe = xb + del;
+    ye = yb + del;
+    painter->fillRect(xb+1,yb + 1,2 * del - 2, del - 2,Qt::white);
+    painter->drawLine(xb+1,yb+1,xb+ del,ye-1);
+    painter->drawLine(xb+ del,ye-1,xe+del- 1,yb+1);
+    /*endPoint.setX(startPoint.x() + del);
     endPoint.setY(startPoint.y() + del);
     painter->fillRect(startPoint.x()+1,startPoint.y() + 1,2 * del - 2, del - 2,Qt::white);
     painter->drawLine(startPoint.x()+1,startPoint.y()+1,startPoint.x()+ del,endPoint.y()-1);
-    painter->drawLine(startPoint.x()+ del,endPoint.y()-1,endPoint.x()+del- 1,startPoint.y()+1);
+    painter->drawLine(startPoint.x()+ del,endPoint.y()-1,endPoint.x()+del- 1,startPoint.y()+1);*/
 
 }
 
-void MakeSelected ::drawBrick(QPainter *painter)
+void MakeSelected ::drawBrick(QPainter *painter, int xb, int yb, int xe, int ye)
 {
-     painter->fillRect(startPoint.x()+1,startPoint.y() + 1,2 * del - 2, del - 2,Qt::white);
+     painter->fillRect(xb+1,yb + 1,2 * del - 2, del - 2,Qt::white);
+    // painter->fillRect(startPoint.x()+1,startPoint.y() + 1,2 * del - 2, del - 2,Qt::white);
 }
 
 QRectF MakeSelected::boundingRect() const
