@@ -18,7 +18,7 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d)
     vertCells = int (height / del);
     sceneArray.reserve(horizCells);
     QVector <int> tmp (vertCells,0);
-    qDebug() << "horiz=" << width << ' ' << height;
+  //  qDebug() << "horiz=" << width << ' ' << height;
     drawFunctions[0] = &MakeSelected::drawCross;
     drawFunctions[1] = &MakeSelected::drawCorn;
 	drawFunctions[2] = &MakeSelected::drawCrossed;
@@ -45,7 +45,7 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d)
      //  sceneArray[i].reserve(vertCells);
      //  for (unsigned int j = 0; j < vertCells; j ++)
      //      sceneArray[i][j] << 0;
-       qDebug() << "init array";
+   //    qDebug() << "init array";
        sceneArray.append(tmp);
    }
     //installSceneEventFilter(this);
@@ -78,26 +78,6 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
  //  itemToDraw = 0;
     QGraphicsItem::mouseReleaseEvent(event);
 }
-/*
-void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    qDebug() << "move move";
-    event->ignore();
-     endPoint = event->scenePos();
-    if( selected )
-    {
-        endPoint = event->scenePos();
-        int xend = int (endPoint.x() / del ) * del;
-        int yend = int (endPoint.y() / del ) * del;
-        endPoint.setX(xend);
-        endPoint.setY(yend);
-        this->update();
-    }
-    else
-        QGraphicsItem::mouseMoveEvent(event);
-     QGraphicsItem::mouseMoveEvent(event);
-
-}*/
 
 void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -106,7 +86,7 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     {
         if ( shiftPressed == false )
         {
-           qDebug() <<" not shift";
+         //  qDebug() <<" not shift";
             endPoint = event->scenePos();
            // int xend = int (endPoint.x() / del ) * del;
           //  int yend = int (endPoint.y() / del ) * del;
@@ -114,6 +94,8 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             int yend = setToGrid(endPoint.y());
             endPoint.setX(xend);
             endPoint.setY(yend);
+            rectWidth = endPoint.x() - startPoint.x();
+            rectHeight = endPoint.y() - startPoint.y();
             qDebug() << "xx=" << xend << ' ' << yend <<' '<< startPoint.x();
             this->update();
         }
@@ -129,7 +111,7 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             endPoint.setX(startPoint.x() + rectWidth);
             endPoint.setY(startPoint.y() + rectHeight);
             this->update();
-           qDebug() <<"shift";
+           qDebug() <<"shift "<< rectWidth;
         }
     }
    // else
@@ -152,13 +134,16 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
        if ( shiftPressed == false )
        {
-           qDebug() << "no shift in press";
+         //  qDebug() << "no shift in press";
             int xbeg = setToGrid(startPoint.x());
             int ybeg = setToGrid(startPoint.y());
             startPoint.setX(xbeg);
             startPoint.setY(ybeg);
             endPoint.setX(xbeg+del);
             endPoint.setY(ybeg+del);
+            rectWidth = 10;
+            rectHeight = 10;
+            qDebug() << "no shift in press " << rectWidth;
             this->update();
        }
        else
@@ -177,8 +162,8 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
           {
             delX = setToGrid(sx);
             delY = setToGrid(sy);
-            rectWidth = endPoint.x() - startPoint.x();
-            rectHeight = endPoint.y() - startPoint.y();
+         //   rectWidth = endPoint.x() - startPoint.x();
+         //   rectHeight = endPoint.y() - startPoint.y();
             qDebug() <<"shift in press " << rectWidth << ' '<< rectHeight;
           }
        }
@@ -278,7 +263,7 @@ void MakeSelected::paint (QPainter *painter,
     int cellY = 0;
     if ( selected )
     {
-        qDebug() << "paint" << startPoint.x() << ' ' <<startPoint.y() ;
+    //    qDebug() << "paint" << startPoint.x() << ' ' <<startPoint.y() ;
         QPointF topLeft (startPoint);
         QPointF bottomRight ( endPoint);
          QRectF rect (topLeft, bottomRight);
@@ -301,7 +286,8 @@ void MakeSelected::paint (QPainter *painter,
 
      //   if ( itemToDraw == Draw )
       //  {
-            for (unsigned int i = 0; i < horizCells; i++)
+            renderArea(painter);
+        /*    for (unsigned int i = 0; i < horizCells; i++)
             {
                 for (unsigned int j = 0 ; j < vertCells; j ++)
                 {
@@ -324,10 +310,39 @@ void MakeSelected::paint (QPainter *painter,
                         }
                     }
                 }
-            }
+            } */
     }
 }
 
+
+
+void MakeSelected :: renderArea(QPainter *painter)
+{
+    for (unsigned int i = 0; i < horizCells; i++)
+    {
+        for (unsigned int j = 0 ; j < vertCells; j ++)
+        {
+            int dei = sceneArray [i][j];
+       // (this->*drawFunctions[ choice - 1 ])( painter );
+            if ( dei > 0 )
+            {
+                if ( dei < 20)
+                {
+                 //   qDebug()<< "i=" << i << " j=" << j << " " << dei;
+               //     drawCross1(painter,i * del, j * del, i * del + del, j * del + del);
+                    int xb = i * del;
+                    int yb = j * del;
+                    int xe = xb + del;
+                    int ye = yb + del;
+                   (this->*drawFunctions[ dei-1 ])( painter, xb, yb, xe, ye );
+                    // here think of coordinates
+                 //   painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+                 //   painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
+                }
+            }
+        }
+    }
+}
 
 
 void MakeSelected ::drawCross1( QPainter *painter, int xb, int yb, int xe, int ye )
@@ -336,7 +351,7 @@ void MakeSelected ::drawCross1( QPainter *painter, int xb, int yb, int xe, int y
       painter->drawLine(xe,yb,xb,ye);
    //  painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
    //  painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
-    qDebug() << "cross cross";
+ //   qDebug() << "cross cross";
 }
 
 void MakeSelected ::drawCross(QPainter *painter, int xb, int yb, int xe, int ye)
@@ -422,14 +437,18 @@ MakeSelected::coord1 MakeSelected::getNumberInArray( QPointF p )
 void MakeSelected::setChoice(Choice cho)
 {
    choice = cho;
+   if ( choice == 0 )
+       setSelected (true);
+   else setSelected (false);
    //this->addLine( QLineF( 10, 10, 30, 30 ),QPen(Qt::red, 1) );
   // this->addLine( QLineF( 10, 30, 30, 10 ) );
    qDebug() << "cho=" << choice;
 }
 
-void MakeSelected::setSelected(void)
+void MakeSelected::setSelected(bool meaning)
 {
-    selected = !selected;
+    //selected = !selected;
+    selected = meaning;
 }
 
 /*

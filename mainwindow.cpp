@@ -169,6 +169,8 @@ void MainWindow::actionGroupClicked(QAction *action)
 
 }
 
+
+
 void MainWindow::thisExitf()
 {
     this->close();
@@ -176,9 +178,9 @@ void MainWindow::thisExitf()
 
 void MainWindow::selectf()
 {
-    int curr = tabWidget->currentIndex();
-    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid ->mSelected->setSelected();
+  //  int curr = tabWidget->currentIndex();
+  //  TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+  //  wid ->mSelected->setSelected(true);
   //  wid ->mScene ->setSelected();
 }
 

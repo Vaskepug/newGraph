@@ -30,7 +30,7 @@ public:
    // void setChoice(Choice choice);
     bool selected;
    // bool itemToDraw;
-    void setSelected(void);
+    void setSelected(bool meaning);
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
                   MakeMiddle, MakeM, MakeBrick};
     enum ItemBehaviour { NotDraw, Draw, Delete };
@@ -69,6 +69,9 @@ private:
     coord1 getNumberInArray( QPointF  );
     void setItemBehaviour(ItemBehaviour );
     //////
+    /// \brief drawCross1
+    /// \param painter
+   renderArea(QPainter *painter);
    void drawCross1(QPainter *painter,int,int,int,int);
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
