@@ -13,5 +13,7 @@
         <file>icons/save.png</file>
         <file>icons/select.png</file>
         <file>icons/upload.png</file>
+        <file>icons/vert.png</file>
+        <file>icons/horiz.png</file>
     </qresource>
 </RCC>

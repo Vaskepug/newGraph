@@ -13,7 +13,7 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d)
     delX = 0;
     delY = 0;
     //itemToDraw = false;
-    itemToDraw = NotDraw;
+  //  itemToDraw = NotDraw;
     horizCells = int (width / del);
     vertCells = int (height / del);
     sceneArray.reserve(horizCells);
@@ -76,6 +76,35 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
       emit select(tmpPath, ctrl);
     }   */
  //  itemToDraw = 0;
+    if ( selected )
+    {
+        MakeSelected::coord1 cc = getNumberInArray(startPoint);
+        int sx = cc.i;
+        int sy = cc.j;
+        selectedArrayX = int ( (endPoint.x() - startPoint.x()) / del  ) + sx;
+        selectedArrayY= int ( (endPoint.y() - startPoint.y()) / del  ) + sy;
+        bool priz = false;
+        for (int i = sx; i < selectedArrayX; i++ )
+        {
+            for ( int j = sy; j < selectedArrayY; j++)
+            {
+                if (sceneArray[i][j] > 0)
+                {
+                    priz = true;
+                     //qDebug() <<"eee-"<<' '<< i << ' ' <<j;
+                    break;
+                }
+            }
+        }
+        if ( priz )
+        {
+      //      selectedArray = new int *[countX];
+       //     for (int i = 0; i < countX; i ++)
+       //     {
+        //        selectedArray[i] = new int [countY];
+       //     }
+        }
+    }
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
@@ -96,7 +125,7 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             endPoint.setY(yend);
             rectWidth = endPoint.x() - startPoint.x();
             rectHeight = endPoint.y() - startPoint.y();
-            qDebug() << "xx=" << xend << ' ' << yend <<' '<< startPoint.x();
+        //    qDebug() << "xx=" << xend << ' ' << yend <<' '<< startPoint.x();
             this->update();
         }
         else
@@ -162,6 +191,12 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
           {
             delX = setToGrid(sx);
             delY = setToGrid(sy);
+            if (selectedArray)
+            {
+                for( int i = 0; i < selectedArrayX; i++ )
+                   delete [] selectedArray[i];
+                delete [] selectedArray;
+            }
          //   rectWidth = endPoint.x() - startPoint.x();
          //   rectHeight = endPoint.y() - startPoint.y();
             qDebug() <<"shift in press " << rectWidth << ' '<< rectHeight;
@@ -191,20 +226,20 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     case MakeCorn:
                     case MakeCrossed:
                     case MakeMiddle:
-                         itemToDraw = Draw;
+                    //     itemToDraw = Draw;
                          sceneArray[cellX][cellY] = choice;
                     break;
                     case MakeM:
                     case MakeBrick:
                         if ( sceneArray[cellX+1][cellY] == 0 )
                         {
-                            itemToDraw = Draw;
+                          //  itemToDraw = Draw;
                             sceneArray[cellX][cellY] = choice;
                             sceneArray[cellX+1][cellY] = choice*50;
                         }
                         else
                         {
-                            itemToDraw = NotDraw;
+                          //  itemToDraw = NotDraw;
                         }
                     break;
                     default:
@@ -212,8 +247,8 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 }
                 this->update();
            }
-           else
-             itemToDraw = NotDraw;
+        //   else
+           //  itemToDraw = NotDraw;
            //this->update();
        }
        else
@@ -235,9 +270,9 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
                    sceneArray[cellX-1][cellY] = 0;
                }
                             this->update();
-                itemToDraw = Delete;
+              //  itemToDraw = Delete;
            }
-           else itemToDraw = NotDraw;
+        //   else itemToDraw = NotDraw;
        }
        int xbeg = setToGrid(startPoint.x());
        int ybeg = setToGrid(startPoint.y());
@@ -259,8 +294,8 @@ int MakeSelected::setToGrid( qreal t )
 void MakeSelected::paint (QPainter *painter,
                           const QStyleOptionGraphicsItem *, QWidget *)
 {
-    int cellX = 0;
-    int cellY = 0;
+    //int cellX = 0;
+    //int cellY = 0;
     if ( selected )
     {
     //    qDebug() << "paint" << startPoint.x() << ' ' <<startPoint.y() ;
@@ -272,21 +307,22 @@ void MakeSelected::paint (QPainter *painter,
 
          painter->drawRect(rect);
      }
-    else
-    {
-        MakeSelected::coord1 cc = getNumberInArray(startPoint);
-        cellX = cc.i;
-        cellY = cc.j;
-        int xbeg = cellX *del;
-        int ybeg = cellY *del;
+     renderArea(painter);
+   // else
+   // {
+      //  MakeSelected::coord1 cc = getNumberInArray(startPoint);
+      //  cellX = cc.i;
+      //  cellY = cc.j;
+    //    int xbeg = cellX *del;
+    //    int ybeg = cellY *del;
      //   int xend = xbeg + del;
      //   int yend = ybeg + del;
-        endPoint.setX(startPoint.x() + del);
-        endPoint.setY(startPoint.y() + del);
+   //     endPoint.setX(startPoint.x() + del);
+    //    endPoint.setY(startPoint.y() + del);
 
      //   if ( itemToDraw == Draw )
       //  {
-            renderArea(painter);
+         //   renderArea(painter);
         /*    for (unsigned int i = 0; i < horizCells; i++)
             {
                 for (unsigned int j = 0 ; j < vertCells; j ++)
@@ -311,7 +347,7 @@ void MakeSelected::paint (QPainter *painter,
                     }
                 }
             } */
-    }
+    //}
 }
 
 
@@ -365,6 +401,8 @@ void MakeSelected ::drawCross(QPainter *painter, int xb, int yb, int xe, int ye)
 
 void MakeSelected ::drawCorn(QPainter *painter, int xb, int yb, int xe, int ye)
 {
+    xe = 0;
+    ye = 0;
     QPointF centerEllipse;
     centerEllipse.setX(xb+del / 2);
     centerEllipse.setY(yb + del / 2);
@@ -391,6 +429,8 @@ void MakeSelected ::drawCrossed(QPainter *painter, int xb, int yb, int xe, int y
 
 void MakeSelected ::drawMiddle(QPainter *painter, int xb, int yb, int xe, int ye)
 {
+    xe = 0;
+    ye = 0;
    // ye = yb + del;
      painter->drawLine(xb + del/2, yb+1,
         xb + del/2, ye - 1);
@@ -416,6 +456,8 @@ void MakeSelected ::drawM(QPainter *painter, int xb, int yb, int xe, int ye)
 
 void MakeSelected ::drawBrick(QPainter *painter, int xb, int yb, int xe, int ye)
 {
+    xe = 0;
+    ye = 0;
      painter->fillRect(xb+1,yb + 1,2 * del - 2, del - 2,Qt::white);
     // painter->fillRect(startPoint.x()+1,startPoint.y() + 1,2 * del - 2, del - 2,Qt::white);
 }

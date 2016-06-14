@@ -36,8 +36,11 @@ MainWindow::~MainWindow()
     delete makeMiddle;
     delete increase;
     delete decrease;
+    delete flipVert;
+    delete flipHoriz;
     delete vertActionGroup;
     delete plusMinusActionGroup;
+    delete flipActionGroup;
     delete topToolbar;
     delete leftToolbar;
 }
@@ -116,7 +119,15 @@ void MainWindow::createToolBars(void)
     decrease->setCheckable(true);
   //  connect(decrease, SIGNAL(triggered()), this, SLOT(decreaseGrid()));
     ////////
+    flipHoriz = new QAction("Horizontal",this);
+    flipHoriz->setIcon(QIcon(":/icons/horiz.png"));
+    flipHoriz->setCheckable(true);
+   // connect(flipHoriz, SIGNAL(triggered()), this, SLOT(flipHorizf()));
 
+    flipVert = new QAction("Vertical",this);
+    flipVert->setIcon(QIcon(":/icons/vert.png"));
+    flipVert->setCheckable(true);
+    // connect(flipVert, SIGNAL(triggered()), this, SLOT(flipVertf()));
     ////////
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
@@ -135,7 +146,11 @@ void MainWindow::createToolBars(void)
     plusMinusActionGroup ->setExclusive(true);
     plusMinusActionGroup->addAction(decrease);
     plusMinusActionGroup->addAction(increase);
-
+    //////////
+    flipActionGroup = new QActionGroup(this);
+    flipActionGroup ->setExclusive(true);
+    flipActionGroup->addAction(flipHoriz);
+    flipActionGroup->addAction(flipVert);
     /////////
     topToolbar = new  QToolBar("Choice ToolBar", this);
     leftToolbar = new  QToolBar("Action ToolBar", this);
@@ -147,6 +162,7 @@ void MainWindow::createToolBars(void)
    // topToolbar->addAction(increase);
   //  topToolbar->addAction(decrease);
     topToolbar->addActions(plusMinusActionGroup->actions());
+    topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
     topToolbar->addAction(thisExit);
 
@@ -169,6 +185,16 @@ void MainWindow::actionGroupClicked(QAction *action)
 
 }
 
+
+void MainWindow::flipHorizf()
+{
+
+}
+
+void MainWindow::flipVertf()
+{
+
+}
 
 
 void MainWindow::thisExitf()

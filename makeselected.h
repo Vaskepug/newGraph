@@ -33,9 +33,9 @@ public:
     void setSelected(bool meaning);
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
                   MakeMiddle, MakeM, MakeBrick};
-    enum ItemBehaviour { NotDraw, Draw, Delete };
+ //   enum ItemBehaviour { NotDraw, Draw, Delete };
     Choice choice;
-    ItemBehaviour itemToDraw;
+ //   ItemBehaviour itemToDraw;
     void setChoice(Choice cho);
 //protected:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -67,11 +67,11 @@ private:
          unsigned int j;
      };
     coord1 getNumberInArray( QPointF  );
-    void setItemBehaviour(ItemBehaviour );
+ //   void setItemBehaviour(ItemBehaviour );
     //////
-    /// \brief drawCross1
-    /// \param painter
-   renderArea(QPainter *painter);
+   /* /// \brief drawCross1
+    /// \param painter*/
+   void renderArea(QPainter *painter);
    void drawCross1(QPainter *painter,int,int,int,int);
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
@@ -79,18 +79,9 @@ private:
    DrawFunctions drawMiddle;
    DrawFunctions drawM;
    DrawFunctions drawBrick;
-   //void drawCorn(QPainter *painter);
-  // void drawCrossed(QPainter *painter);
- //  void drawMiddle(QPainter *painter);
-  // void drawM(QPainter *painter);
-  // void drawBrick(QPainter *painter);
-
-
-  //  virtual bool sceneEventFilter ( QGraphicsItem * watched, QEvent * event ) ;
-  //  virtual void keyPressEvent(QKeyEvent *event);
-   // void keyCaught(QKeyEvent *event);
-//signals:
-  //void keyCaught(QKeyEvent *event);
+   int **selectedArray;
+   int selectedArrayX;
+   int selectedArrayY;
 
 };
 

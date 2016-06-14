@@ -26,6 +26,7 @@ public:
 
     QActionGroup* vertActionGroup;
     QActionGroup* plusMinusActionGroup;
+    QActionGroup* flipActionGroup;
 
     QAction* decrease;
     QAction* makeCross;
@@ -38,6 +39,9 @@ public:
     QAction* thisExit;
     QAction* increase;
     QAction* select;
+    QAction* flipHoriz;
+    QAction* flipVert;
+
 
 private slots:
     void thisExitf(void);
@@ -46,7 +50,8 @@ private slots:
     void actionGroupClicked(QAction*);
     void selectf(void);
     void on_actionOpen_triggered();
-
+    void flipHorizf();
+    void flipVertf();
     void on_actionSave_triggered();
 
 private:
