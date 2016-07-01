@@ -15,19 +15,11 @@ public:
     typedef void DrawFunctions( QPainter *painter,int,int,int,int);
     typedef void (MakeSelected::*DrawFunctionsPtr)(QPainter *painter,int,int,int,int);
     DrawFunctionsPtr drawFunctions[6];
-    //DrawFunctionsPtr drawFunctions[2];
-  //  drawFunctionsPtr *drawFunctions;
-    //void (*functptr[])(QPainter *painter) = { drawCorn, drawCross } ;
-    //typedef drawFunctions_ptr drawFunctions[2];
-    //drawFunctions *df[] = { drawCross,drawCorn,drawCrossed,drawMiddle,drawM,drawBrick };
 
     ~MakeSelected();
     MakeSelected(qreal width, qreal height,int del);
     bool wasShift;
     bool shiftPressed;
-  //  enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
- //                 MakeMiddle, MakeM, MakeBrick ,SelectMode};
-   // void setChoice(Choice choice);
     bool selected;
    // bool itemToDraw;
     void setSelected(bool meaning);
@@ -72,7 +64,9 @@ private:
    /* /// \brief drawCross1
     /// \param painter*/
    void renderArea(QPainter *painter);
+   void renderSelectedArea(QPainter *painter);
    void drawCross1(QPainter *painter,int,int,int,int);
+   void fillSelectedArray(void);
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
    DrawFunctions drawCrossed;
@@ -80,9 +74,13 @@ private:
    DrawFunctions drawM;
    DrawFunctions drawBrick;
    int **selectedArray;
-   int selectedArrayX;
-   int selectedArrayY;
-
+   int selectedArrayXSize;
+   int selectedArrayYSize;
+   int itemsCount;
+   bool wasSelected;
+   bool wasDeleted;
+   void locateSelectedArray(void);
+   void deleteSelectedArray(void);
 };
 
 #endif // MAKESELECTED_H

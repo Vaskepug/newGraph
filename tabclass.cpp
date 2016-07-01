@@ -45,7 +45,7 @@ void TabClass::keyPressEvent(QKeyEvent *event)
      //           (event->key() == Qt::Key_Shift) << event->isAutoRepeat();
     if ( event->key() == Qt::Key_Shift )
     {
-        qDebug() << "key=shift";
+        qDebug() << "key=shift in tab";
         mSelected->shiftPressed = true;
     }
     else qDebug() << "NO NO NO key=shift";

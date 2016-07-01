@@ -214,6 +214,7 @@ void MainWindow::selectf()
 
 void MainWindow::savef()
 {
+
   // qDebug() << "save";
    /*QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
    if (!fileName.isNull())
