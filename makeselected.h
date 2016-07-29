@@ -21,6 +21,8 @@ public:
     bool wasShift;
     bool shiftPressed;
     bool selected;
+    bool renderSelected;
+    void deleteAllInside(void);
    // bool itemToDraw;
     void setSelected(bool meaning);
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
@@ -29,6 +31,10 @@ public:
     Choice choice;
  //   ItemBehaviour itemToDraw;
     void setChoice(Choice cho);
+    void flipHorizontally(void);
+    void flipVertically(void);
+    void rotateClockWise(void);
+    void rotateCounterClockWise(void);
 //protected:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    // void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -49,6 +55,7 @@ private:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
     int setToGrid( qreal t );
     QVector< QVector<int> > sceneArray;
     unsigned int horizCells;
@@ -67,12 +74,14 @@ private:
    void renderSelectedArea(QPainter *painter);
    void drawCross1(QPainter *painter,int,int,int,int);
    void fillSelectedArray(void);
+   bool addSelectedArray();
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
    DrawFunctions drawCrossed;
    DrawFunctions drawMiddle;
    DrawFunctions drawM;
    DrawFunctions drawBrick;
+   void drawElement(MakeSelected::coord1 cc);
    int **selectedArray;
    int selectedArrayXSize;
    int selectedArrayYSize;
@@ -81,6 +90,10 @@ private:
    bool wasDeleted;
    void locateSelectedArray(void);
    void deleteSelectedArray(void);
+   void clearArea(QPainter *painter);
+   void flip(bool);
+   void rotate(bool);
+   void showSelectedArray(void);
 };
 
 #endif // MAKESELECTED_H

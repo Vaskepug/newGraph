@@ -25,8 +25,8 @@ public:
     QToolBar* leftToolbar;
 
     QActionGroup* vertActionGroup;
-    QActionGroup* plusMinusActionGroup;
-    QActionGroup* flipActionGroup;
+   // QActionGroup* plusMinusActionGroup;
+    //QActionGroup* flipActionGroup;
 
     QAction* decrease;
     QAction* makeCross;

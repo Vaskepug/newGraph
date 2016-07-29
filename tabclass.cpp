@@ -46,9 +46,15 @@ void TabClass::keyPressEvent(QKeyEvent *event)
     if ( event->key() == Qt::Key_Shift )
     {
         qDebug() << "key=shift in tab";
+        mSelected->wasShift = true;
         mSelected->shiftPressed = true;
     }
-    else qDebug() << "NO NO NO key=shift";
+    else if (event->key() == Qt::Key_Delete)
+    {
+        qDebug() << "key=pressed in tab";
+        mSelected->deleteAllInside();
+    }
+    else
      //   emit keyCaught(event);
    /* if(event->key() == Qt::Key_Delete)
         foreach(QGraphicsItem* item, selectedItems()){
@@ -63,7 +69,9 @@ void TabClass::keyReleaseEvent(QKeyEvent *event)
 {
      //   qDebug() << "released="<<event->key();
         if ( event->key() == Qt::Key_Shift )
+        {
             mSelected->shiftPressed = false;
+        }
      //   emit keyCaught(event);
    /* if(event->key() == Qt::Key_Delete)
         foreach(QGraphicsItem* item, selectedItems()){

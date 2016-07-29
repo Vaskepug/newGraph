@@ -39,8 +39,8 @@ MainWindow::~MainWindow()
     delete flipVert;
     delete flipHoriz;
     delete vertActionGroup;
-    delete plusMinusActionGroup;
-    delete flipActionGroup;
+  //  delete plusMinusActionGroup;
+  //  delete flipActionGroup;
     delete topToolbar;
     delete leftToolbar;
 }
@@ -105,29 +105,29 @@ void MainWindow::createToolBars(void)
 
     thisExit = new QAction("Exit",this);
     thisExit->setIcon(QIcon(":/icons/exit.png"));
-    thisExit->setCheckable(true);
+    thisExit->setCheckable(false);
     connect(thisExit, SIGNAL(triggered()), this, SLOT(thisExitf()));
 
     /////////
     increase = new QAction("Increase",this);
     increase->setIcon(QIcon(":/icons/plus.png"));
-    increase->setCheckable(true);
+    increase->setCheckable(false);
    // connect(increase, SIGNAL(triggered()), this, SLOT(increaseGrid()));
 
     decrease = new QAction("Decrease",this);
     decrease->setIcon(QIcon(":/icons/minus.png"));
-    decrease->setCheckable(true);
+    decrease->setCheckable(false);
   //  connect(decrease, SIGNAL(triggered()), this, SLOT(decreaseGrid()));
     ////////
     flipHoriz = new QAction("Horizontal",this);
     flipHoriz->setIcon(QIcon(":/icons/horiz.png"));
-    flipHoriz->setCheckable(true);
-   // connect(flipHoriz, SIGNAL(triggered()), this, SLOT(flipHorizf()));
+    flipHoriz->setCheckable(false);
+    connect(flipHoriz, SIGNAL(triggered()), this, SLOT(flipHorizf()));
 
     flipVert = new QAction("Vertical",this);
     flipVert->setIcon(QIcon(":/icons/vert.png"));
-    flipVert->setCheckable(true);
-    // connect(flipVert, SIGNAL(triggered()), this, SLOT(flipVertf()));
+    flipVert->setCheckable(false);
+     connect(flipVert, SIGNAL(triggered()), this, SLOT(flipVertf()));
     ////////
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
@@ -142,7 +142,7 @@ void MainWindow::createToolBars(void)
     connect(vertActionGroup, SIGNAL(triggered(QAction*)),
                 this, SLOT(actionGroupClicked(QAction*)));
     ////////
-    plusMinusActionGroup = new QActionGroup(this);
+   /* plusMinusActionGroup = new QActionGroup(this);
     plusMinusActionGroup ->setExclusive(true);
     plusMinusActionGroup->addAction(decrease);
     plusMinusActionGroup->addAction(increase);
@@ -150,7 +150,7 @@ void MainWindow::createToolBars(void)
     flipActionGroup = new QActionGroup(this);
     flipActionGroup ->setExclusive(true);
     flipActionGroup->addAction(flipHoriz);
-    flipActionGroup->addAction(flipVert);
+    flipActionGroup->addAction(flipVert);*/
     /////////
     topToolbar = new  QToolBar("Choice ToolBar", this);
     leftToolbar = new  QToolBar("Action ToolBar", this);
@@ -159,10 +159,12 @@ void MainWindow::createToolBars(void)
     leftToolbar->addActions(vertActionGroup->actions());
 
     /////////
-   // topToolbar->addAction(increase);
-  //  topToolbar->addAction(decrease);
-    topToolbar->addActions(plusMinusActionGroup->actions());
-    topToolbar->addActions(flipActionGroup->actions());
+    topToolbar->addAction(increase);
+    topToolbar->addAction(decrease);
+    topToolbar->addAction(flipHoriz);
+    topToolbar->addAction(flipVert);
+   // topToolbar->addActions(plusMinusActionGroup->actions());
+  //  topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
     topToolbar->addAction(thisExit);
 
@@ -188,12 +190,16 @@ void MainWindow::actionGroupClicked(QAction *action)
 
 void MainWindow::flipHorizf()
 {
-
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->flipHorizontally();
 }
 
 void MainWindow::flipVertf()
 {
-
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->flipVertically();
 }
 
 
