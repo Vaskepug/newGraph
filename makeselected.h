@@ -90,6 +90,8 @@ private:
    bool wasDeleted;
    void locateSelectedArray(void);
    void deleteSelectedArray(void);
+   void deleteArray(int **array1, int xlen);
+   void showArray(int **array1, int xlen,int ylen );
    void clearArea(QPainter *painter);
    void flip(bool);
    void rotate(bool);

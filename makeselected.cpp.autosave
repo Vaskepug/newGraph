@@ -130,8 +130,9 @@ void MakeSelected::rotate(bool clo)
         int yk = setToGrid(endPoint.y() +  delt);
         if (xn <0) xn = 0;
         if (yn <0) yn = 0;
-        if (xk <0) xk = 0;
-        if (yk <0) yk = 0;
+        if (xk > width) xk = width;
+        if (yk > height ) yk = height;
+        
         startPoint.setX(xn);
         startPoint.setY(yn);
         endPoint.setX(xk);

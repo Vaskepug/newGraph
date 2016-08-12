@@ -15,5 +15,7 @@
         <file>icons/upload.png</file>
         <file>icons/vert.png</file>
         <file>icons/horiz.png</file>
+        <file>icons/rotcl.png</file>
+        <file>icons/rotcounter.png</file>
     </qresource>
 </RCC>

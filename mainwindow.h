@@ -41,7 +41,8 @@ public:
     QAction* select;
     QAction* flipHoriz;
     QAction* flipVert;
-
+    QAction* rotateClockWise;
+    QAction* rotateCounterClockWise;
 
 private slots:
     void thisExitf(void);
@@ -52,6 +53,8 @@ private slots:
     void on_actionOpen_triggered();
     void flipHorizf();
     void flipVertf();
+    void rotateClockWisef();
+    void rotateCounterClockWisef();
     void on_actionSave_triggered();
 
 private:

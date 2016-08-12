@@ -38,6 +38,8 @@ MainWindow::~MainWindow()
     delete decrease;
     delete flipVert;
     delete flipHoriz;
+    delete rotateClockWise;
+    delete rotateCounterClockWise;
     delete vertActionGroup;
   //  delete plusMinusActionGroup;
   //  delete flipActionGroup;
@@ -129,6 +131,16 @@ void MainWindow::createToolBars(void)
     flipVert->setCheckable(false);
      connect(flipVert, SIGNAL(triggered()), this, SLOT(flipVertf()));
     ////////
+     rotateClockWise = new QAction("RotateClock",this);
+     rotateClockWise->setIcon(QIcon(":/icons/rotcl.png"));
+     rotateClockWise->setCheckable(false);
+     connect(rotateClockWise, SIGNAL(triggered()), this, SLOT(rotateClockWisef()));
+
+     rotateCounterClockWise = new QAction("RotateCounter",this);
+     rotateCounterClockWise->setIcon(QIcon(":/icons/rotcounter.png"));
+     rotateCounterClockWise->setCheckable(false);
+      connect(rotateCounterClockWise, SIGNAL(triggered()), this, SLOT(rotateCounterClockWisef()));
+     ////////
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
     vertActionGroup->addAction(select);
@@ -163,6 +175,8 @@ void MainWindow::createToolBars(void)
     topToolbar->addAction(decrease);
     topToolbar->addAction(flipHoriz);
     topToolbar->addAction(flipVert);
+    topToolbar->addAction(rotateClockWise);
+    topToolbar->addAction(rotateCounterClockWise);
    // topToolbar->addActions(plusMinusActionGroup->actions());
   //  topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
@@ -195,11 +209,30 @@ void MainWindow::flipHorizf()
     wid->mSelected->flipHorizontally();
 }
 
+
+
 void MainWindow::flipVertf()
 {
     int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     wid->mSelected->flipVertically();
+}
+
+
+
+void MainWindow::rotateClockWisef()
+{
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->rotateClockWise();
+}
+
+
+void MainWindow::rotateCounterClockWisef()
+{
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->rotateCounterClockWise();
 }
 
 
