@@ -54,6 +54,7 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d)
    selectedArrayYSize = 0;
    selectedArray = nullptr;
    wasDeleted = true;
+   copied = false;
    int a,b,rez;
    a = 7;
    b = 2;
@@ -93,17 +94,28 @@ void MakeSelected::rotate(bool clo)
         {
            array1[i] = new int [ysize];
         }
+        int k = 0;
+        int k1 = 0;
         for (int i = 0; i < selectedArrayXSize; i++)
         {
+            k1 = i;
+            if ( clo )
+                k1 = selectedArrayXSize -i -1;
             for (int j = 0; j < selectedArrayYSize; j++)
             {
-                qDebug() << "i = " << i << ' ' <<j <<' ' << selectedArray[i][j];
-                array1 [j][i] = selectedArray[i][j];
+             //   qDebug() << "i = " << i << ' ' <<j <<' ' << selectedArray[i][j];
+                k = j;
+                if ( !clo )
+                    k = selectedArrayYSize - j - 1;
+               // int j1 = selectedArrayYSize - j;
+               // qDebug() << "j1 " << j1;
+               // array1 [j][i] = selectedArray[i][selectedArrayYSize - j - 1];
+                 array1 [j][i] = selectedArray[k1][k];
             }
         }
 
-        showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
-        showArray(array1, xsize, ysize );
+     //   showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
+      //  showArray(array1, xsize, ysize );
         deleteArray(selectedArray, selectedArrayXSize);
         ///
       /*  int tmp = startPoint.x();
@@ -128,23 +140,43 @@ void MakeSelected::rotate(bool clo)
         int yn = setToGrid(startPoint.y() -  delt);
         int xk = setToGrid(endPoint.x() -  delt);
         int yk = setToGrid(endPoint.y() +  delt);
-        if (xn <0) xn = 0;
-        if (yn <0) yn = 0;
-        if (xk <0) xk = 0;
-        if (yk <0) yk = 0;
-        startPoint.setX(xn);
-        startPoint.setY(yn);
-        endPoint.setX(xk);
-        endPoint.setY(yk);
+
+
         //var xn = maker.select.lastSelected.xb + clockWise * delt;
         //var yn = maker.select.lastSelected.yb - clockWise * delt;
       //  if ( yn < 0 ) yn = 0;
         ///
         selectedArrayXSize = xsize;
         selectedArrayYSize = ysize;
+
+        if (xn <0)
+        {
+            xn = 0;
+            xk = selectedArrayXSize*del;
+        }
+        if (yn <0)
+        {
+            yn = 0;
+            yk = selectedArrayYSize*del;
+        }
+        if (xk > width)
+        {
+            xk = width;
+            xn = xk - selectedArrayXSize*del;
+        }
+        if (yk > height )
+        {
+            yk = height;
+            yn = yk - selectedArrayYSize*del;
+        }
+        startPoint.setX(xn);
+        startPoint.setY(yn);
+        endPoint.setX(xk);
+        endPoint.setY(yk);
+      //  qDebug() << "x="<< yn <<' '<< yk;
         selectedArray = array1;
-        showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
-        qDebug() << "sta "<< startPoint.y() <<' '<< endPoint.y()<< ' '<< delt<< ' ' <<selectedArrayXSize << ' ' << selectedArrayYSize;
+     //   showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
+
        // deleteArray(array1,xsize);
 
     }
@@ -199,10 +231,37 @@ void MakeSelected::flipVertically()
     flip(true);
 }
 
+
+void MakeSelected::pasteSelected()
+{
+    if ( copied )
+    {
+        qDebug () << "pste";
+        startPoint.setX(0);
+        startPoint.setY(0);
+        endPoint.setX(selectedArrayXSize*del);
+        endPoint.setY(selectedArrayYSize*del);
+        renderSelected = true;
+        this->update();
+    }
+}
+
+void MakeSelected::copySelected()
+{
+    copied = true;
+    qDebug () << "set to clip";
+}
+
+void MakeSelected::cutSelected()
+{
+
+}
+
 void MakeSelected::flip(bool vert)
 {
     if (selectedArray != nullptr)
     {
+
         int halfx = selectedArrayXSize / 2;
         int halfy = selectedArrayYSize / 2;
         if (! vert )
@@ -1236,6 +1295,7 @@ void MakeSelected::setChoice(Choice cho)
    else
    {
        setSelected (false);
+       copied = false;
        if (wasSelected)
        {
           // qDebug() << "was selected ";

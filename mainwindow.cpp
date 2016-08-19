@@ -45,6 +45,9 @@ MainWindow::~MainWindow()
   //  delete flipActionGroup;
     delete topToolbar;
     delete leftToolbar;
+    delete copyAction;
+    delete pasteAction;
+    delete cutAction;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -141,6 +144,23 @@ void MainWindow::createToolBars(void)
      rotateCounterClockWise->setCheckable(false);
       connect(rotateCounterClockWise, SIGNAL(triggered()), this, SLOT(rotateCounterClockWisef()));
      ////////
+      ////////
+       copyAction = new QAction("Copy",this);
+       copyAction->setIcon(QIcon(":/icons/copy.png"));
+       copyAction->setCheckable(false);
+       connect(copyAction, SIGNAL(triggered()), this, SLOT(copyf()));
+
+       pasteAction = new QAction("Paste",this);
+       pasteAction->setIcon(QIcon(":/icons/paste.png"));
+       pasteAction->setCheckable(false);
+       connect(pasteAction, SIGNAL(triggered()), this, SLOT(pastef()));
+
+       cutAction = new QAction("Cut",this);
+       cutAction->setIcon(QIcon(":/icons/cut.png"));
+       cutAction->setCheckable(false);
+       connect(cutAction, SIGNAL(triggered()), this, SLOT(cutf()));
+       ////////
+
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
     vertActionGroup->addAction(select);
@@ -177,6 +197,9 @@ void MainWindow::createToolBars(void)
     topToolbar->addAction(flipVert);
     topToolbar->addAction(rotateClockWise);
     topToolbar->addAction(rotateCounterClockWise);
+    topToolbar->addAction(copyAction);
+    topToolbar->addAction(pasteAction);
+    topToolbar->addAction(cutAction);
    // topToolbar->addActions(plusMinusActionGroup->actions());
   //  topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
@@ -218,6 +241,29 @@ void MainWindow::flipVertf()
     wid->mSelected->flipVertically();
 }
 
+
+void MainWindow::copyf()
+{
+    qDebug () << "111";
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->copySelected();
+}
+
+void MainWindow::cutf()
+{
+    //int curr = tabWidget->currentIndex();
+    //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    //wid->mSelected->flipVertically();
+}
+
+void MainWindow::pastef()
+{
+    qDebug () << "222";
+    int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->pasteSelected();
+}
 
 
 void MainWindow::rotateClockWisef()

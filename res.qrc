@@ -17,5 +17,8 @@
         <file>icons/horiz.png</file>
         <file>icons/rotcl.png</file>
         <file>icons/rotcounter.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/copy.png</file>
     </qresource>
 </RCC>

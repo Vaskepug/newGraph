@@ -43,6 +43,9 @@ public:
     QAction* flipVert;
     QAction* rotateClockWise;
     QAction* rotateCounterClockWise;
+    QAction* copyAction;
+    QAction* cutAction;
+    QAction* pasteAction;
 
 private slots:
     void thisExitf(void);
@@ -56,6 +59,9 @@ private slots:
     void rotateClockWisef();
     void rotateCounterClockWisef();
     void on_actionSave_triggered();
+    void copyf();
+    void pastef();
+    void cutf();
 
 private:
     Ui::MainWindow *ui;

@@ -35,6 +35,9 @@ public:
     void flipVertically(void);
     void rotateClockWise(void);
     void rotateCounterClockWise(void);
+    void copySelected();
+    void pasteSelected();
+    void cutSelected();
 //protected:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    // void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -45,7 +48,7 @@ private:
     int delX;
     int delY;
     //Choice thisChoice;
-     int     del;
+    int     del;
     qreal   width;
     qreal   height;
     int rectWidth;
@@ -88,6 +91,7 @@ private:
    int itemsCount;
    bool wasSelected;
    bool wasDeleted;
+   bool copied;
    void locateSelectedArray(void);
    void deleteSelectedArray(void);
    void deleteArray(int **array1, int xlen);
