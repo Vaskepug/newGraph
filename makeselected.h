@@ -36,8 +36,9 @@ public:
     void rotateClockWise(void);
     void rotateCounterClockWise(void);
     void copySelected();
-    void pasteSelected();
+    void pasteSelected(QPointF point1);
     void cutSelected();
+    void saveAsImage();
 //protected:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    // void mousePressEvent(QGraphicsSceneMouseEvent *event);

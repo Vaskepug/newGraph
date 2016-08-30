@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QActionGroup>
 #include <QDebug>
+#include <QLabel>
 
+#include "twidget.h"
 #include "tabclass.h"
 
 
@@ -62,10 +64,15 @@ private slots:
     void copyf();
     void pastef();
     void cutf();
+    void on_actionNew_triggered();
+    void decreaseGrid();
+    void increaseGrid();
 
 private:
     Ui::MainWindow *ui;
-    QTabWidget *tabWidget;
+    TWidget *tabWidget;
+    TabClass *tabwid;
+    int indexNewTabs;
 };
 
 #endif // MAINWINDOW_H

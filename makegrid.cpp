@@ -32,7 +32,7 @@ void MakeGrid::paint (QPainter *painter,
         {
             thickness = 2;
             dist = width1+5;
-            painter->drawText( dist+2,y+2,QString::number(k));
+            painter->drawText( dist+2,y+fm.height(),QString::number(k));
             //k = 0;
         }
         else
@@ -61,7 +61,7 @@ void MakeGrid::paint (QPainter *painter,
           //  k = 0;
             thickness = 2;
             dist = height1+5;
-            painter->drawText( x-1,dist+2+fm.height(),QString::number(k));
+            painter->drawText( x+1,dist+fm.height(),QString::number(k));
         }
         else
         {

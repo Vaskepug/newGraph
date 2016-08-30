@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     tabclass.cpp \
     makegrid.cpp \
     makeselected.cpp \
-    drawcrosses.cpp
+    drawcrosses.cpp \
+    twidget.cpp
 
 HEADERS  += mainwindow.h \
     tabclass.h \
     makegrid.h \
     makeselected.h \
-    drawcrosses.h
+    drawcrosses.h \
+    twidget.h
 
 FORMS    += mainwindow.ui
 

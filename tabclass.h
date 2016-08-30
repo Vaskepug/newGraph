@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QCoreApplication>
+
 #include "makegrid.h"
 #include "makeselected.h"
 #include "drawcrosses.h"
@@ -19,7 +22,10 @@ public:
     explicit TabClass(QWidget *parent = 0);
     ~TabClass();
     MakeSelected *mSelected;
-    QGraphicsScene * mScene ; ///< the scene will contain the graphics item 'StateBox'
+    QGraphicsScene * mScene ; //
+    QGraphicsView * mView; //
+    QPointF topLeft;
+    void saveAsImage();
  //   DrawCrosses *mScene;
    // enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
     //              MakeMiddle, MakeM, MakeBrick ,SelectMode};
@@ -44,7 +50,7 @@ private:
  //DrawingPlace *drawplace;
     QHBoxLayout *mLayout;
    // QGraphicsScene * mScene ; ///< the scene will contain the graphics item 'StateBox'
-    QGraphicsView * mView; ///< the graphics view will contain and display the scene.
+
    // StateBox * stateBox; ///< this is my custom QGraphicsItem
     MakeGrid * mGrid; ///< this is my custom QGraphicsItem
     virtual void keyPressEvent(QKeyEvent *event);

@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -10,15 +12,32 @@ MainWindow::MainWindow(QWidget *parent) :
     addTabs();
     setCentralWidget(tabWidget);
     tabWidget->show();
+
 }
 
 void MainWindow::addTabs(void)
 {
-    TabClass *tab1 = new TabClass(this);
+    //TabClass *tab1 = new TabClass(this);
 
   //  TabClass *tab2 = new TabClass(this);
-    tabWidget = new QTabWidget(this);
-    tabWidget->addTab( tab1,tr("General"));
+   // tabWidget = new QTabWidget(this);
+    tabWidget = new TWidget();
+    tabWidget->addTab( new TabClass(this),"NewFile0");
+    tabWidget->tabBar()->setTabTextColor(0,Qt::red);
+    tabWidget->setTabsClosable(true);
+    tabWidget->tabBar()->setTabTextColor(0,Qt::blue);
+    tabWidget->tabBar()->setTabText(0,"111 111");
+    indexNewTabs = 0;
+    int curr = tabWidget->currentIndex();
+    tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    QLabel* statusLabel = new QLabel("Your Message");
+    statusLabel->setAlignment(Qt::AlignCenter);
+    ui->statusBar->addWidget(statusLabel,1);
+    //ui->statusBar->showMessage("Status");
+   // QLabel* nameFile;
+  //  nameFile->setText("New1");
+  //  statusBar()->addWidget(nameFile);
+
   //  tabWidget->addTab( tab2,tr("New"));
 }
 
@@ -52,14 +71,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    QString fileName = QFileDialog::getOpenFileName(this,
+       // tr("Open File"), "", tr("Files (*.png *.jpg *.bmp)"));
+        tr("Open File"), "", tr("Files (*.*)"));
 
+     qDebug() << "Got filename: " << fileName;
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-
+    tabwid->saveAsImage();
+    //QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
+   // if (!fileName.isNull())
+  //  {
+  //     QPixmap pixMap = this->ui->graphicsView->grab();
+  //     pixMap.save(fileName);
+  //  }
 }
 
+void MainWindow::on_actionNew_triggered()
+{
+    indexNewTabs ++;
+   // QString name = "NewFile";
+    QString name = QString ("NewFile%1").arg(indexNewTabs);
+  //  name += indexNewTabs;
+    tabWidget->addTab( new TabClass(this),name);
+    qDebug() << "new " << name ;
+}
 
 void MainWindow::createToolBars(void)
 {
@@ -67,6 +105,7 @@ void MainWindow::createToolBars(void)
     makeCross = new QAction("Make Cross",this);
     makeCross->setData(int(MakeSelected::MakeCross));
     makeCross->setIcon(QIcon(":/icons/cross.png"));
+
     makeCross->setCheckable(true);
 
   //  connect(makeCross, SIGNAL(triggered()), this, SLOT(makeCrossf()));
@@ -117,12 +156,12 @@ void MainWindow::createToolBars(void)
     increase = new QAction("Increase",this);
     increase->setIcon(QIcon(":/icons/plus.png"));
     increase->setCheckable(false);
-   // connect(increase, SIGNAL(triggered()), this, SLOT(increaseGrid()));
+    connect(increase, SIGNAL(triggered()), this, SLOT(increaseGrid()));
 
     decrease = new QAction("Decrease",this);
     decrease->setIcon(QIcon(":/icons/minus.png"));
     decrease->setCheckable(false);
-  //  connect(decrease, SIGNAL(triggered()), this, SLOT(decreaseGrid()));
+    connect(decrease, SIGNAL(triggered()), this, SLOT(decreaseGrid()));
     ////////
     flipHoriz = new QAction("Horizontal",this);
     flipHoriz->setIcon(QIcon(":/icons/horiz.png"));
@@ -227,27 +266,30 @@ void MainWindow::actionGroupClicked(QAction *action)
 
 void MainWindow::flipHorizf()
 {
-    int curr = tabWidget->currentIndex();
+    /*int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->flipHorizontally();
+    wid->mSelected->flipHorizontally();*/
+    tabwid->mSelected->flipHorizontally();
 }
 
 
 
 void MainWindow::flipVertf()
 {
-    int curr = tabWidget->currentIndex();
+  /*  int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->flipVertically();
+    wid->mSelected->flipVertically(); */
+    tabwid->mSelected->flipVertically();
 }
 
 
 void MainWindow::copyf()
 {
     qDebug () << "111";
-    int curr = tabWidget->currentIndex();
+   /* int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->copySelected();
+    wid->mSelected->copySelected();*/
+    tabwid->mSelected->copySelected();
 }
 
 void MainWindow::cutf()
@@ -257,28 +299,51 @@ void MainWindow::cutf()
     //wid->mSelected->flipVertically();
 }
 
+void MainWindow::increaseGrid()
+{
+    //int curr = tabWidget->currentIndex();
+    //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    tabwid->mView->scale(1.5,1.5);
+
+}
+
+void MainWindow::decreaseGrid()
+{
+    //int curr = tabWidget->currentIndex();
+    //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    tabwid->mView->scale(1/1.5,1/1.5);
+
+}
+
+
+
 void MainWindow::pastef()
 {
-    qDebug () << "222";
-    int curr = tabWidget->currentIndex();
+    tabwid->topLeft = tabwid-> mView->mapToScene( 0, 0 );
+    qDebug () << "xxx " << tabwid->topLeft.x() << ' ' << tabwid->topLeft.y();
+  //  qDebug () << "222";
+/*    int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->pasteSelected();
+    wid->mSelected->pasteSelected(); */
+    tabwid->mSelected->pasteSelected(tabwid->topLeft);
 }
 
 
 void MainWindow::rotateClockWisef()
 {
-    int curr = tabWidget->currentIndex();
+  /*  int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->rotateClockWise();
+    wid->mSelected->rotateClockWise(); */
+    tabwid->mSelected->rotateClockWise();
 }
 
 
 void MainWindow::rotateCounterClockWisef()
 {
-    int curr = tabWidget->currentIndex();
+    /*int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->rotateCounterClockWise();
+    wid->mSelected->rotateCounterClockWise();*/
+    tabwid->mSelected->rotateCounterClockWise();
 }
 
 
@@ -319,3 +384,5 @@ void MainWindow::savef()
   // image.save("file_name.png");
 
 }
+
+

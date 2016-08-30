@@ -78,6 +78,12 @@ void MakeSelected::rotateCounterClockWise()
     rotate(true);
 }
 
+void MakeSelected::saveAsImage()
+{
+    qDebug() << "save";
+}
+
+
 void MakeSelected::rotate(bool clo)
 {
     if (selectedArray != nullptr)
@@ -232,15 +238,17 @@ void MakeSelected::flipVertically()
 }
 
 
-void MakeSelected::pasteSelected()
+void MakeSelected::pasteSelected(QPointF point1)
 {
     if ( copied )
     {
         qDebug () << "pste";
-        startPoint.setX(0);
-        startPoint.setY(0);
-        endPoint.setX(selectedArrayXSize*del);
-        endPoint.setY(selectedArrayYSize*del);
+        int xp = point1.x();
+        int yp = point1.y();
+        startPoint.setX(xp);
+        startPoint.setY(yp);
+        endPoint.setX(xp + selectedArrayXSize*del);
+        endPoint.setY(yp + selectedArrayYSize*del);
         renderSelected = true;
         this->update();
     }

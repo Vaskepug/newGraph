@@ -5,14 +5,12 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     mLayout = new QHBoxLayout();
     this->setLayout(mLayout);
     mScene = new QGraphicsScene();
-  //  mScene = new DrawCrosses();
-  //  mScene->init(300,200);
     mView = new QGraphicsView ();
     int del = 10;
 //            stateBox( new StateBox()),
     qDebug() << "mh " << this->width() << this->height();
     mScene->setSceneRect(0,0,300,200);
-    mGrid = new MakeGrid(this->mScene->width(), this->mScene->height(),del);
+    mGrid = new MakeGrid(this->mScene->width()-20, this->mScene->height()-20,del);
     mSelected = new MakeSelected(this->mScene->width(), this->mScene->height(),del);
     //mSelected->setPos(10,10);
     ////////
@@ -24,8 +22,29 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     mView->show();
     mSelected->setFlag(QGraphicsItem::ItemIsSelectable,
                             true);
+   //this->setTabText("nene");
+   // topLeft     = mView->mapToScene( 0, 0 );
     //mSelected->setFlag(QGraphicsItem::ItemIsMovable,
      //                      true);
+}
+
+void TabClass::saveAsImage()
+{
+  /* QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
+   if (!fileName.isNull())
+   {
+      //QPixmap pixMap = this->ui->graphicsView->grab();
+      QPixmap pixMap = mView->grab();
+      pixMap.save(fileName);
+   }*/
+    mScene->clearSelection();                                                  // Selections would also render to the file
+    mScene->setSceneRect(mScene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    QImage image(mScene->sceneRect().size().toSize(), QImage::Format_ARGB32);  // Create the image with the exact size of the shrunk scene
+    image.fill(Qt::transparent);                                              // Start all pixels transparent
+
+    QPainter painter(&image);
+    mScene->render(&painter);
+    image.save("file_name.png");
 }
 
 TabClass::~TabClass()
