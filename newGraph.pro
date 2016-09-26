@@ -18,14 +18,19 @@ SOURCES += main.cpp\
     makegrid.cpp \
     makeselected.cpp \
     drawcrosses.cpp \
-    twidget.cpp
+    twidget.cpp \
+    operationstore.cpp \
+    commands.cpp
 
 HEADERS  += mainwindow.h \
     tabclass.h \
     makegrid.h \
     makeselected.h \
     drawcrosses.h \
-    twidget.h
+    twidget.h \
+    operationstore.h \
+    commands.h \
+    twoheaders.h
 
 FORMS    += mainwindow.ui
 

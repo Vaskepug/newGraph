@@ -1,0 +1,28 @@
+#include "commands.h"
+#include <QDebug>
+//AddCommand::AddCommand(MakeSelected::Choice cho, MakeSelected::coord1 cc,  QUndoCommand *parent)
+AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand *parent)
+     : QUndoCommand(parent)
+ {
+       // ch1 = cho;
+     mSel = ms;
+     cc1 = cc;
+     mSel->drawElement(cc1);
+    // qDebug() << "added " << ch1;
+ }
+
+ AddCommand::~AddCommand()
+ {
+
+ }
+
+ void AddCommand::undo()
+ {
+     mSel->removeElement(cc1);
+    qDebug() << "undo ";
+ }
+
+ void AddCommand::redo()
+ {
+     mSel->drawElement(cc1);
+ }

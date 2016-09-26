@@ -7,6 +7,10 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include<QUndoStack>
+//#include "commands.h"
+//#include "tabclass.h"
+//#include "twoheaders.h"
 
 
 class MakeSelected: public QGraphicsItem
@@ -17,7 +21,8 @@ public:
     DrawFunctionsPtr drawFunctions[6];
 
     ~MakeSelected();
-    MakeSelected(qreal width, qreal height,int del);
+    //MakeSelected(qreal width, qreal height, int del, TabClass *widget);
+    MakeSelected(qreal width, qreal height, int del, QWidget *widget);
     bool wasShift;
     bool shiftPressed;
     bool selected;
@@ -39,6 +44,16 @@ public:
     void pasteSelected(QPointF point1);
     void cutSelected();
     void saveAsImage();
+    QWidget widget1;
+    QUndoStack *qst;
+    //TabClass *widget1;
+    struct coord1
+     {
+         unsigned int i;
+         unsigned int j;
+     };
+    void drawElement(MakeSelected::coord1 cc);
+    void removeElement(MakeSelected::coord1 cc);
 //protected:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    // void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -64,11 +79,11 @@ private:
     QVector< QVector<int> > sceneArray;
     unsigned int horizCells;
     unsigned int vertCells;
-    struct coord1
+  /*  struct coord1
      {
          unsigned int i;
          unsigned int j;
-     };
+     };*/
     coord1 getNumberInArray( QPointF  );
  //   void setItemBehaviour(ItemBehaviour );
     //////
@@ -85,7 +100,7 @@ private:
    DrawFunctions drawMiddle;
    DrawFunctions drawM;
    DrawFunctions drawBrick;
-   void drawElement(MakeSelected::coord1 cc);
+
    int **selectedArray;
    int selectedArrayXSize;
    int selectedArrayYSize;

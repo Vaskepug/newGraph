@@ -1,6 +1,10 @@
 #include "makeselected.h"
+#include "tabclass.h"
+//#include "twoheaders.h"
+#include "commands.h"
 
-MakeSelected::MakeSelected (qreal w, qreal h , int d)
+
+MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
 {
     width = w;
     height = h;
@@ -59,7 +63,11 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d)
    a = 7;
    b = 2;
    rez = a/b;
-   qDebug() << "rez=" << rez;
+
+   qDebug() << "rez=" << dynamic_cast<TabClass *>(widget)->test;
+
+   qst = dynamic_cast<TabClass *>(widget)->undoStack;
+  // qDebug() << qst;
     //installSceneEventFilter(this);
 }
 
@@ -774,12 +782,18 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
        cellX = cc.i;
        cellY = cc.j;*/
        MakeSelected::coord1 cc = getNumberInArray(startPoint);
-       int cellX = cc.i;
-       int cellY = cc.j;
        if(event->button() == Qt::LeftButton)
        {
         //   qDebug() << "in press "<< cc.i << ' ' << cc.j;
-            drawElement(cc);
+           // was drawElement(cc);
+            //qDebug() << dynamic_cast<TabClass *>(widget) ->test;
+         //   TabClass w1 = dynamic_cast<TabClass >(widget);
+            //QUndoCommand *addCommand = new AddCommand(choice,cc);
+            QUndoCommand *addCommand = new AddCommand(this,cc);
+          //  qDebug() << qst;
+            qst ->push(addCommand);
+           // dynamic_cast<TabClass *>(widget)->undoStack->push(addCommand);
+          //  w1->push(addCommand);
        //    qDebug() << "itemmmm " << sceneArray[cellX][cellY] << ' ' << cellX << ' ' << cellY;
       /*     if ( sceneArray[cellX][cellY] == 0 )
            {
@@ -816,9 +830,10 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
            //  itemToDraw = NotDraw;
            //this->update();
        }
-       else
+       else // right button
        {
-           if ( sceneArray[cellX][cellY] > 0 )
+           removeElement(cc);
+        /*   if ( sceneArray[cellX][cellY] > 0 )
            {
                if ( sceneArray[cellX][cellY]  <= 4 )
                {
@@ -838,7 +853,7 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
              //  qDebug() << "else than left" << itemsCount;
                this->update();
               //  itemToDraw = Delete;
-           }
+           }*/
         //   else itemToDraw = NotDraw;
        }
        int xbeg = setToGrid(startPoint.x());
@@ -848,6 +863,33 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
    }
    QGraphicsItem::mousePressEvent(event);
+}
+
+void MakeSelected::removeElement(MakeSelected::coord1 cc)
+{
+    int cellX = cc.i;
+    int cellY = cc.j;
+    if ( sceneArray[cellX][cellY] > 0 )
+              {
+                  if ( sceneArray[cellX][cellY]  <= 4 )
+                  {
+                       sceneArray[cellX][cellY] = 0;
+                  }
+                  else if ( sceneArray[cellX][cellY] < 10 )
+                  {
+                      sceneArray[cellX][cellY] = 0;
+                      sceneArray[cellX+1][cellY] = 0;
+                  }
+                  else
+                  {
+                      sceneArray[cellX][cellY] = 0;
+                      sceneArray[cellX-1][cellY] = 0;
+                  }
+                  itemsCount --;
+                //  qDebug() << "else than left" << itemsCount;
+                  this->update();
+                 //  itemToDraw = Delete;
+              }
 }
 
 void MakeSelected::drawElement(MakeSelected::coord1 cc)

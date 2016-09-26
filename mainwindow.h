@@ -48,6 +48,8 @@ public:
     QAction* copyAction;
     QAction* cutAction;
     QAction* pasteAction;
+    QAction* undoAction;
+    QAction* redoAction;
 
 private slots:
     void thisExitf(void);
@@ -67,7 +69,8 @@ private slots:
     void on_actionNew_triggered();
     void decreaseGrid();
     void increaseGrid();
-
+    void undof();
+    void redof();
 private:
     Ui::MainWindow *ui;
     TWidget *tabWidget;

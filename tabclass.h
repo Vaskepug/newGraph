@@ -10,10 +10,14 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QCoreApplication>
+#include <QUndoStack>
 
 #include "makegrid.h"
 #include "makeselected.h"
 #include "drawcrosses.h"
+//#include "twoheaders.h"
+
+//class MakeSelected;
 
 class TabClass : public QWidget
 {
@@ -26,6 +30,8 @@ public:
     QGraphicsView * mView; //
     QPointF topLeft;
     void saveAsImage();
+    int test;
+    QUndoStack *undoStack;
  //   DrawCrosses *mScene;
    // enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
     //              MakeMiddle, MakeM, MakeBrick ,SelectMode};

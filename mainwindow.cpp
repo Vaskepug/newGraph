@@ -67,6 +67,8 @@ MainWindow::~MainWindow()
     delete copyAction;
     delete pasteAction;
     delete cutAction;
+    delete undoAction;
+    delete redoAction;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -199,6 +201,18 @@ void MainWindow::createToolBars(void)
        cutAction->setCheckable(false);
        connect(cutAction, SIGNAL(triggered()), this, SLOT(cutf()));
        ////////
+       undoAction = new QAction("Undo",this);
+       undoAction->setIcon(QIcon(":/icons/undo.png"));
+       undoAction->setCheckable(false);
+       connect(undoAction, SIGNAL(triggered()), this, SLOT(undof()));
+
+       redoAction = new QAction("Redo",this);
+       redoAction->setIcon(QIcon(":/icons/redo.png"));
+       redoAction->setCheckable(false);
+       connect(redoAction, SIGNAL(triggered()), this, SLOT(redof()));
+
+
+       ///////
 
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
@@ -239,6 +253,8 @@ void MainWindow::createToolBars(void)
     topToolbar->addAction(copyAction);
     topToolbar->addAction(pasteAction);
     topToolbar->addAction(cutAction);
+    topToolbar->addAction(undoAction);
+    topToolbar->addAction(redoAction);
    // topToolbar->addActions(plusMinusActionGroup->actions());
   //  topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
@@ -385,4 +401,13 @@ void MainWindow::savef()
 
 }
 
-
+void MainWindow::redof()
+{
+   // tabwid->mView->scale(1.5,1.5);
+    qDebug() << "redo main";
+}
+void MainWindow::undof()
+{
+    tabwid->undoStack->undo();
+    qDebug() << "undo main";
+}

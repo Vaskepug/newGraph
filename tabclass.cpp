@@ -1,17 +1,20 @@
 #include "tabclass.h"
 
+//#include "twoheaders.h"
 TabClass::TabClass(QWidget *parent) : QWidget(parent)
 {
+    test = 100;
     mLayout = new QHBoxLayout();
     this->setLayout(mLayout);
     mScene = new QGraphicsScene();
     mView = new QGraphicsView ();
     int del = 10;
+    undoStack = new QUndoStack();
 //            stateBox( new StateBox()),
     qDebug() << "mh " << this->width() << this->height();
     mScene->setSceneRect(0,0,300,200);
     mGrid = new MakeGrid(this->mScene->width()-20, this->mScene->height()-20,del);
-    mSelected = new MakeSelected(this->mScene->width(), this->mScene->height(),del);
+    mSelected = new MakeSelected(this->mScene->width(), this->mScene->height(),del,this);
     //mSelected->setPos(10,10);
     ////////
     mLayout->addWidget(mView);
@@ -22,6 +25,7 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     mView->show();
     mSelected->setFlag(QGraphicsItem::ItemIsSelectable,
                             true);
+
    //this->setTabText("nene");
    // topLeft     = mView->mapToScene( 0, 0 );
     //mSelected->setFlag(QGraphicsItem::ItemIsMovable,
