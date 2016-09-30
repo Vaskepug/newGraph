@@ -25,6 +25,8 @@ public:
     MakeSelected(qreal width, qreal height, int del, QWidget *widget);
     bool wasShift;
     bool shiftPressed;
+    bool mouseWasPressed;
+    bool shiftPressedOnce;
     bool selected;
     bool renderSelected;
     void deleteAllInside(void);
@@ -33,9 +35,10 @@ public:
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
                   MakeMiddle, MakeM, MakeBrick};
  //   enum ItemBehaviour { NotDraw, Draw, Delete };
-    Choice choice;
+//    Choice choice;
  //   ItemBehaviour itemToDraw;
     void setChoice(Choice cho);
+    Choice getChoice();
     void flipHorizontally(void);
     void flipVertically(void);
     void rotateClockWise(void);
@@ -58,12 +61,14 @@ public:
    // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
    // void mousePressEvent(QGraphicsSceneMouseEvent *event);
 private:
+  //  enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
+ //                  MakeMiddle, MakeM, MakeBrick};
+    Choice choice;
     QPointF startPoint;
     QPointF endPoint;
     QPointF whereClickedWithShift;
     int delX;
     int delY;
-    //Choice thisChoice;
     int     del;
     qreal   width;
     qreal   height;
@@ -116,6 +121,8 @@ private:
    void flip(bool);
    void rotate(bool);
    void showSelectedArray(void);
+   int getElemType(MakeSelected::coord1 cc);
+   void setRedCoordinates(void);
 };
 
 #endif // MAKESELECTED_H

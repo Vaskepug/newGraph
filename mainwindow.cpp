@@ -403,6 +403,7 @@ void MainWindow::savef()
 
 void MainWindow::redof()
 {
+    tabwid->undoStack->redo();
    // tabwid->mView->scale(1.5,1.5);
     qDebug() << "redo main";
 }

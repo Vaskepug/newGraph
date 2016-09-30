@@ -14,6 +14,8 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
     wasSelected = false;
     shiftPressed = false;
     renderSelected = false;
+    mouseWasPressed = false;
+    shiftPressedOnce = false;
     rectWidth = del;
     rectHeight = del;
     delX = 0;
@@ -132,22 +134,7 @@ void MakeSelected::rotate(bool clo)
       //  showArray(array1, xsize, ysize );
         deleteArray(selectedArray, selectedArrayXSize);
         ///
-      /*  int tmp = startPoint.x();
-        startPoint.setX(startPoint.y());
-        startPoint.setY(tmp);
-        tmp = endPoint.x();
-        endPoint.setX(endPoint.y());
-        endPoint.setY(tmp);*/
-      //  int midx = startPoint.x() + selectedArrayXSize * del / 2;
-      //  int midy = startPoint.y() + selectedArrayYSize * del / 2;
-       // QPointF tmpP;
-      //  tmpP.setX(midx);
-      //  tmpP.setY(midy);
-      //  MakeSelected::coord1 ser = getNumberInArray( tmpP );
-        //console.log(ser)
-      //  midx = ser.i * del;
-      //  midy = ser.j * del;
-        //var delt = Math.abs( midx - midy );
+
         int delt = ( selectedArrayXSize -selectedArrayYSize ) * del  / 2 ;
        // delt = Math.floor ( delt );
         int xn = setToGrid(startPoint.x() +  delt);
@@ -194,41 +181,7 @@ void MakeSelected::rotate(bool clo)
        // deleteArray(array1,xsize);
 
     }
-   /* if (selectedArray != nullptr)
-    {
-        int halfx = selectedArrayXSize / 2;
-        int halfy = selectedArrayYSize / 2;
-        if (! clo )
-        {
-            for (int i = 0; i < selectedArrayYSize; i++) // horiz
-            {
-                for (int j = 0; j < halfx; j++)
-                {
-                  //   qDebug() << "v "<<i<<' '<<j <<' '<<selectedArrayXSize - j - 1;
-                  //   qDebug() << "and " << selectedArray [j][i] << ' ' << selectedArray [selectedArrayXSize - j - 1][i] ;
-                    int tmp = selectedArray [j][i];
-                    selectedArray [j][i] =selectedArray [selectedArrayXSize - j - 1][i];
-                    selectedArray [selectedArrayXSize - j - 1][i] =  tmp;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < selectedArrayXSize; i++)
-            {
-                for (int j = 0; j <halfy; j++)
-                {
-                   // qDebug() << "v "<<i<<' '<<j <<' '<<selectedArrayYSize - j - 1;
-                    //qDebug() << "and " << selectedArray [i][j] << ' ' << selectedArray [i][selectedArrayYSize - j - 1] ;
-                    int tmp = selectedArray [i][j];
-                   selectedArray [i][j] =selectedArray [i][selectedArrayYSize - j-1];
-                    selectedArray [i][selectedArrayYSize - j-1] =  tmp;
 
-                }
-            }
-        }
-        // showSelectedArray( );
-       }*/
     renderSelected = true;
     this->update();
     qDebug() << "rotate";
@@ -421,145 +374,6 @@ void MakeSelected::showArray(int **array1, int xlen, int ylen )
 void MakeSelected::showSelectedArray(void )
 {
     showArray(selectedArray,selectedArrayXSize,selectedArrayYSize);
-   // int sz = 33;
- /*  int sz = selectedArrayXSize;
-    char reg[31] =      "  0  1  2  3  4  5  6  7  8  9";
-    char regEmpty[31] = "                              ";
-    reg[30] = '\0';
-    regEmpty[30] = '\0';
-    if ( sz > 0 )
-    {
-        int dec = sz / 10;
-        int ost = sz % 10;
-        char* str = new char[dec * 30 + ost * 3 + 2 + 1];
-        char* str1 = new char[dec * 30 + ost * 3 + 2 + 1];
-        str [dec * 30 + ost * 3 + 2] = '\0';
-        int i;
-        str [0] = ' ';
-        str[1] = ' ';
-        str1[0] = ' ';
-        str1[1] = ' ';
-        str1[2] = ' ';
-        str1[3] = ' ';
-        str1[4] = '\0';
-        qDebug () << "len " <<  dec * 30 + ost * 3 + 2 + 1;
-        int k1 = 4;
-        for (i = 0; i < dec; i ++ )
-        {
-            char strdig[3] = "";
-            itoa(i%10, strdig, 10);
-            strcpy(str+ i * 30+2, reg);
-            str1[k1] = strdig[0];
-            k1 ++;
-            for (int k = 0; k < 29;k ++)
-            {
-                str1[k1] = ' ';
-                k1 ++;
-            }
-          //  str1[k1] = strdig[0];
-          //  k1 ++;
-         //   regEmpty [2] = strdig[0];
-          //  strcpy(str1+ i * 30+2, regEmpty);
-        }
-        qDebug() << "k1 =" << k1;
-        str1[k1] = '\0';
-        int j1 = 0;
-        int j = 0;
-        for (j = 0; j < ost * 3; j +=3)
-        {
-            char strdig[3] = "";
-            itoa(j1, strdig, 10);
-            str[i*30+j+2] = ' ';
-            str[i*30+j+1+2] = ' ';
-            str[i*30+j+2+2] = strdig[0];
-           // qDebug() << strdig[0] << ' ' <<ost << ' ' << dec;
-            j1 ++;
-        }
-        str [i * 30 + j+2] = '\0';
-        qDebug () << "len1 " <<  i * 30 +j;
-       //  str [i * 30 + j] = '\0';
-        qDebug() << str1;
-        qDebug() << str;
-     //   str = "";
-        str[0] = ' ';
-        str[1] = ' ';
-        for (int i1 = 0; i1 < selectedArrayYSize; i1 ++ )
-        {
-                int k2 = 2;
-                for (int j1 = 0; j1 < selectedArrayXSize; j1 ++)
-                {
-                  //  qDebug() << "k2 " << k2;
-                   // str[k2] = 'a';
-                    char strdig[3] = "";
-                    itoa(selectedArray[j1][i1], strdig, 10);
-                    if (selectedArray[j1][i1] < 10)
-                    {
-                        str[k2] = ' ';
-                        k2 ++;
-                        str[k2] = ' ';
-                        k2 ++;
-                        str[k2] = strdig[0];
-                        //qDebug () << "di" << strdig[0];
-                    }
-                    else
-                    {
-                        str[k2] = ' ';
-                        k2 ++;
-                        str[k2] = strdig[0];
-                        k2 ++;
-                        str[k2] = strdig[1];
-                     //   qDebug () << "in arr " << selectedArray[j1][i1];
-                    }
-                    k2 ++;
-                }
-                str[k2] = '\0';
-                qDebug() << str;
-        }
-        delete str;
-        delete str1;
-     }*/
-    /*
-//// first string
-    var str = '';
-    var maxx = arr.length;
-    if ( 0 == maxy ) return;
-    var maxy = arr[0].length;
-    //	console.log('m=',maxx,maxy) // 15 12
-    str = '';
-
-    for ( j = 0; j < maxx; j ++)
-    {
-        if ( j < 10 )
-            str += '  '+j;
-        else
-            str += '  '+ j % 10;
-    }
-    console.log('   '+str);
-
-    str = '';
-    for (i = 0; i < maxy; i++)
-    {
-        if ( i < 10 ) str += ' ';
-        str += i + ' ';
-        for ( j = 0; j < maxx; j++)
-        {
-//			var one = arr[j][i];
-        //	console.log('i=',i,maxx)
-            var one = arr[j][i];
-            if ( one > -1 )
-                str += '  '+ one;
-            else
-            {
-                str += ' '+'-1';
-            }
-        }
-
-        console.log(str);
-        str = '';
-    }
-    //// end
-     */
-
 
 }
 
@@ -583,19 +397,35 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
       emit select(tmpPath, ctrl);
     }   */
  //  itemToDraw = 0;
-    if ( selected )
-    {
+  if ( selected )
+  {
 
         //MakeSelected::coord1 cc = getNumberInArray(startPoint);
        // int sx = cc.i;
        // int sy = cc.j;
         // first point
-        if ( !shiftPressed )
-        {
+      if ( !shiftPressed )
+      {
             selectedArrayXSize = int ( (endPoint.x() - startPoint.x()) / del  );// + sx;
             selectedArrayYSize= int ( (endPoint.y() - startPoint.y()) / del  ); //+ sy;
-        }
-        if ( wasDeleted == true)
+           // addSelectedArray(); it s to mousepress after selected
+         //    this->update();
+            // not was
+            renderSelected = true;
+            qDebug() << "mouse release " << startPoint.x();
+      }
+      if ( wasDeleted == true)
+      {
+          if ( itemsCount > 0)
+          {
+              locateSelectedArray();
+              fillSelectedArray();
+          }
+          else
+              qDebug() << "item count zero";
+      }
+      else qDebug() << "was deleted false";
+   /*     if ( wasDeleted == true)
         {
             if ( itemsCount > 0)
             {
@@ -605,31 +435,7 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             else
                 qDebug() << "item count zero";
         }
-        else qDebug() << "was deleted false";
-
-
-       /* bool priz = false;
-        for (int i = sx; i < selectedArrayXSize; i++ )
-        {
-            for ( int j = sy; j < selectedArrayYSize; j++)
-            {
-                if (sceneArray[i][j] > 0)
-                {
-                    priz = true;
-                     //qDebug() <<"eee-"<<' '<< i << ' ' <<j;
-                    break;
-                }
-            }
-        }*/
-      /*  if ( itemsCount > 0 )
-        {
-            selectedArray = new int *[selectedArrayXSize];
-            for (int i = 0; i < selectedArrayXSize; i ++)
-            {
-                selectedArray[i] = new int [selectedArrayYSize];
-            }
-        }*/
-
+        else qDebug() << "was deleted false";*/
     }
     else
     {
@@ -671,7 +477,7 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             this->update();
         }
         else
-        {
+        { // shift Pressed
            //whereClickedWithShift =
             QPointF  tmp = event->scenePos();
             int sx = setToGrid(tmp.x()+delX);
@@ -711,12 +517,11 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QGraphicsItem::mouseMoveEvent(event);
 
 }
-/*
-void MakeSelected::keyCaught(QKeyEvent *event)
+
+void MakeSelected::setRedCoordinates(void)
 {
-    qDebug() << "222";
+
 }
-*/
 
 void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -728,6 +533,11 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //    qDebug() << "selectednddd " << shiftPressed;
        if ( shiftPressed == false )
        {
+           if ( selectedArray != nullptr )
+           {
+             addSelectedArray();
+             deleteSelectedArray();
+           }
          //  qDebug() << "no shift in press";
             startPoint = event->scenePos();
             int xbeg = setToGrid(startPoint.x());
@@ -738,11 +548,12 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
             endPoint.setY(ybeg+del);
             rectWidth = 10;
             rectHeight = 10;
+
        //     qDebug() << "no shift in press " << rectWidth;
             this->update();
        }
        else
-       {
+       { // shift pressed
           whereClickedWithShift =  event->scenePos();
         //  qDebug() << "x1 " <<  startPoint.x() << ' ' << whereClickedWithShift.x();
          // qDebug() << "y1 " <<  startPoint.y() <<' ' << whereClickedWithShift.y();
@@ -758,16 +569,7 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
           {
             delX = setToGrid(sx);
             delY = setToGrid(sy);
-            // second point
-      /*      if ( wasDeleted == true)
-            {
-                qDebug() << "located";
-                locateSelectedArray();
-                fillSelectedArray();
-            }*/
-         //   rectWidth = endPoint.x() - startPoint.x();
-         //   rectHeight = endPoint.y() - startPoint.y();
-        //    qDebug() <<"shift in press " << rectWidth << ' '<< rectHeight;
+
           }
           else qDebug() << "not in the area";
        }
@@ -784,77 +586,19 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
        MakeSelected::coord1 cc = getNumberInArray(startPoint);
        if(event->button() == Qt::LeftButton)
        {
-        //   qDebug() << "in press "<< cc.i << ' ' << cc.j;
-           // was drawElement(cc);
-            //qDebug() << dynamic_cast<TabClass *>(widget) ->test;
-         //   TabClass w1 = dynamic_cast<TabClass >(widget);
-            //QUndoCommand *addCommand = new AddCommand(choice,cc);
             QUndoCommand *addCommand = new AddCommand(this,cc);
-          //  qDebug() << qst;
             qst ->push(addCommand);
-           // dynamic_cast<TabClass *>(widget)->undoStack->push(addCommand);
-          //  w1->push(addCommand);
-       //    qDebug() << "itemmmm " << sceneArray[cellX][cellY] << ' ' << cellX << ' ' << cellY;
-      /*     if ( sceneArray[cellX][cellY] == 0 )
-           {
-                //itemToDraw = Draw;
-                switch (choice)
-                {
-                    case MakeCross:
-                    case MakeCorn:
-                    case MakeCrossed:
-                    case MakeMiddle:
-                    //     itemToDraw = Draw;
-                         sceneArray[cellX][cellY] = choice;
-                    break;
-                    case MakeM:
-                    case MakeBrick:
-                        if ( sceneArray[cellX+1][cellY] == 0 )
-                        {
-                          //  itemToDraw = Draw;
-                            sceneArray[cellX][cellY] = choice;
-                            sceneArray[cellX+1][cellY] = choice*50;
-                        }
-                        else
-                        {
-                          //  itemToDraw = NotDraw;
-                        }
-                    break;
-                    default:
-                    break;
-                }
-                itemsCount ++;
-                this->update();
-           } */
-        //   else
-           //  itemToDraw = NotDraw;
-           //this->update();
+
        }
        else // right button
        {
-           removeElement(cc);
-        /*   if ( sceneArray[cellX][cellY] > 0 )
+           int elemType = getElemType(cc);
+           if ( elemType > 0 )
            {
-               if ( sceneArray[cellX][cellY]  <= 4 )
-               {
-                    sceneArray[cellX][cellY] = 0;
-               }
-               else if ( sceneArray[cellX][cellY] < 10 )
-               {
-                   sceneArray[cellX][cellY] = 0;
-                   sceneArray[cellX+1][cellY] = 0;
-               }
-               else
-               {
-                   sceneArray[cellX][cellY] = 0;
-                   sceneArray[cellX-1][cellY] = 0;
-               }
-               itemsCount --;
-             //  qDebug() << "else than left" << itemsCount;
-               this->update();
-              //  itemToDraw = Delete;
-           }*/
-        //   else itemToDraw = NotDraw;
+                QUndoCommand *deleteCommand = new DeleteCommand( this, cc, elemType );
+                qst ->push(deleteCommand);
+           }
+
        }
        int xbeg = setToGrid(startPoint.x());
        int ybeg = setToGrid(startPoint.y());
@@ -865,17 +609,25 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
    QGraphicsItem::mousePressEvent(event);
 }
 
+int MakeSelected::getElemType(MakeSelected::coord1 cc)
+{
+    int cellX = cc.i;
+    int cellY = cc.j;
+    return sceneArray[cellX][cellY];
+}
+
 void MakeSelected::removeElement(MakeSelected::coord1 cc)
 {
     int cellX = cc.i;
     int cellY = cc.j;
-    if ( sceneArray[cellX][cellY] > 0 )
-              {
-                  if ( sceneArray[cellX][cellY]  <= 4 )
+    int etype = getElemType(cc);
+//    if ( sceneArray[cellX][cellY] > 0 )
+ //             {
+                  if ( etype  <= 4 )
                   {
                        sceneArray[cellX][cellY] = 0;
                   }
-                  else if ( sceneArray[cellX][cellY] < 10 )
+                  else if ( etype < 10 )
                   {
                       sceneArray[cellX][cellY] = 0;
                       sceneArray[cellX+1][cellY] = 0;
@@ -886,10 +638,10 @@ void MakeSelected::removeElement(MakeSelected::coord1 cc)
                       sceneArray[cellX-1][cellY] = 0;
                   }
                   itemsCount --;
-                //  qDebug() << "else than left" << itemsCount;
+                  qDebug() << "else than left" << itemsCount;
                   this->update();
                  //  itemToDraw = Delete;
-              }
+  //            }
 }
 
 void MakeSelected::drawElement(MakeSelected::coord1 cc)
@@ -1058,17 +810,23 @@ void MakeSelected::paint (QPainter *painter,
 
          }
          else qDebug() << "was not deleted in paint";*/
+       //  qDebug() << "renren" << renderSelected;
          if ( shiftPressed || renderSelected )
          {
-
+            qDebug() << "here is shift or render";
             if ( selectedArray != nullptr )
             {
                 qDebug() << "shift in paint and render";
-                renderSelectedArea(painter);
+                renderSelectedArea(painter); // here pay attention to shift
             }
             else qDebug() << "no selected array";
             if ( renderSelected ) renderSelected = false;
+
          }
+        // renderSelectedArea(painter); goes to the new start point when mouse prfessed
+         //addSelectedArray();
+        // if (renderSelected) qDebug() << " render";
+
         // renderArea(painter);
      }
      else
@@ -1083,48 +841,9 @@ void MakeSelected::paint (QPainter *painter,
         painter->setPen(QPen(c, 1, Qt::SolidLine, Qt::RoundCap));
         painter->drawRect(rect);*/
     }
-     renderArea(painter);
-   // else
-   // {
-      //  MakeSelected::coord1 cc = getNumberInArray(startPoint);
-      //  cellX = cc.i;
-      //  cellY = cc.j;
-    //    int xbeg = cellX *del;
-    //    int ybeg = cellY *del;
-     //   int xend = xbeg + del;
-     //   int yend = ybeg + del;
-   //     endPoint.setX(startPoint.x() + del);
-    //    endPoint.setY(startPoint.y() + del);
 
-     //   if ( itemToDraw == Draw )
-      //  {
-         //   renderArea(painter);
-        /*    for (unsigned int i = 0; i < horizCells; i++)
-            {
-                for (unsigned int j = 0 ; j < vertCells; j ++)
-                {
-                    int dei = sceneArray [i][j];
-               // (this->*drawFunctions[ choice - 1 ])( painter );
-                    if ( dei > 0 )
-                    {
-                        if ( dei < 20)
-                        {
-                         //   qDebug()<< "i=" << i << " j=" << j << " " << dei;
-                       //     drawCross1(painter,i * del, j * del, i * del + del, j * del + del);
-                            int xb = i * del;
-                            int yb = j * del;
-                            int xe = xb + del;
-                            int ye = yb + del;
-                           (this->*drawFunctions[ dei-1 ])( painter, xb, yb, xe, ye );
-                            // here think of coordinates
-                         //   painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
-                         //   painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
-                        }
-                    }
-                }
-            } */
-    //}
-}
+     renderArea(painter);
+ }
 
 void MakeSelected ::clearArea(QPainter *painter)
 {
@@ -1140,7 +859,12 @@ void MakeSelected ::clearArea(QPainter *painter)
 
 bool MakeSelected ::addSelectedArray(void)
 {
-    if (selectedArray == nullptr) return false;
+    if (selectedArray == nullptr)
+    {
+       // qDebug () << "in add nulllll";
+        return false;
+    }
+  //  qDebug () << "in add " << startPoint.x() <<' '<<selectedArrayXSize ;
     MakeSelected::coord1 cc = getNumberInArray(startPoint);
     int sx = cc.i;
     int sy = cc.j;
@@ -1210,7 +934,7 @@ void MakeSelected :: renderSelectedArea(QPainter *painter)
 
 void MakeSelected :: renderArea(QPainter *painter)
 {
-    //qDebug() << "here render scene array";
+   // qDebug() << "here render scene array";
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap));
     for (unsigned int i = 0; i < horizCells; i++)
     {
@@ -1333,6 +1057,10 @@ MakeSelected::coord1 MakeSelected::getNumberInArray( QPointF p )
     return c;
 }
 
+MakeSelected::Choice MakeSelected::getChoice()
+{
+    return choice;
+}
 
 void MakeSelected::setChoice(Choice cho)
 {
@@ -1352,25 +1080,6 @@ void MakeSelected::setChoice(Choice cho)
            if ( wasShift )
            {
                wasShift = false;
-            //   qDebug() << "was shift ";
-             /*  MakeSelected::coord1 cc = getNumberInArray(startPoint);
-               int sx = cc.i;
-               int sy = cc.j;
-               int i1 = 0;
-               int j1 = 0;
-               for (int i = sx; i < sx + selectedArrayXSize; i ++)
-               {
-                   j1 = 0;
-                   for (int j = sy; j < sy + selectedArrayYSize; j ++)
-                   {
-                       if ( sceneArray[i][j] == 0 )
-                        sceneArray[i][j] = selectedArray[i1][j1];
-                       j1 ++;
-                   }
-                   i1 ++;
-               }
-               qDebug() << "end " << startPoint.x();*/
-
                addSelectedArray();
            }
            else qDebug() << " not was shift ";
@@ -1383,7 +1092,7 @@ void MakeSelected::setChoice(Choice cho)
            }
            this->update();
        }
-       else qDebug() << "not was selected ";
+      // else qDebug() << "not was selected ";
    }
    //this->addLine( QLineF( 10, 10, 30, 30 ),QPen(Qt::red, 1) );
   // this->addLine( QLineF( 10, 30, 30, 10 ) );
