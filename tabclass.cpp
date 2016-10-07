@@ -9,12 +9,15 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     mScene = new QGraphicsScene();
     mView = new QGraphicsView ();
     int del = 10;
+    int borderForNumbers = 20;
     undoStack = new QUndoStack();
 //            stateBox( new StateBox()),
     qDebug() << "mh " << this->width() << this->height();
     mScene->setSceneRect(0,0,300,200);
-    mGrid = new MakeGrid(this->mScene->width()-20, this->mScene->height()-20,del);
-    mSelected = new MakeSelected(this->mScene->width(), this->mScene->height(),del,this);
+    mGrid = new MakeGrid(this->mScene->width()-borderForNumbers,
+                         this->mScene->height()-borderForNumbers,del);
+    mSelected = new MakeSelected(this->mScene->width()-borderForNumbers,
+                                 this->mScene->height()-borderForNumbers,del,this);
     //mSelected->setPos(10,10);
     ////////
     mLayout->addWidget(mView);
@@ -69,8 +72,9 @@ void TabClass::keyPressEvent(QKeyEvent *event)
     if ( event->key() == Qt::Key_Shift )
     {
         qDebug() << "key=shift in tab";
-        mSelected->wasShift = true;
-        mSelected->shiftPressed = true;
+        mSelected->setWasShift( true );
+        mSelected->setShiftPressed( true );
+        if ( mSelected->getMouseWasPressed() ) mSelected->setShiftPressedOnce(true);
     }
     else if (event->key() == Qt::Key_Delete)
     {
@@ -93,7 +97,7 @@ void TabClass::keyReleaseEvent(QKeyEvent *event)
      //   qDebug() << "released="<<event->key();
         if ( event->key() == Qt::Key_Shift )
         {
-            mSelected->shiftPressed = false;
+            mSelected->setShiftPressed(false);
         }
      //   emit keyCaught(event);
    /* if(event->key() == Qt::Key_Delete)

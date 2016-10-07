@@ -10,14 +10,13 @@ class AddCommand : public QUndoCommand
     // AddCommand(MakeSelected::Choice cho, MakeSelected::coord1 cc, QUndoCommand *parent = 0);
      AddCommand(MakeSelected *ms, MakeSelected::coord1 cc, QUndoCommand *parent = 0);
      ~AddCommand();
-    MakeSelected::Choice ch1;
-    MakeSelected::coord1 cc1;
-    MakeSelected *mSel;
      void undo();
      void redo();
 
  private:
-
+     MakeSelected::Choice ch1;
+     MakeSelected::coord1 cc1;
+     MakeSelected *mSel;
  };
 
 class DeleteCommand : public QUndoCommand
@@ -27,31 +26,34 @@ class DeleteCommand : public QUndoCommand
      DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
                    int eType, QUndoCommand *parent = 0);
      ~DeleteCommand();
-    MakeSelected::Choice ch1;
-    MakeSelected::coord1 cc1;
-    MakeSelected *mSel;
+
      void undo();
      void redo();
 
  private:
+     MakeSelected::Choice ch1;
+     MakeSelected::coord1 cc1;
+     MakeSelected *mSel;
 
  };
 
 class MoveCommand : public QUndoCommand
  {
  public:
-     MoveCommand(MakeSelected *ms, QPointF startP, QPointF endP,
-                 int selectedArrayXs, int selectedArrayYs, int **selArray,
-                   int eType, QUndoCommand *parent = 0);
+     MoveCommand(MakeSelected *ms,
+                 QUndoCommand *parent = 0);
      ~MoveCommand();
-    MakeSelected::Choice ch1;
-    MakeSelected::coord1 cc1;
-    MakeSelected *mSel;
+
      void undo();
      void redo();
 
  private:
-
+     MakeSelected *mSel;
+     int **thisSelectedArray;
+     QPointF newStart;
+     QPointF newEnd;
+     QPointF oldStart;
+     QPointF oldEnd;
  };
 
 class FlipRotateCommand : public QUndoCommand
@@ -74,13 +76,14 @@ class FlipRotateCommand : public QUndoCommand
 class SelectCommand : public QUndoCommand
  {
  public:
-     SelectCommand(MakeSelected *ms, QPointF startP, QPointF endP,
-                 int selectedArrayXs, int selectedArrayYs, int **selArray,
-                   int eType, QUndoCommand *parent = 0);
+     SelectCommand(MakeSelected *ms, QUndoCommand *parent = 0);
      ~SelectCommand();
-    MakeSelected::Choice ch1;
-    MakeSelected::coord1 cc1;
+  //  MakeSelected::Choice ch1;
+  //  MakeSelected::coord1 cc1;
+ private:
     MakeSelected *mSel;
+    QPointF pStart;
+    QPointF pEnd;
      void undo();
      void redo();
 

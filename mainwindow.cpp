@@ -268,15 +268,15 @@ void MainWindow::actionGroupClicked(QAction *action)
  //  qDebug() << "xc=" <<  makeCross->data().toInt()<<' '<<tabWidget->currentIndex();
    qDebug() <<  "dat=" << action->data().toInt();
  //  int curr = tabWidget->currentIndex();
-   for (int i = 0; i <tabWidget->count();i ++ )
+ /*  for (int i = 0; i <tabWidget->count();i ++ )
    {
        //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
        TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(i));
        wid ->mSelected->setChoice(MakeSelected::Choice(action->data().toInt()));
      //  wid->drawplace->setMode(DrawingPlace::Mode(action->data().toInt()));
-   }
+   }*/
    // dynamic_cast<QLineEdit*>(widget)->text();
-
+     tabwid ->mSelected->setChoice(MakeSelected::Choice(action->data().toInt()));
 }
 
 
