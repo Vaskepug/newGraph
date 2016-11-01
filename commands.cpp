@@ -8,8 +8,8 @@ AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand 
      cc1 = cc;
      ch1 = mSel->getChoice();
      mSel->setSelected(false);
-     mSel->drawElement(cc1);
-     qDebug() << "added command" << cc.i;
+  //   mSel->drawElement(cc1);
+   //  qDebug() << "added command" << cc.i;
  }
 
  AddCommand::~AddCommand()
@@ -49,7 +49,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
       }
       else
       {
-           mSel->removeElement(cc1);
+        //   mSel->removeElement(cc1);
           int i10 = eType / 10;
           ch1 = static_cast<MakeSelected::Choice>(i10);
           cc1.i = cc1.i - 1;
@@ -162,3 +162,49 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
         mSel->update();
         qDebug() << "Select redo";
     }
+
+    FlipRotateCommand::FlipRotateCommand(MakeSelected *ms, bool direction, bool typeOfAction,
+                 QUndoCommand *parent) : QUndoCommand(parent)
+     {
+        mSel = ms;
+        dir = direction;
+        typeA = typeOfAction;
+     /*   if ( typeA )
+        {
+           mSel->flip(dir);
+        }
+        else
+        {
+            mSel->rotate(dir);
+        }*/
+     }
+
+      FlipRotateCommand::~FlipRotateCommand()
+      {
+
+      }
+
+      void FlipRotateCommand::undo()
+      {
+          if ( typeA )
+          {
+             mSel->flip(!dir);
+          }
+          else
+          {
+              mSel->rotate(!dir);
+          }
+      }
+
+      void FlipRotateCommand::redo()
+      {
+          if ( typeA )
+          {
+             mSel->flip(dir);
+          }
+          else
+          {
+              mSel->rotate(dir);
+          }
+      }
+

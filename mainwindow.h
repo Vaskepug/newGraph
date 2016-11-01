@@ -51,6 +51,7 @@ public:
     QAction* undoAction;
     QAction* redoAction;
 
+
 private slots:
     void thisExitf(void);
     void savef(void);
@@ -71,11 +72,14 @@ private slots:
     void increaseGrid();
     void undof();
     void redof();
+    void tabChanged();
 private:
     Ui::MainWindow *ui;
     TWidget *tabWidget;
     TabClass *tabwid;
     int indexNewTabs;
+    QAction* vertActions[7];
+    void setRightTool(void);
 };
 
 #endif // MAINWINDOW_H

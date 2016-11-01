@@ -41,8 +41,10 @@ public:
     Choice getChoice();
     void flipHorizontally(void);
     void flipVertically(void);
+    void flip(bool);
     void rotateClockWise(void);
     void rotateCounterClockWise(void);
+    void rotate(bool);
     void copySelected();
     void pasteSelected(QPointF point1);
     void cutSelected();
@@ -141,8 +143,8 @@ private:
    void deleteArray(int **array1, int xlen);
    void showArray(int **array1, int xlen,int ylen );
    void clearArea(QPainter *painter);
-   void flip(bool);
-   void rotate(bool);
+   //void flip(bool);
+   //void rotate(bool);
    void showSelectedArray(void);
    int getElemType(MakeSelected::coord1 cc);
    void setRedCoordinates(void);

@@ -8,11 +8,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    int numActions = 6;
+
     createToolBars();
     addTabs();
     setCentralWidget(tabWidget);
     tabWidget->show();
 
+    connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 }
 
 void MainWindow::addTabs(void)
@@ -30,9 +33,16 @@ void MainWindow::addTabs(void)
     indexNewTabs = 0;
     int curr = tabWidget->currentIndex();
     tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    tabwid ->mSelected->setChoice(MakeSelected::Choice(1));
+  /*  MakeSelected::Choice cho;
+    cho = tabwid ->mSelected->getChoice();
+    vertActions [(int) cho - 1]->setChecked(true);*/
+    setRightTool();
+    qDebug() << "checked selected " << (int)  MakeSelected::Choice(1);
     QLabel* statusLabel = new QLabel("Your Message");
     statusLabel->setAlignment(Qt::AlignCenter);
     ui->statusBar->addWidget(statusLabel,1);
+
     //ui->statusBar->showMessage("Status");
    // QLabel* nameFile;
   //  nameFile->setText("New1");
@@ -41,6 +51,17 @@ void MainWindow::addTabs(void)
   //  tabWidget->addTab( tab2,tr("New"));
 }
 
+void MainWindow::tabChanged()
+{
+    int curr = tabWidget->currentIndex();
+    qDebug() << "curr tab " << curr;
+    tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    setRightTool();
+  //  MakeSelected::Choice cho;
+  //  cho = tabwid ->mSelected->getChoice();
+  //  vertActions [(int) cho - 1]->setChecked(true);
+   //
+}
 
 MainWindow::~MainWindow()
 {
@@ -69,6 +90,7 @@ MainWindow::~MainWindow()
     delete cutAction;
     delete undoAction;
     delete redoAction;
+    //delete vertActions;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -97,45 +119,73 @@ void MainWindow::on_actionNew_triggered()
    // QString name = "NewFile";
     QString name = QString ("NewFile%1").arg(indexNewTabs);
   //  name += indexNewTabs;
-    tabWidget->addTab( new TabClass(this),name);
+    int index = tabWidget->addTab( new TabClass(this),name);
+    tabWidget->setCurrentIndex(index);
+    int curr = tabWidget->currentIndex();
+    tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    tabwid ->mSelected->setChoice(MakeSelected::Choice(1));
+    setRightTool();
     qDebug() << "new " << name ;
+}
+
+void MainWindow::setRightTool(void)
+{
+    MakeSelected::Choice cho;
+    cho = tabwid ->mSelected->getChoice();
+    qDebug() << "  changed tab " << (int)cho;
+    if ( cho >= 0)
+        vertActions [(int) cho]->setChecked(true);
+
 }
 
 void MainWindow::createToolBars(void)
 {
+    select = new QAction("Select",this);
+    vertActions[0] = select;
+    select->setIcon(QIcon(":/icons/select.png"));
+    select->setCheckable(true);
+    connect (select, SIGNAL(triggered()), this, SLOT(selectf()));
    //////////
     makeCross = new QAction("Make Cross",this);
+    vertActions[1] = makeCross;
     makeCross->setData(int(MakeSelected::MakeCross));
     makeCross->setIcon(QIcon(":/icons/cross.png"));
 
     makeCross->setCheckable(true);
+    //makeCross->setChecked(true);
 
   //  connect(makeCross, SIGNAL(triggered()), this, SLOT(makeCrossf()));
     makeCircle = new QAction("Make Circle",this);
+    vertActions[2] = makeCircle;
     makeCircle->setIcon(QIcon(":/icons/circle.png"));
     makeCircle->setData(int(MakeSelected::MakeCorn));
     makeCircle->setCheckable(true);
   //  connect(makeCircle, SIGNAL(triggered()), this, SLOT(makeCirclef()));
 
     makeM = new QAction("Make M",this);
+    vertActions[5] = makeM;
     makeM->setIcon(QIcon(":/icons/m.png"));
     makeM->setData(int(MakeSelected::MakeM));
     makeM->setCheckable(true);
 
-    makeBrick = new QAction("Make Brick",this);
-    makeBrick->setIcon(QIcon(":/icons/brick.png"));
-    makeBrick->setData(int(MakeSelected::MakeBrick));
-    makeBrick->setCheckable(true);
+    makeMiddle = new QAction("Make Middle",this);
+    vertActions[4] = makeMiddle;
+    makeMiddle->setIcon(QIcon(":/icons/middle.png"));
+    makeMiddle->setData(int(MakeSelected::MakeMiddle));
+    makeMiddle->setCheckable(true);
 
     makeCrossed = new QAction("Make Crossed",this);
+    vertActions[3] = makeCrossed;
     makeCrossed->setIcon(QIcon(":/icons/crossed.png"));
     makeCrossed->setData(int(MakeSelected::MakeCrossed));
     makeCrossed->setCheckable(true);
 
-    makeMiddle = new QAction("Make Middle",this);
-    makeMiddle->setIcon(QIcon(":/icons/middle.png"));
-    makeMiddle->setData(int(MakeSelected::MakeMiddle));
-    makeMiddle->setCheckable(true);
+
+    makeBrick = new QAction("Make Brick",this);
+    vertActions[6] = makeBrick;
+    makeBrick->setIcon(QIcon(":/icons/brick.png"));
+    makeBrick->setData(int(MakeSelected::MakeBrick));
+    makeBrick->setCheckable(true);
 
     ////////////////////////
 
@@ -144,10 +194,10 @@ void MainWindow::createToolBars(void)
     setGrid->setCheckable(true);
    // connect (setGrid, SIGNAL(triggered()), this, SLOT(setGridf()));
 
-    select = new QAction("Select",this);
+    /*select = new QAction("Select",this);
     select->setIcon(QIcon(":/icons/select.png"));
     select->setCheckable(true);
-    connect (select, SIGNAL(triggered()), this, SLOT(selectf()));
+    connect (select, SIGNAL(triggered()), this, SLOT(selectf()));*/
 
     thisExit = new QAction("Exit",this);
     thisExit->setIcon(QIcon(":/icons/exit.png"));
@@ -219,10 +269,12 @@ void MainWindow::createToolBars(void)
     vertActionGroup->addAction(select);
     vertActionGroup->addAction(makeCross);
     vertActionGroup->addAction(makeCircle);
-    vertActionGroup->addAction(makeM);
-    vertActionGroup->addAction(makeBrick);
     vertActionGroup->addAction(makeCrossed);
     vertActionGroup->addAction(makeMiddle);
+    vertActionGroup->addAction(makeM);
+    vertActionGroup->addAction(makeBrick);
+  //  vertActionGroup->addAction(makeCrossed);
+  //  vertActionGroup->addAction(makeMiddle);
     //////////
     connect(vertActionGroup, SIGNAL(triggered(QAction*)),
                 this, SLOT(actionGroupClicked(QAction*)));
@@ -277,6 +329,7 @@ void MainWindow::actionGroupClicked(QAction *action)
    }*/
    // dynamic_cast<QLineEdit*>(widget)->text();
      tabwid ->mSelected->setChoice(MakeSelected::Choice(action->data().toInt()));
+
 }
 
 
@@ -286,6 +339,7 @@ void MainWindow::flipHorizf()
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     wid->mSelected->flipHorizontally();*/
     tabwid->mSelected->flipHorizontally();
+    qDebug() << "horizontally";
 }
 
 
@@ -296,6 +350,7 @@ void MainWindow::flipVertf()
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     wid->mSelected->flipVertically(); */
     tabwid->mSelected->flipVertically();
+    qDebug() << "vrtically";
 }
 
 
@@ -341,7 +396,11 @@ void MainWindow::pastef()
 /*    int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     wid->mSelected->pasteSelected(); */
-    tabwid->mSelected->pasteSelected(tabwid->topLeft);
+    QPointF leftTopZero;
+    leftTopZero.setX(0);
+    leftTopZero.setY(0);
+    //tabwid->mSelected->pasteSelected(tabwid->topLeft);
+    tabwid->mSelected->pasteSelected(leftTopZero);
 }
 
 

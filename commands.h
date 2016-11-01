@@ -59,17 +59,17 @@ class MoveCommand : public QUndoCommand
 class FlipRotateCommand : public QUndoCommand
  {
  public:
-     FlipRotateCommand(MakeSelected *ms, QPointF startP, QPointF endP,
-                 int selectedArrayXs, int selectedArrayYs, int **selArray,
-                   int eType, QUndoCommand *parent = 0);
+     FlipRotateCommand(MakeSelected *ms, bool direction,
+                       bool typeOfAction, QUndoCommand *parent = 0);
      ~FlipRotateCommand();
-    MakeSelected::Choice ch1;
-    MakeSelected::coord1 cc1;
-    MakeSelected *mSel;
+
      void undo();
      void redo();
 
  private:
+     bool dir;
+     bool typeA;
+     MakeSelected *mSel;
 
  };
 
