@@ -2,25 +2,31 @@
 #include "ui_mainwindow.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
+#include <QFormLayout>
+#include <QDialogButtonBox>
+#include <QSpinBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    int numActions = 6;
+    //int numActions = 6;
 
     createToolBars();
     addTabs();
     setCentralWidget(tabWidget);
     tabWidget->show();
-
+    selectedArray = nullptr;
     connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 }
 
 void MainWindow::addTabs(void)
 {
     //TabClass *tab1 = new TabClass(this);
+    wasCopied = false;
+    currentTab = 0;
 
   //  TabClass *tab2 = new TabClass(this);
    // tabWidget = new QTabWidget(this);
@@ -34,6 +40,7 @@ void MainWindow::addTabs(void)
     int curr = tabWidget->currentIndex();
     tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     tabwid ->mSelected->setChoice(MakeSelected::Choice(1));
+
   /*  MakeSelected::Choice cho;
     cho = tabwid ->mSelected->getChoice();
     vertActions [(int) cho - 1]->setChecked(true);*/
@@ -90,7 +97,10 @@ MainWindow::~MainWindow()
     delete cutAction;
     delete undoAction;
     delete redoAction;
+    delete resizeAction;
     //delete vertActions;
+    if ( selectedArray != nullptr )
+        deleteArray(selectedArray,selectedArrayXSize);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -261,7 +271,11 @@ void MainWindow::createToolBars(void)
        redoAction->setCheckable(false);
        connect(redoAction, SIGNAL(triggered()), this, SLOT(redof()));
 
-
+        ///////////
+       resizeAction = new QAction("Resize",this);
+       resizeAction->setIcon(QIcon(":/icons/resize.png"));
+       resizeAction->setCheckable(false);
+       connect(resizeAction, SIGNAL(triggered()), this, SLOT(resizef()));
        ///////
 
     vertActionGroup = new QActionGroup(this);
@@ -307,6 +321,7 @@ void MainWindow::createToolBars(void)
     topToolbar->addAction(cutAction);
     topToolbar->addAction(undoAction);
     topToolbar->addAction(redoAction);
+    topToolbar->addAction(resizeAction);
    // topToolbar->addActions(plusMinusActionGroup->actions());
   //  topToolbar->addActions(flipActionGroup->actions());
     topToolbar->addAction(setGrid);
@@ -354,22 +369,6 @@ void MainWindow::flipVertf()
 }
 
 
-void MainWindow::copyf()
-{
-    qDebug () << "111";
-   /* int curr = tabWidget->currentIndex();
-    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    wid->mSelected->copySelected();*/
-    tabwid->mSelected->copySelected();
-}
-
-void MainWindow::cutf()
-{
-    //int curr = tabWidget->currentIndex();
-    //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    //wid->mSelected->flipVertically();
-}
-
 void MainWindow::increaseGrid()
 {
     //int curr = tabWidget->currentIndex();
@@ -387,20 +386,90 @@ void MainWindow::decreaseGrid()
 }
 
 
+void MainWindow::copyf()
+{
+    qDebug () << "111";
+   /* int curr = tabWidget->currentIndex();
+    TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    wid->mSelected->copySelected();*/
+    wasCopied = tabwid->mSelected->copySelected();
+    if ( wasCopied )
+    {
+        selectedArrayXSize = tabwid->mSelected->getSelectedArrayXSize();
+        selectedArrayYSize = tabwid->mSelected->getSelectedArrayYSize();
+        currentTab = tabWidget->currentIndex();
+        if ( selectedArray != nullptr )
+        {
+            qDebug() << "New Array 111";
+            deleteArray(selectedArray,selectedArrayXSize);
+            selectedArray = nullptr;
+        }
+
+        //qDebug() << "New Array " << selectedArrayXSize << ' ' << selectedArrayYSize;
+        // locate
+        selectedArray = new int *[selectedArrayXSize];
+        for (int i = 0; i < selectedArrayXSize; i ++)
+        {
+            selectedArray[i] = new int [selectedArrayYSize];
+        }
+        // copy
+        int **sA = tabwid->mSelected->getSelectedArray();
+        for ( int i = 0; i < selectedArrayXSize; i ++)
+        {
+            for ( int j = 0; j < selectedArrayYSize; j ++)
+            {
+                selectedArray[i][j] = sA[i][j];
+            }
+        }
+       // qDebug() << "New Array " << selectedArray[0][0] << ' ' << selectedArray[2][2];
+    }
+}
+
+void MainWindow::cutf()
+{
+    //int curr = tabWidget->currentIndex();
+    //TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
+    //wid->mSelected->flipVertically();
+}
+
 
 void MainWindow::pastef()
 {
-    tabwid->topLeft = tabwid-> mView->mapToScene( 0, 0 );
-    qDebug () << "xxx " << tabwid->topLeft.x() << ' ' << tabwid->topLeft.y();
+   // tabwid->topLeft = tabwid-> mView->mapToScene( 0, 0 );
+   // qDebug () << "xxx " << tabwid->topLeft.x() << ' ' << tabwid->topLeft.y();
   //  qDebug () << "222";
 /*    int curr = tabWidget->currentIndex();
     TabClass *wid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
     wid->mSelected->pasteSelected(); */
-    QPointF leftTopZero;
-    leftTopZero.setX(0);
-    leftTopZero.setY(0);
-    //tabwid->mSelected->pasteSelected(tabwid->topLeft);
-    tabwid->mSelected->pasteSelected(leftTopZero);
+    if (wasCopied)
+    {
+        QPointF leftTopZero;
+        leftTopZero.setX(0);
+        leftTopZero.setY(0);
+        //tabwid->mSelected->pasteSelected(tabwid->topLeft);
+        if ( currentTab ==  tabWidget->currentIndex())
+            tabwid->mSelected->pasteSelected(leftTopZero);
+        else
+        {
+            if ( tabwid->mSelected->selectedArray != nullptr )
+            {
+                qDebug() << "in new tab";
+                tabwid->mSelected->addSelectedArray();
+                tabwid->mSelected->setSelected(false);
+                tabwid->mSelected->deleteSelectedArray();
+                tabwid->mSelected->doUpdate();
+            }
+            qDebug() << "in other tab";
+            tabwid->mSelected->setSelectedArrayXSize(selectedArrayXSize);
+            tabwid->mSelected->setSelectedArrayYSize(selectedArrayYSize);
+            tabwid->mSelected->fillSelectedArrayfromOutside(selectedArray);
+            tabwid->mSelected->setSelected (true);
+            tabwid->mSelected->setCopied (true);
+            tabwid ->mSelected->setChoice(MakeSelected::Choice(0));
+            setRightTool();
+            tabwid->mSelected->pasteSelected(leftTopZero);
+        }
+     }
 }
 
 
@@ -470,4 +539,45 @@ void MainWindow::undof()
 {
     tabwid->undoStack->undo();
     qDebug() << "undo main";
+}
+void MainWindow::resizef()
+{
+    int v = tabwid->getVertNumber();
+    int h = tabwid->getHorNumber();
+    qDebug() << "vh = " << v << ' '<<h;
+
+    QDialog dialog(this);
+    QFormLayout form(&dialog);
+    form.addRow(new QLabel("The number of horizontal cells"));
+    //QLabel *integerLabel = new QLabel(tr(""));
+    QSpinBox *integerSpinBoxH = new QSpinBox;
+    integerSpinBoxH->setRange(10, 120);
+    integerSpinBoxH->setSingleStep(1);
+    integerSpinBoxH->setValue(h);
+    form.addWidget(integerSpinBoxH);
+    form.addRow(new QLabel("The number of vertical cells"));
+    QSpinBox *integerSpinBoxV = new QSpinBox;
+    integerSpinBoxV->setRange(10, 120);
+    integerSpinBoxV->setSingleStep(1);
+    integerSpinBoxV->setValue(v);
+    form.addWidget(integerSpinBoxV);
+
+    QDialogButtonBox buttonBox(Qt::Horizontal,&dialog);
+    buttonBox.addButton(tr("Apply"), QDialogButtonBox::AcceptRole);
+    buttonBox.addButton(tr("Cancel"), QDialogButtonBox::RejectRole);
+
+    form.addRow(&buttonBox);
+    QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+    //dialog.exec();
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        qDebug() << integerSpinBoxH -> value();
+        qDebug() << integerSpinBoxV -> value();
+        int v1 = integerSpinBoxV -> value();
+        int h1 = integerSpinBoxH -> value();
+        tabwid->resizeGrid(h1,v1);
+    }
+    qDebug() << "resize main";
 }

@@ -8,22 +8,26 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     this->setLayout(mLayout);
     mScene = new QGraphicsScene();
     mView = new QGraphicsView ();
-    int del = 10;
-    int borderForNumbers = 20;
+    del = 10;
+    borderForNumbers = 20;
     undoStack = new QUndoStack();
 //            stateBox( new StateBox()),
     qDebug() << "mh " << this->width() << this->height();
-    mScene->setSceneRect(0,0,300,200);
-    mGrid = new MakeGrid(this->mScene->width()-borderForNumbers,
-                         this->mScene->height()-borderForNumbers,del);
-    mSelected = new MakeSelected(this->mScene->width()-borderForNumbers,
-                                 this->mScene->height()-borderForNumbers,del,this);
+    border = -20;
+    mScene->setSceneRect(border,border,300+border,200+border);
+    horSize = this->mScene->width()-borderForNumbers;
+    vertSize = this->mScene->height()-borderForNumbers;
+    mGrid = new MakeGrid(horSize,
+                         vertSize,del);
+    mSelected = new MakeSelected(horSize,
+                                 vertSize,del,this);
     //mSelected->setPos(10,10);
     ////////
     mLayout->addWidget(mView);
     this->setLayout(mLayout);
     mScene->addItem(mGrid);
     mScene->addItem(mSelected);
+    mView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     mView->setScene( mScene);
     mView->show();
     mSelected->setFlag(QGraphicsItem::ItemIsSelectable,
@@ -63,6 +67,46 @@ TabClass::~TabClass()
   //  delete mSelected;
 }
 
+int TabClass::getHorNumber()
+{
+    return horSize/del;
+}
+
+int TabClass::getVertNumber()
+{
+    return vertSize/del;
+}
+
+void TabClass::setHorNumber(int h)
+{
+    horSize = h * del;
+}
+
+void TabClass::setVertNumber( int v)
+{
+    vertSize = v * del;
+}
+
+int TabClass::getDel()
+{
+    return del;
+}
+
+void TabClass::resizeGrid(int h, int v)
+{
+    setVertNumber(v);
+    setHorNumber(h);
+    h = h * del + borderForNumbers;
+    v = v * del + borderForNumbers;
+    mScene->setSceneRect(border,border,h+border,v+border);
+    qDebug() << "wh "<< mScene->width()<<' '<<mScene->height();
+    mGrid->sizeChanged(h,v);
+}
+
+int TabClass::getBorderForNumbers()
+{
+    return borderForNumbers;
+}
 
 void TabClass::keyPressEvent(QKeyEvent *event)
 {

@@ -30,8 +30,14 @@ public:
     QGraphicsView * mView; //
     QPointF topLeft;
     void saveAsImage();
+    void changeGrid(int,int);
     int test;
     QUndoStack *undoStack;
+    int getHorNumber();
+    int getVertNumber();
+    int getDel();
+    int getBorderForNumbers();
+    void resizeGrid(int h, int v);
  //   DrawCrosses *mScene;
    // enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
     //              MakeMiddle, MakeM, MakeBrick ,SelectMode};
@@ -54,7 +60,14 @@ public slots:
 
 private:
  //DrawingPlace *drawplace;
+    int del;
+    int horSize;
+    int vertSize;
+    int borderForNumbers;
+    int border;
     QHBoxLayout *mLayout;
+    void setHorNumber(int);
+    void setVertNumber(int);
    // QGraphicsScene * mScene ; ///< the scene will contain the graphics item 'StateBox'
 
    // StateBox * stateBox; ///< this is my custom QGraphicsItem

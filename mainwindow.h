@@ -50,6 +50,7 @@ public:
     QAction* pasteAction;
     QAction* undoAction;
     QAction* redoAction;
+    QAction* resizeAction;
 
 
 private slots:
@@ -72,6 +73,7 @@ private slots:
     void increaseGrid();
     void undof();
     void redof();
+    void resizef();
     void tabChanged();
 private:
     Ui::MainWindow *ui;
@@ -80,6 +82,11 @@ private:
     int indexNewTabs;
     QAction* vertActions[7];
     void setRightTool(void);
+    bool wasCopied;
+    int currentTab;
+    int **selectedArray;
+    int selectedArrayXSize;
+    int selectedArrayYSize;
 };
 
 #endif // MAINWINDOW_H

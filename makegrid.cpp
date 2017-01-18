@@ -19,7 +19,7 @@ void MakeGrid::paint (QPainter *painter,
 
     QFont font = painter->font();
     QFontMetrics fm(font);
-    int doubleDel = del * 2;
+    //int doubleDel = del * 2;
   //  qDebug() << "ff=" << fm.height();
     int thickness = 1;
     painter->setPen( QPen(c, thickness));
@@ -72,6 +72,8 @@ void MakeGrid::paint (QPainter *painter,
         painter->drawLine(x,0, x, dist);
         k ++;
     }
+     painter->drawLine(width1+fm.width("   ")+10,0, width1+fm.width("   ")+10, dist);
+     painter->drawLine(0,height1+fm.height()+10,dist, height1+fm.height()+10);
 ////////////
  /*   k = 0;
     for (qreal y = top; y < bottom-10; y += gridSize)
@@ -109,7 +111,8 @@ QRectF MakeGrid::boundingRect() const
 void MakeGrid::sizeChanged(int w, int h)
 {
     width1 = w;
-   height1 = h;
+    height1 = h;
+    this->update();
 }
 
 void MakeGrid::mouseMoveEvent(QGraphicsSceneDragDropEvent *)
@@ -127,4 +130,5 @@ void MakeGrid::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 void MakeGrid::mouseMoveEvent ( QGraphicsSceneMouseEvent * event )
 {
 }
+
 

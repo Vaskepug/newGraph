@@ -9,7 +9,7 @@ AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand 
      ch1 = mSel->getChoice();
      mSel->setSelected(false);
   //   mSel->drawElement(cc1);
-   //  qDebug() << "added command" << cc.i;
+     qDebug() << "added command";
  }
 
  AddCommand::~AddCommand()
@@ -22,14 +22,14 @@ AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand 
   //  mSel->setChoice(ch1);
     mSel->setSelected(false);
     mSel->removeElement(cc1);
-    qDebug() << "undo 11";
+    qDebug() << "undo add";
  }
 
  void AddCommand::redo()
  {
      mSel->setChoiceSimple(ch1);
      mSel->drawElement(cc1);
-  //   qDebug() << "redo 11";
+     qDebug() << "redo add";
  }
 
  ////////////////////////
@@ -66,14 +66,14 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
   {
       mSel->setChoiceSimple(ch1);
       mSel->drawElement(cc1);
-     qDebug() << "undo 22";
+     qDebug() << "undo del";
   }
 
   void DeleteCommand::redo()
   {
       mSel->setSelected(false);
       mSel->removeElement(cc1);
-      qDebug() << "redo 22";
+      qDebug() << "redo del";
   }
 
 
@@ -86,6 +86,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
      oldEnd = mSel->getOldEndPoint();
      newStart = mSel->getStartPoint();
      newEnd = mSel->getEndPoint();
+      qDebug() << "added move";
   }
 
    MoveCommand::~MoveCommand()
@@ -121,6 +122,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
       mSel = ms;
       pStart = mSel->getStartPoint();
       pEnd = mSel->getEndPoint();
+      qDebug() << "Select added";
    //   thisSelectedArray = mSel->selectedArray;
     //  oldStart = mSel->getOldStartPoint();
     //  oldEnd = mSel->getOldEndPoint();
@@ -162,6 +164,56 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
         mSel->update();
         qDebug() << "Select redo";
     }
+
+
+    UnSelectCommand::UnSelectCommand(MakeSelected *ms,
+                 QUndoCommand *parent) : QUndoCommand(parent)
+     {
+        mSel = ms;
+        pStart = mSel->getStartPoint();
+        pEnd = mSel->getEndPoint();
+        qDebug() << "Select added";
+     //   thisSelectedArray = mSel->selectedArray;
+      //  oldStart = mSel->getOldStartPoint();
+      //  oldEnd = mSel->getOldEndPoint();
+       // newStart = mSel->getStartPoint();
+       // newEnd = mSel->getEndPoint();
+     }
+
+      UnSelectCommand::~UnSelectCommand()
+      {
+
+      }
+
+      void UnSelectCommand::redo()
+      {
+      /*    mSel->setStartPoint(oldStart);
+          mSel->setEndPoint(oldEnd);
+          mSel->setRenderSelected(true);
+          mSel->setSelected(true);
+          mSel->update();
+       //   mSel->setSelected(false);*/
+          mSel->setSelected(false);
+          mSel->addSelectedArray();
+          mSel->deleteSelectedArray();
+     //     mSel->setChoice(MakeSelected::MakeCross);
+          mSel->update();
+          qDebug() << "Select undo";
+      }
+
+      void UnSelectCommand::undo()
+      {
+         /* mSel->setStartPoint(newStart);
+          mSel->setEndPoint(newEnd);
+          mSel->setRenderSelected(true);
+          mSel->setSelected( true );
+          mSel->update();*/
+          mSel->setStartPoint(pStart);
+          mSel->setEndPoint(pEnd);
+          mSel->setSelected(true);
+          mSel->update();
+          qDebug() << "Select redo";
+      }
 
     FlipRotateCommand::FlipRotateCommand(MakeSelected *ms, bool direction, bool typeOfAction,
                  QUndoCommand *parent) : QUndoCommand(parent)

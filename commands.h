@@ -90,6 +90,25 @@ class SelectCommand : public QUndoCommand
  private:
 
  };
+
+class UnSelectCommand : public QUndoCommand
+ {
+ public:
+     UnSelectCommand(MakeSelected *ms, QUndoCommand *parent = 0);
+     ~UnSelectCommand();
+  //  MakeSelected::Choice ch1;
+  //  MakeSelected::coord1 cc1;
+ private:
+    MakeSelected *mSel;
+    QPointF pStart;
+    QPointF pEnd;
+     void undo();
+     void redo();
+
+ private:
+
+ };
+
 class PasteCommand : public QUndoCommand
  {
  public:

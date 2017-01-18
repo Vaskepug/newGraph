@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     drawcrosses.cpp \
     twidget.cpp \
     operationstore.cpp \
-    commands.cpp
+    commands.cpp \
+    functions.cpp
 
 HEADERS  += mainwindow.h \
     tabclass.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     twidget.h \
     operationstore.h \
     commands.h \
-    twoheaders.h
+    twoheaders.h \
+    functions.h
 
 FORMS    += mainwindow.ui
 

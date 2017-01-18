@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include<QUndoStack>
+
 //#include "commands.h"
 //#include "tabclass.h"
 //#include "twoheaders.h"
@@ -45,7 +46,7 @@ public:
     void rotateClockWise(void);
     void rotateCounterClockWise(void);
     void rotate(bool);
-    void copySelected();
+    bool copySelected();
     void pasteSelected(QPointF point1);
     void cutSelected();
     void saveAsImage();
@@ -55,8 +56,17 @@ public:
     bool getMouseWasPressed(void);
     void setMouseWasPressed(bool meaning);
     void setRenderSelected (bool meaning);
+    void setCopied(bool meaning);
     bool addSelectedArray();
     void deleteSelectedArray(void);
+    int getSelectedArrayXSize();
+    int getSelectedArrayYSize();
+    void setSelectedArrayXSize(int sz);
+    void setSelectedArrayYSize(int sz);
+    int ** getSelectedArray();
+    void doUpdate();
+    void fillSelectedArrayfromOutside(int ** array);
+    void setItemsCount(int c);
     QPointF getStartPoint();
     QPointF getEndPoint();
     QPointF getOldStartPoint();
@@ -101,6 +111,7 @@ private:
 
     int setToGrid( qreal t );
     QVector< QVector<int> > sceneArray;
+    void makeSceneArray();
     unsigned int horizCells;
     unsigned int vertCells;
   /*  struct coord1
@@ -129,7 +140,7 @@ private:
    int selectedArrayXSize;
    int selectedArrayYSize;
    int itemsCount;
-       bool selected;
+   bool selected;
    bool wasSelected;
    bool wasDeleted;
    bool wasShift;
@@ -140,7 +151,8 @@ private:
    bool copied;
    void locateSelectedArray(void);
    //void deleteSelectedArray(void);
-   void deleteArray(int **array1, int xlen);
+  // void deleteArray(int **array1, int xlen);
+   friend void deleteArray(int **array1, int xlen);
    void showArray(int **array1, int xlen,int ylen );
    void clearArea(QPainter *painter);
    //void flip(bool);

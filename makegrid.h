@@ -12,7 +12,7 @@ public:
 
     public :
 
-    void sizeChanged(int w, int h);
+    void sizeChanged(int, int);
 
     private:
 
