@@ -69,8 +69,10 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
 
 void MakeSelected::makeSceneArray()
 {
-    sceneArray.reserve(horizCells);
-    QVector <int> tmp (vertCells,0);
+   // sceneArray.reserve(horizCells);
+   // QVector <int> tmp (vertCells,0);
+    QVector <int> tmp (vertCells);
+    qDebug() << "here is vector " << tmp[0];
     for (unsigned int i = 0; i < horizCells; i ++)
     {
       //  sceneArray[i].reserve(vertCells);
@@ -78,6 +80,46 @@ void MakeSelected::makeSceneArray()
       //      sceneArray[i][j] << 0;
         sceneArray.append(tmp);
     }
+}
+
+void MakeSelected::resizeSceneArray(int h, int v)
+{
+   // sceneArray.reserve(horizCells);
+   // QVector <int> tmp (vertCells,0);
+  /*  QVector <int> tmp (vertCells);
+    qDebug() << "here is vector " << tmp[0];
+    for (unsigned int i = 0; i < horizCells; i ++)
+    {
+      //  sceneArray[i].reserve(vertCells);
+      //  for (unsigned int j = 0; j < vertCells; j ++)
+      //      sceneArray[i][j] << 0;
+        sceneArray.append(tmp);
+    }*/
+
+    if (h > horizCells)
+    {
+        qDebug() << "here is vector hor" <<  ' '<<horizCells << ' ' << h<<' '<< h -horizCells ;
+        QVector <int> tmp (vertCells);
+        for (int i = 0; i < h - horizCells; i ++)
+            sceneArray.append(tmp);
+        horizCells = h;
+       // sceneArray.resize(h);
+    }
+    else if (h < horizCells)
+    {
+        sceneArray.resize(h);
+        horizCells = h;
+    }
+    if (v != vertCells)
+    {
+        qDebug() << "here is vector vert";
+        vertCells = v;
+        for (unsigned int i = 0; i < horizCells; i ++)
+        {
+            sceneArray[i].resize(v);
+        }
+    }
+   // this->update();
 }
 
 MakeSelected::~MakeSelected()
@@ -627,24 +669,29 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
       //   qDebug() << "xxx=" ;
      //   startPoint.setY(sy);
      //   MakeSelected::coord1 cc = getNumberInArray(startPoint);
-            MakeSelected::coord1 cc = getNumberInArray(pf);
-     //   int cellX = cc.i;
-     //   int cellY = cc.j;
-        int b = event->buttons() & Qt::LeftButton;
-       // qDebug() << "butt" <<  b;
-        if( b )
-        {
-         //   qDebug() << "in move "<< cc.i << ' ' << cc.j;
-            //  drawElement(cc); // here is the bottle neck
-            int cellX = cc.i;
-            int cellY = cc.j;
-            if ( sceneArray[cellX][cellY] == 0 )
+       MakeSelected::coord1 cc = getNumberInArray(pf);
+       bool res = checkNumber(cc);
+       if ( res )
+       {
+         //   int cellX = cc.i;
+         //   int cellY = cc.j;
+            int b = event->buttons() & Qt::LeftButton;
+           // qDebug() << "butt" <<  b;
+            if( b )
             {
-                 QUndoCommand *addCommand = new AddCommand(this,cc);
-                 qst ->push(addCommand);
-            }
+             //   qDebug() << "in move "<< cc.i << ' ' << cc.j;
+                //  drawElement(cc); // here is the bottle neck
+                int cellX = cc.i;
+                int cellY = cc.j;
+                if ( sceneArray[cellX][cellY] == 0 )
+                {
+    //                drawElement(cc);
+                   QUndoCommand *addCommand = new AddCommand(this,cc);
+                   qst ->push(addCommand);
+                }
 
-        }
+            }
+       }
    // else
      }
         QGraphicsItem::mouseMoveEvent(event);
@@ -660,7 +707,7 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
    // startPoint = event->scenePos();
   // itemToDraw = false;
-   //qDebug() << "pressed";
+   qDebug() << "pressed";
    if( selected )
    {
        mouseWasPressed = true;
@@ -715,34 +762,39 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
    {
        // startPoint = event->scenePos();
        QPointF pf = event->scenePos();
-      //  qDebug() << "bnadvbna";
     /*   MakeSelected::coord1 cc = getNumberInArray(origPoint);
        int cellX = 0;
        int cellY = 0;
        cellX = cc.i;
        cellY = cc.j;*/
        //MakeSelected::coord1 cc = getNumberInArray(startPoint);
-        MakeSelected::coord1 cc = getNumberInArray(pf);
-       if(event->button() == Qt::LeftButton)
-       {
-        //   qDebug() << "nnnooo selectedddd";
-           int cellX = cc.i;
-           int cellY = cc.j;
-           if ( sceneArray[cellX][cellY] == 0 )
-           {
-               QUndoCommand *addCommand = new AddCommand(this,cc);
-               qst ->push(addCommand);
-           }
-       }
-       else // right button
-       {
-           int elemType = getElemType(cc);
-           if ( elemType > 0 )
-           {
-                QUndoCommand *deleteCommand = new DeleteCommand( this, cc, elemType );
-                qst ->push(deleteCommand);
-           }
 
+        MakeSelected::coord1 cc = getNumberInArray(pf);
+        bool res = checkNumber(cc);
+       if ( res )
+       {
+           if(event->button() == Qt::LeftButton)
+           {
+               qDebug() << "nnnooo selectedddd";
+               int cellX = cc.i;
+               int cellY = cc.j;
+               if ( sceneArray[cellX][cellY] == 0 )
+               {
+                 //  drawElement(cc);
+                 QUndoCommand *addCommand = new AddCommand(this,cc);
+                 qst ->push(addCommand);
+               }
+           }
+           else // right button
+           {
+               int elemType = getElemType(cc);
+               if ( elemType > 0 )
+               {
+                    QUndoCommand *deleteCommand = new DeleteCommand( this, cc, elemType );
+                    qst ->push(deleteCommand);
+               }
+
+           }
        }
      //  int xbeg = setToGrid(startPoint.x());
      //  int ybeg = setToGrid(startPoint.y());
@@ -752,6 +804,16 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
    }
    QGraphicsItem::mousePressEvent(event);
 }
+
+bool MakeSelected::checkNumber(MakeSelected::coord1 cc)
+{
+    int cx = cc.i;
+    if ( cx >= sceneArray.size()  ) return false;
+    int cy = cc.j;
+    if ( cy >= sceneArray.size() ) return false;
+    return true;
+}
+
 
 int MakeSelected::getElemType(MakeSelected::coord1 cc)
 {
@@ -837,6 +899,7 @@ void MakeSelected::fillSelectedArray()
 {
   //  qDebug() << "filled";
     MakeSelected::coord1 cc = getNumberInArray(startPoint);
+
     int begx = cc.i;
     int begy = cc.j;
     int i1 = 0;
@@ -1254,6 +1317,7 @@ MakeSelected::coord1 MakeSelected::getNumberInArray( QPointF p )
     coord1 c;
     c.i = floor( p.x() / del );
     c.j = floor( p.y() / del );
+    qDebug() << "sdfad" << c.i <<' '<< c.j;
     return c;
 }
 

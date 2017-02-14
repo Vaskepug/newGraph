@@ -75,6 +75,7 @@ public:
     void setEndPoint(QPointF pf);
     QWidget widget1;
     QUndoStack *qst;
+    void resizeSceneArray(int h, int v);
     //TabClass *widget1;
     struct coord1
      {
@@ -120,6 +121,7 @@ private:
          unsigned int j;
      };*/
     coord1 getNumberInArray( QPointF  );
+    bool checkNumber(MakeSelected::coord1 cc);
  //   void setItemBehaviour(ItemBehaviour );
     //////
    /* /// \brief drawCross1

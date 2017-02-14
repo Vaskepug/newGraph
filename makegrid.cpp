@@ -53,6 +53,7 @@ void MakeGrid::paint (QPainter *painter,
     }
     k = 0;
     dist = height1;
+    int m = 0;
    // for (int x= doubleDel; x < width1; x+=del)
      for (int x=0; x < width1; x+=del)
     {
@@ -71,7 +72,9 @@ void MakeGrid::paint (QPainter *painter,
         painter->setPen( QPen(c, thickness));
         painter->drawLine(x,0, x, dist);
         k ++;
+        m ++;
     }
+    // qDebug () << "vsego " << m << ' ' << width1;
      painter->drawLine(width1+fm.width("   ")+10,0, width1+fm.width("   ")+10, dist);
      painter->drawLine(0,height1+fm.height()+10,dist, height1+fm.height()+10);
 ////////////

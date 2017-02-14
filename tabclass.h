@@ -38,6 +38,7 @@ public:
     int getDel();
     int getBorderForNumbers();
     void resizeGrid(int h, int v);
+    void resizeSceneArray(int h, int v);
  //   DrawCrosses *mScene;
    // enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
     //              MakeMiddle, MakeM, MakeBrick ,SelectMode};

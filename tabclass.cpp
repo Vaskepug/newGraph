@@ -14,7 +14,7 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
 //            stateBox( new StateBox()),
     qDebug() << "mh " << this->width() << this->height();
     border = -20;
-    mScene->setSceneRect(border,border,300+border,200+border);
+    mScene->setSceneRect(border,border,300-border,200-border);
     horSize = this->mScene->width()-borderForNumbers;
     vertSize = this->mScene->height()-borderForNumbers;
     mGrid = new MakeGrid(horSize,
@@ -96,12 +96,25 @@ void TabClass::resizeGrid(int h, int v)
 {
     setVertNumber(v);
     setHorNumber(h);
+    int h1 = h * del + borderForNumbers;
+    int v1 = v * del + borderForNumbers;
+    mScene->setSceneRect(border,border,h1+border,v1+border);
+    qDebug() << "wh "<< mScene->width()<<' '<<mScene->height();
+    mGrid->sizeChanged(h*del,v*del);
+}
+
+void TabClass::resizeSceneArray(int h, int v)
+{
+    mSelected->resizeSceneArray(h,v);
+   /* setVertNumber(v);
+    setHorNumber(h);
     h = h * del + borderForNumbers;
     v = v * del + borderForNumbers;
     mScene->setSceneRect(border,border,h+border,v+border);
     qDebug() << "wh "<< mScene->width()<<' '<<mScene->height();
-    mGrid->sizeChanged(h,v);
+    mGrid->sizeChanged(h,v);*/
 }
+
 
 int TabClass::getBorderForNumbers()
 {

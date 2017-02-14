@@ -544,7 +544,7 @@ void MainWindow::resizef()
 {
     int v = tabwid->getVertNumber();
     int h = tabwid->getHorNumber();
-    qDebug() << "vh = " << v << ' '<<h;
+ //   qDebug() << "vh = " << v << ' '<<h;
 
     QDialog dialog(this);
     QFormLayout form(&dialog);
@@ -570,14 +570,40 @@ void MainWindow::resizef()
     QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
     QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
 
-    //dialog.exec();
     if (dialog.exec() == QDialog::Accepted)
     {
-        qDebug() << integerSpinBoxH -> value();
-        qDebug() << integerSpinBoxV -> value();
-        int v1 = integerSpinBoxV -> value();
-        int h1 = integerSpinBoxH -> value();
-        tabwid->resizeGrid(h1,v1);
+        qDebug() << "vhh" <<integerSpinBoxH -> value() << ' ' <<h;
+        qDebug() << "vvv" << integerSpinBoxV -> value() << ' ' << v;
+        bool doIt = true;
+    //    if ( v > integerSpinBoxV -> value() ||  h > integerSpinBoxH -> value() )
+     //   {
+            if ( v > integerSpinBoxV -> value() || h > integerSpinBoxH -> value() )
+            {
+                QMessageBox msgBox;
+                msgBox.setText("Some cells will be lost.");
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                int otv = msgBox.exec();
+                if (otv == QMessageBox::Ok)
+                {
+                }
+                else doIt = false;
+            }
+            else
+                qDebug() << "changes";
+     /*   }
+        else
+        {
+            doIt = false;
+
+        } */
+        if ( doIt )
+        {
+            qDebug() << "redraw";
+            int v1 = integerSpinBoxV -> value();
+            int h1 = integerSpinBoxH -> value();
+            tabwid->resizeGrid(h1,v1);
+            tabwid->resizeSceneArray(h1,v1);
+        }
     }
     qDebug() << "resize main";
 }
