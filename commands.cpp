@@ -1,4 +1,5 @@
 #include "commands.h"
+#include "functions.h"
 #include <QDebug>
 //AddCommand::AddCommand(MakeSelected::Choice cho, MakeSelected::coord1 cc,  QUndoCommand *parent)
 AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand *parent)
@@ -81,17 +82,32 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
               QUndoCommand *parent) : QUndoCommand(parent)
   {
      mSel = ms;
+     //thisSelectedArray = mSel->getSelectedArray();
   //   thisSelectedArray = mSel->selectedArray;
      oldStart = mSel->getOldStartPoint();
      oldEnd = mSel->getOldEndPoint();
      newStart = mSel->getStartPoint();
      newEnd = mSel->getEndPoint();
-      qDebug() << "added move";
+      qDebug() << "added move " ;
   }
 
    MoveCommand::~MoveCommand()
    {
         qDebug() << "delete move";
+        if ( thisSelectedArray != nullptr )
+        {
+            deleteArray(thisSelectedArray,thisSelectedArrayXSize);
+        /*  for( int i = 0; i < selectedArrayXSize; i++ )
+          {
+            //  qDebug() << "deleted " << selectedArrayXSize << ' ' << selectedArrayYSize;
+                 delete [] selectedArray[i];
+           }
+            delete selectedArray;*/
+           thisSelectedArray = nullptr;
+//           thisSselectedArrayXSize = 0;
+  //         selectedArrayYSize = 0;
+    //       wasDeleted = true;
+        }
    }
 
    void MoveCommand::undo()
@@ -115,6 +131,36 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        qDebug() << "Move redo";
    }
 
+   void MoveCommand::copySelectedArray()
+   {
+       thisSelectedArrayXSize = mSel->getSelectedArrayXSize();
+       thisSelectedArrayYSize = mSel->getSelectedArrayYSize();
+       // locate
+       // was locateArray(thisSelectedArray,thisSelectedArrayXSize,thisSelectedArrayYSize);
+     /*  thisSelectedArray = new int *[mSel->getSelectedArrayXSize()];
+       for (int i = 0; i < thisSelectedArrayXSize; i ++)
+       {
+           thisSelectedArray[i] = new int [mSel->getSelectedArrayYSize()];
+       }*/
+       // copy
+       //int **sA = mSel->getSelectedArray();
+       QVector< QVector<int>> sA = mSel->getSelectedArray();
+       for ( int i = 0; i < thisSelectedArrayXSize; i ++)
+       {
+           for ( int j = 0; j < thisSelectedArrayYSize; j ++)
+           {
+               thisSelectedArray[i][j] = sA[i][j];
+           }
+       }
+
+
+   }
+   void MoveCommand::pasteSelectedArray()
+   {
+
+   }
+
+   ///////////
 
   SelectCommand::SelectCommand(MakeSelected *ms,
                QUndoCommand *parent) : QUndoCommand(parent)

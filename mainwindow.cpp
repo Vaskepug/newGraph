@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "functions.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -18,7 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     addTabs();
     setCentralWidget(tabWidget);
     tabWidget->show();
-    selectedArray = nullptr;
+    //selectedArray = nullptr;
+    selectedArray.clear();
     connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tabChanged()));
 }
 
@@ -99,8 +101,10 @@ MainWindow::~MainWindow()
     delete redoAction;
     delete resizeAction;
     //delete vertActions;
-    if ( selectedArray != nullptr )
-        deleteArray(selectedArray,selectedArrayXSize);
+    //if ( selectedArray != nullptr )
+    if ( selectedArray.size() != 0 )
+       // deleteArray(selectedArray,selectedArrayXSize);
+        deleteVectorContent( selectedArray,selectedArrayYSize );
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -398,22 +402,27 @@ void MainWindow::copyf()
         selectedArrayXSize = tabwid->mSelected->getSelectedArrayXSize();
         selectedArrayYSize = tabwid->mSelected->getSelectedArrayYSize();
         currentTab = tabWidget->currentIndex();
-        if ( selectedArray != nullptr )
+      //  if ( selectedArray != nullptr )
+          if ( selectedArray.size() != 0 )
         {
             qDebug() << "New Array 111";
-            deleteArray(selectedArray,selectedArrayXSize);
-            selectedArray = nullptr;
+           // deleteArray(selectedArray,selectedArrayXSize);
+            deleteVectorContent( selectedArray,  selectedArrayYSize );
+            selectedArray.clear();
         }
 
         //qDebug() << "New Array " << selectedArrayXSize << ' ' << selectedArrayYSize;
         // locate
-        selectedArray = new int *[selectedArrayXSize];
+        allocateVector( selectedArray, selectedArrayXSize,selectedArrayYSize );
+        // was locateArray(selectedArray,selectedArrayXSize,selectedArrayYSize);
+      /*  selectedArray = new int *[selectedArrayXSize];
         for (int i = 0; i < selectedArrayXSize; i ++)
         {
             selectedArray[i] = new int [selectedArrayYSize];
-        }
+        }*/
         // copy
-        int **sA = tabwid->mSelected->getSelectedArray();
+      // int **sA = tabwid->mSelected->getSelectedArray();
+         QVector< QVector<int>> sA = tabwid->mSelected->getSelectedArray();
         for ( int i = 0; i < selectedArrayXSize; i ++)
         {
             for ( int j = 0; j < selectedArrayYSize; j ++)
@@ -451,7 +460,8 @@ void MainWindow::pastef()
             tabwid->mSelected->pasteSelected(leftTopZero);
         else
         {
-            if ( tabwid->mSelected->selectedArray != nullptr )
+            //if ( tabwid->mSelected->selectedArray != nullptr )
+            if ( tabwid->mSelected->selectedArray.size() != 0 )
             {
                 qDebug() << "in new tab";
                 tabwid->mSelected->addSelectedArray();
@@ -606,4 +616,9 @@ void MainWindow::resizef()
         }
     }
     qDebug() << "resize main";
+}
+
+void MainWindow::on_actionSaveP_triggered()
+{
+    qDebug() << "here is saving to pattern file";
 }

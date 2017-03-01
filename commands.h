@@ -46,14 +46,18 @@ class MoveCommand : public QUndoCommand
 
      void undo();
      void redo();
-
+    friend void deleteArray(int **array1, int xlen);
  private:
      MakeSelected *mSel;
      int **thisSelectedArray;
+     int thisSelectedArrayXSize;
+     int thisSelectedArrayYSize;
      QPointF newStart;
      QPointF newEnd;
      QPointF oldStart;
      QPointF oldEnd;
+     void copySelectedArray();
+     void pasteSelectedArray();
  };
 
 class FlipRotateCommand : public QUndoCommand

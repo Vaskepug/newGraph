@@ -75,8 +75,8 @@ void MakeGrid::paint (QPainter *painter,
         m ++;
     }
     // qDebug () << "vsego " << m << ' ' << width1;
-     painter->drawLine(width1+fm.width("   ")+10,0, width1+fm.width("   ")+10, dist);
-     painter->drawLine(0,height1+fm.height()+10,dist, height1+fm.height()+10);
+  //   painter->drawLine(width1+fm.width("   ")+10,0, width1+fm.width("   ")+10, dist);
+   //  painter->drawLine(0,height1+fm.height()+10,dist, height1+fm.height()+10);
 ////////////
  /*   k = 0;
     for (qreal y = top; y < bottom-10; y += gridSize)

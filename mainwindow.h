@@ -75,6 +75,8 @@ private slots:
     void redof();
     void resizef();
     void tabChanged();
+    void on_actionSaveP_triggered();
+
 private:
     Ui::MainWindow *ui;
     TWidget *tabWidget;
@@ -84,7 +86,8 @@ private:
     void setRightTool(void);
     bool wasCopied;
     int currentTab;
-    int **selectedArray;
+   // int **selectedArray;
+    QVector< QVector<int>> selectedArray;
     int selectedArrayXSize;
     int selectedArrayYSize;
 };

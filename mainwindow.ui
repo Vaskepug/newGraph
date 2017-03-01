@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>416</width>
+    <height>218</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -11,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>495</width>
+     <width>416</width>
      <height>21</height>
     </rect>
    </property>
@@ -22,6 +30,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSaveP"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -47,6 +56,11 @@
   <action name="actionNew">
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionSaveP">
+   <property name="text">
+    <string>SaveP</string>
    </property>
   </action>
  </widget>

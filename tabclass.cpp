@@ -49,13 +49,24 @@ void TabClass::saveAsImage()
       pixMap.save(fileName);
    }*/
     mScene->clearSelection();                                                  // Selections would also render to the file
-    mScene->setSceneRect(mScene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    qDebug() << "ww " << mScene->width() <<' ' <<mScene->height();
+    unsigned int wtemp = mScene->width();
+    unsigned int htemp = mScene->height();
+    QRectF tmprect;
+    tmprect.setWidth(wtemp+30);
+    tmprect.setHeight(htemp+30);
+    //mScene->setSceneRect(mScene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    mScene->setSceneRect(tmprect);                          // Re-shrink the scene to it's bounding contents
     QImage image(mScene->sceneRect().size().toSize(), QImage::Format_ARGB32);  // Create the image with the exact size of the shrunk scene
     image.fill(Qt::transparent);                                              // Start all pixels transparent
 
     QPainter painter(&image);
     mScene->render(&painter);
     image.save("file_name.png");
+    tmprect.setWidth(wtemp);
+    tmprect.setHeight(htemp);
+    //mScene->setSceneRect(mScene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
+    mScene->setSceneRect(tmprect);
 }
 
 TabClass::~TabClass()

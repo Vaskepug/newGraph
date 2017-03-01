@@ -26,7 +26,7 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
   //  itemToDraw = NotDraw;
     horizCells = int (width / del);
     vertCells = int (height / del);
-    makeSceneArray();
+    locateSceneArray();
   //  qDebug() << "horiz=" << width << ' ' << height;
     drawFunctions[0] = &MakeSelected::drawCross;
     drawFunctions[1] = &MakeSelected::drawCorn;
@@ -52,7 +52,8 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
 
    selectedArrayXSize = 0;
    selectedArrayYSize = 0;
-   selectedArray = nullptr;
+   //selectedArray = nullptr;
+   selectedArray.clear();
    wasDeleted = true;
    copied = false;
    int a,b,rez;
@@ -67,11 +68,11 @@ MakeSelected::MakeSelected (qreal w, qreal h , int d, QWidget *widget)
     //installSceneEventFilter(this);
 }
 
-void MakeSelected::makeSceneArray()
+void MakeSelected::locateSceneArray()
 {
    // sceneArray.reserve(horizCells);
    // QVector <int> tmp (vertCells,0);
-    QVector <int> tmp (vertCells);
+   /* QVector <int> tmp (vertCells);
     qDebug() << "here is vector " << tmp[0];
     for (unsigned int i = 0; i < horizCells; i ++)
     {
@@ -79,10 +80,28 @@ void MakeSelected::makeSceneArray()
       //  for (unsigned int j = 0; j < vertCells; j ++)
       //      sceneArray[i][j] << 0;
         sceneArray.append(tmp);
-    }
+    }*/
+    allocateVector( sceneArray, horizCells, vertCells );
 }
 
-void MakeSelected::resizeSceneArray(int h, int v)
+void MakeSelected::deleteSceneArray()
+{
+   // sceneArray.reserve(horizCells);
+   // QVector <int> tmp (vertCells,0);
+   // QVector <int> tmp (vertCells);
+    deleteVectorContent( sceneArray, horizCells );
+   /* for (unsigned int i = 0; i < horizCells; i ++)
+    {
+      //  sceneArray[i].reserve(vertCells);
+      //  for (unsigned int j = 0; j < vertCells; j ++)
+      //      sceneArray[i][j] << 0;
+        sceneArray[i].clear();
+    }
+    sceneArray.clear();*/
+}
+
+
+void MakeSelected::resizeSceneArray(unsigned int h, unsigned int v)
 {
    // sceneArray.reserve(horizCells);
    // QVector <int> tmp (vertCells,0);
@@ -95,36 +114,42 @@ void MakeSelected::resizeSceneArray(int h, int v)
       //      sceneArray[i][j] << 0;
         sceneArray.append(tmp);
     }*/
-
+    setSelected(false);
     if (h > horizCells)
     {
         qDebug() << "here is vector hor" <<  ' '<<horizCells << ' ' << h<<' '<< h -horizCells ;
         QVector <int> tmp (vertCells);
-        for (int i = 0; i < h - horizCells; i ++)
+        for (unsigned int i = 0; i < h - horizCells; i ++)
             sceneArray.append(tmp);
         horizCells = h;
+        width = h * del;
        // sceneArray.resize(h);
     }
     else if (h < horizCells)
     {
         sceneArray.resize(h);
         horizCells = h;
+        width = h * del;
     }
+
     if (v != vertCells)
     {
         qDebug() << "here is vector vert";
         vertCells = v;
+        height = v * del;
         for (unsigned int i = 0; i < horizCells; i ++)
         {
             sceneArray[i].resize(v);
         }
     }
+
    // this->update();
 }
 
 MakeSelected::~MakeSelected()
 {
     deleteSelectedArray();
+    deleteSceneArray();
 }
 
 QPointF MakeSelected::getStartPoint()
@@ -214,7 +239,8 @@ void MakeSelected::saveAsImage()
 
 void MakeSelected::rotate(bool clo)
 {
-    if (selectedArray != nullptr)
+    //if (selectedArray != nullptr)
+    if (selectedArray.size() != 0)
     {
        // int halfx = selectedArrayXSize / 2;
        // int halfy = selectedArrayYSize / 2;
@@ -222,12 +248,14 @@ void MakeSelected::rotate(bool clo)
         int xsize = selectedArrayYSize;
 
         // locateNew Array
-        int ** array1;
-        array1 = new int *[xsize];
+        int ** array1 = nullptr;
+      //was  locateArray(array1,xsize,ysize);
+
+     /*   array1 = new int *[xsize];
         for (int i = 0; i <xsize; i ++)
         {
            array1[i] = new int [ysize];
-        }
+        }*/
         int k = 0;
         int k1 = 0;
         for (int i = 0; i < selectedArrayXSize; i++)
@@ -250,7 +278,7 @@ void MakeSelected::rotate(bool clo)
 
      //   showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
       //  showArray(array1, xsize, ysize );
-        deleteArray(selectedArray, selectedArrayXSize);
+    // was    deleteArray(selectedArray, selectedArrayXSize);
         ///
 
         int delt = ( selectedArrayXSize -selectedArrayYSize ) * del  / 2 ;
@@ -293,7 +321,7 @@ void MakeSelected::rotate(bool clo)
         endPoint.setX(xk);
         endPoint.setY(yk);
       //  qDebug() << "x="<< yn <<' '<< yk;
-        selectedArray = array1;
+        // was nada selectedArray = array1;
      //   showArray(selectedArray, selectedArrayXSize, selectedArrayYSize );
 
        // deleteArray(array1,xsize);
@@ -350,7 +378,8 @@ void MakeSelected::setCopied(bool meaning)
 
 bool MakeSelected::copySelected()
 {
-    if (selectedArray != nullptr)
+    //if (selectedArray != nullptr)
+    if (selectedArray.size() != 0)
         copied = true;
     else copied = false;
   //  qDebug () << "set to clip";
@@ -365,7 +394,8 @@ void MakeSelected::cutSelected()
 void MakeSelected::flip(bool vert)
 {
     qDebug() << "flip flip";
-    if (selectedArray != nullptr)
+    //if (selectedArray != nullptr)
+    if (selectedArray.size() != 0)
     {
         qDebug() << "sel flip";
         int halfx = selectedArrayXSize / 2;
@@ -511,7 +541,7 @@ void MakeSelected::showArray(int **array1, int xlen, int ylen )
 
 void MakeSelected::showSelectedArray(void )
 {
-    showArray(selectedArray,selectedArrayXSize,selectedArrayYSize);
+    // was showArray(selectedArray,selectedArrayXSize,selectedArrayYSize);
 
 }
 
@@ -582,6 +612,7 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
           {
               locateSelectedArray();
               fillSelectedArray();
+              qDebug() << "after fill ";
           }
           else
               qDebug() << "item count zero";
@@ -606,7 +637,8 @@ void MakeSelected::setItemsCount(int c)
 
 void MakeSelected::deleteAllInside(void)
 {
-    if (selected && selectedArray != nullptr )
+    //if (selected && selectedArray != nullptr )
+    if (selected && selectedArray.size() != 0 )
     //if (selectedArray != nullptr )
     {
         //qDebug() << "delete all inside";
@@ -651,7 +683,6 @@ void MakeSelected::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
            // startPoint.setY(tmp.y()+delY);
             endPoint.setX(startPoint.x() + rectWidth);
             endPoint.setY(startPoint.y() + rectHeight);
-
             this->update();
           // qDebug() <<"shift "<< rectWidth;
         }
@@ -714,7 +745,8 @@ void MakeSelected::mousePressEvent(QGraphicsSceneMouseEvent *event)
      //   qDebug() << "selectednddd " << shiftPressed;
        if ( shiftPressed == false )
        {
-           if ( selectedArray != nullptr )
+           //if ( selectedArray != nullptr )
+           if ( selectedArray.size() != 0 )
            {
          //      qDebug() << "added 3 ";
              addSelectedArray();
@@ -897,14 +929,16 @@ void MakeSelected::drawElement(MakeSelected::coord1 cc)
 
 void MakeSelected::fillSelectedArray()
 {
-  //  qDebug() << "filled";
+    qDebug() << "filled";
     MakeSelected::coord1 cc = getNumberInArray(startPoint);
 
     int begx = cc.i;
     int begy = cc.j;
     int i1 = 0;
     int j1 = 0;
-  //  qDebug() << begx << ' '<<begy << ' ' << begx+selectedArrayXSize << ' ' <<begy+selectedArrayYSize;
+    if ( selectedArray.size() == 0  ) qDebug() << "null";
+    else qDebug() << "not null " << selectedArrayXSize << ' ' << selectedArrayYSize ;
+    qDebug() << "tut " << begx << ' '<<begy << ' ' << begx+selectedArrayXSize << ' ' <<begy+selectedArrayYSize;
     for ( int i = begx; i < begx + selectedArrayXSize; i ++)
     {
         j1 = 0;
@@ -954,34 +988,58 @@ void MakeSelected:: setSelectedArrayYSize(int sz)
 {
     selectedArrayYSize = sz;
 }
-
-
+/*
+void MakeSelected:: setSelectedArray(int **arr)
+{
+    // was selectedArray = arr;
+}
+*/
+void MakeSelected:: setSelectedArray(QVector< QVector<int> > arr)
+{
+    selectedArray = arr;
+}
+/*
 int ** MakeSelected::getSelectedArray()
 {
+    int ** tmp = nullptr;
+    // was return selectedArray;
+    return tmp;
+}*/
+
+QVector<QVector<int> > MakeSelected::getSelectedArray()
+{
+   //nt ** tmp = nullptr;
     return selectedArray;
+   //eturn tmp;
 }
+
 
 void MakeSelected::locateSelectedArray()
 {
    // qDebug() << "locate " << selectedArrayXSize;
-    if ( itemsCount > 0 && selectedArray == nullptr )
+    //if ( itemsCount > 0 && selectedArray == nullptr )
+    if ( itemsCount > 0 && selectedArray.size() == 0 )
     {
-          selectedArray = new int *[selectedArrayXSize];
+       /*   selectedArray = new int *[selectedArrayXSize];
           for (int i = 0; i < selectedArrayXSize; i ++)
           {
               selectedArray[i] = new int [selectedArrayYSize];
            //   for (int k = 0; k < selectedArrayYSize; k++)
                   //selectedArray[i][k] = 0;
                  // selectedArray[i][k] = 1;
-          }
+          }*/
+       // selectedArray = locateArray1(selectedArrayXSize, selectedArrayYSize);
+        allocateVector( selectedArray,selectedArrayXSize, selectedArrayYSize );
+        //locateArray(selectedArray,selectedArrayXSize, selectedArrayYSize);
           wasDeleted = false;
     }
 
 }
 
-void MakeSelected::fillSelectedArrayfromOutside(int **array)
+//void MakeSelected::fillSelectedArrayfromOutside(int **array)
+void MakeSelected::fillSelectedArrayfromOutside(QVector< QVector<int>> array)
 {
-    selectedArray = new int *[selectedArrayXSize];
+    /* was selectedArray = new int *[selectedArrayXSize];
     for (int i = 0; i < selectedArrayXSize; i ++)
     {
         selectedArray[i] = new int [selectedArrayYSize];
@@ -993,7 +1051,7 @@ void MakeSelected::fillSelectedArrayfromOutside(int **array)
         {
             selectedArray[i][j] = array[i][j];
         }
-    }
+    }*/
 
 }
 
@@ -1006,18 +1064,26 @@ void MakeSelected::doUpdate()
 void MakeSelected::deleteSelectedArray()
 {
   //  qDebug() << "delete selected array";
-    if ( selectedArray != nullptr )
+   /* was  if ( selectedArray != nullptr )
     {
-        deleteArray(selectedArray,selectedArrayXSize);
-    /*  for( int i = 0; i < selectedArrayXSize; i++ )
-      {
+      // was  deleteArray(selectedArray,selectedArrayXSize);
+    //  for( int i = 0; i < selectedArrayXSize; i++ )
+      //{
         //  qDebug() << "deleted " << selectedArrayXSize << ' ' << selectedArrayYSize;
-             delete [] selectedArray[i];
-       }
-        delete selectedArray;*/
+        //     delete [] selectedArray[i];
+       //}
+       // delete selectedArray;
        selectedArray = nullptr;
+       selectedArrayXSize = 0;
+       selectedArrayYSize = 0;
        wasDeleted = true;
-    }
+    }*/
+    deleteVectorContent( selectedArray,  selectedArrayXSize );
+   // qDebug() << "delete selected array " << selectedArray.size();
+    //selectedArray = nullptr;
+    selectedArrayXSize = 0;
+    selectedArrayYSize = 0;
+    wasDeleted = true;
 }
 
 
@@ -1041,7 +1107,26 @@ void MakeSelected::paint (QPainter *painter,
    //  qDebug() << " in paint ";
     if ( selected )
     {
-      //z  qDebug() << "paint selected " << startPoint.x();
+        if ( endPoint.x() > width )
+        {
+            endPoint.setX(width);
+            startPoint.setX(width - selectedArrayXSize*del);
+        }
+        if ( startPoint.x() < 0 )
+        {
+            startPoint.setX(0);
+            endPoint.setX(selectedArrayXSize*del);
+        }
+        if ( endPoint.y() > height )
+        {
+            endPoint.setY(height);
+            startPoint.setY(height - selectedArrayYSize*del);
+        }
+        if ( startPoint.y() < 0 )
+        {
+            startPoint.setY(0);
+            endPoint.setY(selectedArrayYSize*del);
+        }
         QPointF topLeft (startPoint);
         QPointF bottomRight ( endPoint);
         QRectF rect (topLeft, bottomRight);
@@ -1083,13 +1168,14 @@ void MakeSelected::paint (QPainter *painter,
        // clearArea(painter); why is this here
 
     }
-    if ( selectedArray != nullptr )
+    //if ( selectedArray != nullptr )
+    if ( selectedArray.size() != 0 )
     {
-    //    qDebug() << "shift in paint and render where selected";
+       // qDebug() << "shift in paint and render where selected";
         renderSelectedArea(painter); // here pay attention to shift
 
     }
-  //  else qDebug() << "no selected array";
+    else qDebug() << "no selected array";
      renderArea(painter);
  }
 
@@ -1107,12 +1193,13 @@ void MakeSelected ::clearArea(QPainter *painter)
 
 bool MakeSelected ::addSelectedArray(void)
 {
-    if (selectedArray == nullptr)
+    //if (selectedArray == nullptr)
+    if (selectedArray.size() == 0)
     {
        // qDebug () << "in add nulllll";
         return false;
     }
-   // qDebug () << "in add " << startPoint.x() <<' '<<selectedArrayXSize ;
+    qDebug () << "in add " << startPoint.x() <<' '<<selectedArrayXSize ;
     MakeSelected::coord1 cc = getNumberInArray(startPoint);
     int sx = cc.i;
     int sy = cc.j;
@@ -1157,7 +1244,7 @@ bool MakeSelected ::addSelectedArray(void)
 
 void MakeSelected :: renderSelectedArea(QPainter *painter)
 {
-   // qDebug() << "render selected area";
+  //  qDebug() << "render selected area";
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap));
     //int begx= startPoint.x();
     //int begy= startPoint.y();
@@ -1226,6 +1313,8 @@ void MakeSelected :: renderArea(QPainter *painter)
             }
         }
     }
+  //  painter->drawLine(width+50,0, width+50, 120);
+  //  painter->drawLine(0,height+30,50, height30);
 }
 /*
 void MakeSelected::checkSelectedArr()
@@ -1317,7 +1406,7 @@ MakeSelected::coord1 MakeSelected::getNumberInArray( QPointF p )
     coord1 c;
     c.i = floor( p.x() / del );
     c.j = floor( p.y() / del );
-    qDebug() << "sdfad" << c.i <<' '<< c.j;
+   // qDebug() << "sdfad" << c.i <<' '<< c.j;
     return c;
 }
 
@@ -1347,7 +1436,8 @@ void MakeSelected::setChoice(Choice cho)
        if (wasSelected)
        {
            qDebug() << "was selected ";
-           if ( wasShift || selectedArray != nullptr)
+           //if ( wasShift || selectedArray != nullptr)
+           if ( wasShift || selectedArray.size() != 0)
            {
             //   qDebug() << "added 1 ";
                wasShift = false;

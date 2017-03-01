@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMessageBox>
-#include<QUndoStack>
+#include <QUndoStack>
 
 //#include "commands.h"
 //#include "tabclass.h"
@@ -28,7 +28,8 @@ public:
     MakeSelected(qreal width, qreal height, int del, QWidget *widget);
 
 
-    int **selectedArray; // should be private
+   // int **selectedArray; // should be private
+    QVector< QVector<int> > selectedArray;
     void deleteAllInside(void);
    // bool itemToDraw;
     void setSelected(bool meaning);
@@ -63,9 +64,12 @@ public:
     int getSelectedArrayYSize();
     void setSelectedArrayXSize(int sz);
     void setSelectedArrayYSize(int sz);
-    int ** getSelectedArray();
+    //void setSelectedArray(int **arr);
+    void setSelectedArray(QVector< QVector<int> > arr);
+    //int ** getSelectedArray();
+    QVector< QVector<int>> getSelectedArray();
     void doUpdate();
-    void fillSelectedArrayfromOutside(int ** array);
+    void fillSelectedArrayfromOutside(QVector<QVector<int> > array);
     void setItemsCount(int c);
     QPointF getStartPoint();
     QPointF getEndPoint();
@@ -75,7 +79,7 @@ public:
     void setEndPoint(QPointF pf);
     QWidget widget1;
     QUndoStack *qst;
-    void resizeSceneArray(int h, int v);
+    void resizeSceneArray(unsigned int h, unsigned int v);
     //TabClass *widget1;
     struct coord1
      {
@@ -112,7 +116,8 @@ private:
 
     int setToGrid( qreal t );
     QVector< QVector<int> > sceneArray;
-    void makeSceneArray();
+    void locateSceneArray();
+    void deleteSceneArray();
     unsigned int horizCells;
     unsigned int vertCells;
   /*  struct coord1
@@ -155,6 +160,7 @@ private:
    //void deleteSelectedArray(void);
   // void deleteArray(int **array1, int xlen);
    friend void deleteArray(int **array1, int xlen);
+   friend void locateeArray(int **array1, int xlen, int ylen);
    void showArray(int **array1, int xlen,int ylen );
    void clearArea(QPainter *painter);
    //void flip(bool);
