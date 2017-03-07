@@ -71,4 +71,5 @@ void deleteVectorContent( QVector< QVector<int>> &v,  int ylen )
         }
         v.clear();
     }
+    qDebug() << "deleted" << v.size();
 }

@@ -77,6 +77,8 @@ private slots:
     void tabChanged();
     void on_actionSaveP_triggered();
 
+    void on_actionLoadP_triggered();
+
 private:
     Ui::MainWindow *ui;
     TWidget *tabWidget;

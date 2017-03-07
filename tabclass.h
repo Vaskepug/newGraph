@@ -29,7 +29,9 @@ public:
     QGraphicsScene * mScene ; //
     QGraphicsView * mView; //
     QPointF topLeft;
-    void saveAsImage();
+    bool saveAsImage();
+    bool saveAsFile();
+    bool loadFromFile();
     void changeGrid(int,int);
     int test;
     QUndoStack *undoStack;

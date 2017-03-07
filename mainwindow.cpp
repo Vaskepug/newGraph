@@ -118,7 +118,16 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    tabwid->saveAsImage();
+    bool ret = tabwid->saveAsImage();
+    QMessageBox msgBox;
+
+    if (ret)
+    {
+        msgBox.setText("File was saved successfully");
+    }
+    else
+        msgBox.setText("File was not saved");
+    msgBox.exec();
     //QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
    // if (!fileName.isNull())
   //  {
@@ -554,7 +563,7 @@ void MainWindow::resizef()
 {
     int v = tabwid->getVertNumber();
     int h = tabwid->getHorNumber();
- //   qDebug() << "vh = " << v << ' '<<h;
+    qDebug() << "vh = " << v << ' '<<h;
 
     QDialog dialog(this);
     QFormLayout form(&dialog);
@@ -608,10 +617,12 @@ void MainWindow::resizef()
         } */
         if ( doIt )
         {
-            qDebug() << "redraw";
+
             int v1 = integerSpinBoxV -> value();
             int h1 = integerSpinBoxH -> value();
-            tabwid->resizeGrid(h1,v1);
+            int del = tabwid->getDel();
+            tabwid->resizeGrid(h1*del,v1*del);
+            //qDebug() << "redraw " << tabwid->getHorNumber() << ' ' << tabwid->getVertNumber() ;
             tabwid->resizeSceneArray(h1,v1);
         }
     }
@@ -621,4 +632,19 @@ void MainWindow::resizef()
 void MainWindow::on_actionSaveP_triggered()
 {
     qDebug() << "here is saving to pattern file";
+    bool ret = tabwid->saveAsFile();
+    QMessageBox msgBox;
+
+    if (ret)
+    {
+        msgBox.setText("File was saved successfully");
+    }
+    else
+        msgBox.setText("File was not saved");
+    msgBox.exec();
+}
+
+void MainWindow::on_actionLoadP_triggered()
+{
+    bool ret = tabwid->loadFromFile();
 }

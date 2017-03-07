@@ -60,10 +60,18 @@ public:
     void setCopied(bool meaning);
     bool addSelectedArray();
     void deleteSelectedArray(void);
+    void deleteSceneArray();
+    int getHorizCells();
+    void setHorizCells(int h);
+    int getVertCells();
+    void setVertCells(int v);
+    QVector<QVector<int> > *getSceneArray();
+    void setSceneArray(QVector< QVector<int> >);
     int getSelectedArrayXSize();
     int getSelectedArrayYSize();
     void setSelectedArrayXSize(int sz);
     void setSelectedArrayYSize(int sz);
+    void fillSceneArray(QVector< QVector<int>> sA);
     //void setSelectedArray(int **arr);
     void setSelectedArray(QVector< QVector<int> > arr);
     //int ** getSelectedArray();
@@ -117,7 +125,7 @@ private:
     int setToGrid( qreal t );
     QVector< QVector<int> > sceneArray;
     void locateSceneArray();
-    void deleteSceneArray();
+
     unsigned int horizCells;
     unsigned int vertCells;
   /*  struct coord1
@@ -135,6 +143,7 @@ private:
    void renderSelectedArea(QPainter *painter);
 
    void fillSelectedArray(void);
+   bool checkSelectedArrayEmpty();
    //bool addSelectedArray();
    DrawFunctions drawCross;
    DrawFunctions drawCorn;
@@ -156,12 +165,13 @@ private:
    bool shiftPressedOnce;
    bool renderSelected;
    bool copied;
-   void locateSelectedArray(void);
+   bool locateSelectedArray(void);
    //void deleteSelectedArray(void);
   // void deleteArray(int **array1, int xlen);
    friend void deleteArray(int **array1, int xlen);
    friend void locateeArray(int **array1, int xlen, int ylen);
-   void showArray(int **array1, int xlen,int ylen );
+   //void showArray(int **array1, int xlen,int ylen );
+   void showArray( QVector< QVector<int>> array1, int xlen, int ylen);
    void clearArea(QPainter *painter);
    //void flip(bool);
    //void rotate(bool);

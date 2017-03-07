@@ -1,4 +1,5 @@
 #include "tabclass.h"
+#include "functions.h"
 
 //#include "twoheaders.h"
 TabClass::TabClass(QWidget *parent) : QWidget(parent)
@@ -12,7 +13,7 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     borderForNumbers = 20;
     undoStack = new QUndoStack();
 //            stateBox( new StateBox()),
-    qDebug() << "mh " << this->width() << this->height();
+    //qDebug() << "mh " << this->width() << this->height();
     border = -20;
     mScene->setSceneRect(border,border,300-border,200-border);
     horSize = this->mScene->width()-borderForNumbers;
@@ -39,15 +40,42 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
      //                      true);
 }
 
-void TabClass::saveAsImage()
+bool TabClass::saveAsImage()
 {
-  /* QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
-   if (!fileName.isNull())
+   QString initialFileName =  "NewImage.png";
+  // QString fileName= QFileDialog::getSaveFileName(this, tr("Save image"), QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
+    QString fileName= QFileDialog::getSaveFileName(this, tr("Save image"), initialFileName, "PNG (*.png)" );
+   if (fileName.isNull())
    {
+       return false;
       //QPixmap pixMap = this->ui->graphicsView->grab();
-      QPixmap pixMap = mView->grab();
-      pixMap.save(fileName);
-   }*/
+    //  QPixmap pixMap = mView->grab();
+   //   pixMap.save(fileName);
+   }
+   else
+   {
+     //  bool doIt = true;
+     //  QFileInfo checkFile(fileName);
+          // check if file exists and if yes: Is it really a file and no directory?
+     /*  if (checkFile.exists() && checkFile.isFile())
+       {
+           QMessageBox msgBox;
+           msgBox.setText("The file exists. Would you like to replace it&");
+           msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+           int otv = msgBox.exec();
+           if (otv == QMessageBox::Ok)
+           {
+                qDebug() << "can save " << fileName;
+           }
+           else doIt = false;
+       }
+       else
+       {
+            qDebug() << "file for saving " << fileName;
+           //return false;
+       }*/
+   }
+
     mScene->clearSelection();                                                  // Selections would also render to the file
     qDebug() << "ww " << mScene->width() <<' ' <<mScene->height();
     unsigned int wtemp = mScene->width();
@@ -62,11 +90,99 @@ void TabClass::saveAsImage()
 
     QPainter painter(&image);
     mScene->render(&painter);
-    image.save("file_name.png");
+    //image.save("file_name.png");
+    image.save(fileName);
     tmprect.setWidth(wtemp);
     tmprect.setHeight(htemp);
     //mScene->setSceneRect(mScene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
     mScene->setSceneRect(tmprect);
+    return true;
+}
+
+
+bool TabClass::saveAsFile()
+{
+   QString initialFileName =  "NewPettern.fil";
+  // QString fileName= QFileDialog::getSaveFileName(this, tr("Save image"), QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
+    QString fileName= QFileDialog::getSaveFileName(this, tr("Save pattern"), initialFileName, "FIL (*.fil)" );
+   if (fileName.isNull())
+   {
+       return false;
+      //QPixmap pixMap = this->ui->graphicsView->grab();
+    //  QPixmap pixMap = mView->grab();
+   //   pixMap.save(fileName);
+   }
+   else
+   {
+       QFile file(fileName);
+       file.open(QIODevice::ReadWrite|QIODevice::Truncate);
+       QTextStream stream(&file);
+       stream << "Only test "<<endl ;
+       //stream << mScene->width()<<' '<< mScene->height()<<endl ;
+       int v = mSelected->getVertCells();
+       int h = mSelected->getHorizCells();
+       stream << v*del<<' '<< h*del << endl ;
+       QVector< QVector<int> > *sA = mSelected->getSceneArray();
+       for (int i = 0; i < h; i++)
+       {
+           for (int j = 0; j < v; j++)
+           {
+               int deg = (*sA)[i][j];
+               stream << deg  << ' ';
+           }
+           stream << endl ;
+       }
+       file.close();
+   }
+
+    return true;
+}
+
+bool TabClass::loadFromFile()
+{
+    QString fileName= QFileDialog::getOpenFileName(this, tr("Open pattern"), QCoreApplication::applicationDirPath(), "FIL (*.fil)" );
+   //  QString fileName= "D://qtprj//test1//build-newGraph-Desktop-Debug//13.fil";
+    qDebug() << "loaded " <<  fileName;
+    QFile file(fileName);
+    file.open(QIODevice::ReadWrite);
+    QTextStream stream(&file);
+    QString strLine = stream.readLine();
+    strLine = stream.readLine();
+    QStringList fields = strLine.split(" ");
+    int w = fields[0].toInt();
+    int h = fields[1].toInt();
+    int wd = w/del;
+    int hd = h/del;
+   // qDebug() <<"wa read " <<fields[0].toInt()<<' '<<fields[1].toInt();
+    resizeGrid(h,w);
+     qDebug() <<"wa read " <<wd<<' '<<hd;
+    QVector< QVector<int> > sA;
+    allocateVector( sA, hd, wd );
+    for (int i = 0; i < hd; i++)
+    {
+       // qDebug() << "i=" << i;
+        strLine = stream.readLine();
+      //  qDebug() << "str " <<strLine;
+        QStringList fields1 = strLine.split(" ");
+        for (int j = 0; j < wd; j ++)
+        {
+           // qDebug() << "j=" << ' '<< j <<' '<<fields1[j].toInt();;
+            sA[i][j] = fields1[j].toInt();
+        }
+    }
+    mSelected->resizeSceneArray(hd,wd);
+    mSelected->fillSceneArray(sA);
+    //mSelected->deleteSceneArray();
+    qDebug() << "after delete";
+   //  mSelected->setHorizCells(wd);
+  //   mSelected->setVertCells(hd);
+   //  mSelected->setSceneArray(sA);
+
+    deleteVectorContent( sA,  hd );
+
+   // resizeSceneArray(h,v);
+   file.close();
+    return true;
 }
 
 TabClass::~TabClass()
@@ -90,12 +206,12 @@ int TabClass::getVertNumber()
 
 void TabClass::setHorNumber(int h)
 {
-    horSize = h * del;
+    horSize = h;
 }
 
 void TabClass::setVertNumber( int v)
 {
-    vertSize = v * del;
+    vertSize = v;
 }
 
 int TabClass::getDel()
@@ -107,11 +223,12 @@ void TabClass::resizeGrid(int h, int v)
 {
     setVertNumber(v);
     setHorNumber(h);
-    int h1 = h * del + borderForNumbers;
-    int v1 = v * del + borderForNumbers;
+    qDebug() << "here goes v " << getVertNumber()<<' '<<getHorNumber();
+    int h1 = h + borderForNumbers;
+    int v1 = v + borderForNumbers;
     mScene->setSceneRect(border,border,h1+border,v1+border);
-    qDebug() << "wh "<< mScene->width()<<' '<<mScene->height();
-    mGrid->sizeChanged(h*del,v*del);
+    qDebug() << "whhhh "<< h<<' '<<v;
+    mGrid->sizeChanged(h,v);
 }
 
 void TabClass::resizeSceneArray(int h, int v)
