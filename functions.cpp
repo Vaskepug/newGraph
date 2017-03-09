@@ -44,7 +44,7 @@ int ** locateArray1(int xlen, int ylen)
 }
 
 
-void allocateVector( QVector< QVector<int>> &v, int xlen, int ylen )
+void allocateVector( QVector< QVector<int> > &v, int xlen, int ylen )
 {
     QVector <int> tmp (ylen);
      qDebug() << "allocated 111" << tmp.size();
@@ -58,7 +58,7 @@ void allocateVector( QVector< QVector<int>> &v, int xlen, int ylen )
     qDebug() << "allocated " << v.size();
 }
 
-void deleteVectorContent( QVector< QVector<int>> &v,  int ylen )
+void deleteVectorContent( QVector< QVector<int> > &v,  int ylen )
 {
     if ( v.size() > 0 )
     {

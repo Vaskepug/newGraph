@@ -39,4 +39,5 @@ FORMS    += mainwindow.ui
 RESOURCES += \
     res.qrc
 
-DISTFILES +=
+DISTFILES += \
+    icons/save1.png

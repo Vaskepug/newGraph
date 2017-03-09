@@ -10,7 +10,6 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
     mScene = new QGraphicsScene();
     mView = new QGraphicsView ();
     del = 10;
-    newFile = true;
 
     borderForNumbers = 20;
     undoStack = new QUndoStack();
@@ -203,15 +202,10 @@ bool TabClass::loadFromFile()
    file.close();
    loadedFileName = fileName;
   // return fileName;
-   newFile = false;
+
     return false;
 }
 
-
-bool TabClass::isFileNew()
-{
-    return newFile;
-}
 
 TabClass::~TabClass()
 {

@@ -71,11 +71,11 @@ public:
     int getSelectedArrayYSize();
     void setSelectedArrayXSize(int sz);
     void setSelectedArrayYSize(int sz);
-    void fillSceneArray(QVector< QVector<int>> sA);
+    void fillSceneArray(QVector< QVector<int> > sA);
     //void setSelectedArray(int **arr);
     void setSelectedArray(QVector< QVector<int> > arr);
     //int ** getSelectedArray();
-    QVector< QVector<int>> getSelectedArray();
+    QVector< QVector<int> > getSelectedArray();
     void doUpdate();
     void fillSelectedArrayfromOutside(QVector<QVector<int> > array);
     void setItemsCount(int c);
@@ -171,7 +171,7 @@ private:
    friend void deleteArray(int **array1, int xlen);
    friend void locateeArray(int **array1, int xlen, int ylen);
    //void showArray(int **array1, int xlen,int ylen );
-   void showArray( QVector< QVector<int>> array1, int xlen, int ylen);
+   void showArray( QVector< QVector<int> > array1, int xlen, int ylen);
    void clearArea(QPainter *painter);
    //void flip(bool);
    //void rotate(bool);

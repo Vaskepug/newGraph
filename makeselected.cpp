@@ -159,7 +159,7 @@ void MakeSelected::resizeSceneArray(unsigned int h, unsigned int v)
    // this->update();
 }
 
-void MakeSelected::fillSceneArray(QVector< QVector<int>> sA)
+void MakeSelected::fillSceneArray(QVector< QVector<int> > sA)
 {
     qDebug() << "cells " << horizCells << ' '<<vertCells;
     for (int i = 0; i < horizCells; i ++)
@@ -296,7 +296,7 @@ void MakeSelected::rotate(bool clo)
 
         // locateNew Array
         //int ** array1 = nullptr;
-        QVector< QVector<int>> array1;
+        QVector< QVector<int> > array1;
         allocateVector( array1, ysize, xsize );
       //was  locateArray(array1,xsize,ysize);
 
@@ -490,7 +490,7 @@ void MakeSelected::flip(bool vert)
     this->update();
 }
 
-void MakeSelected::showArray(QVector< QVector<int>> array1, int xlen, int ylen )
+void MakeSelected::showArray(QVector< QVector<int> > array1, int xlen, int ylen )
 //void MakeSelected::showArray(int **array1, int xlen, int ylen )
 {
    // int sz = 33;
@@ -1108,7 +1108,7 @@ bool MakeSelected::locateSelectedArray()
 }
 
 //void MakeSelected::fillSelectedArrayfromOutside(int **array)
-void MakeSelected::fillSelectedArrayfromOutside(QVector< QVector<int>> array)
+void MakeSelected::fillSelectedArrayfromOutside(QVector< QVector<int> > array)
 {
     /* was selectedArray = new int *[selectedArrayXSize];
     for (int i = 0; i < selectedArrayXSize; i ++)

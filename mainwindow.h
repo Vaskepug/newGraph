@@ -51,6 +51,7 @@ public:
     QAction* undoAction;
     QAction* redoAction;
     QAction* resizeAction;
+    QAction* fastSaveAction;
 
 
 private slots:
@@ -74,6 +75,7 @@ private slots:
     void undof();
     void redof();
     void resizef();
+    void fastSavef();
     void tabChanged();
     void on_actionSaveP_triggered();
 

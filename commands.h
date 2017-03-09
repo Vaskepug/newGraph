@@ -49,7 +49,8 @@ class MoveCommand : public QUndoCommand
     friend void deleteArray(int **array1, int xlen);
  private:
      MakeSelected *mSel;
-     int **thisSelectedArray;
+     //int **thisSelectedArray;
+     QVector< QVector<int> > thisSelectedArray;
      int thisSelectedArrayXSize;
      int thisSelectedArrayYSize;
      QPointF newStart;
@@ -117,7 +118,9 @@ class PasteCommand : public QUndoCommand
  {
  public:
      PasteCommand(MakeSelected *ms, QPointF startP, QPointF endP,
-                 int selectedArrayXs, int selectedArrayYs, int **selArray,
+                // int selectedArrayXs, int selectedArrayYs, int **selArray,
+                 int selectedArrayXs, int selectedArrayYs,
+                  QVector< QVector<int> > selArray,
                    int eType, QUndoCommand *parent = 0);
      ~PasteCommand();
     MakeSelected::Choice ch1;

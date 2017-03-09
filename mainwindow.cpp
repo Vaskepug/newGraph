@@ -100,6 +100,7 @@ MainWindow::~MainWindow()
     delete undoAction;
     delete redoAction;
     delete resizeAction;
+    delete fastSaveAction;
     //delete vertActions;
     //if ( selectedArray != nullptr )
     if ( selectedArray.size() != 0 )
@@ -290,6 +291,12 @@ void MainWindow::createToolBars(void)
        resizeAction->setCheckable(false);
        connect(resizeAction, SIGNAL(triggered()), this, SLOT(resizef()));
        ///////
+       ////////
+       fastSaveAction = new QAction("Save",this);
+       fastSaveAction->setIcon(QIcon(":/icons/save1.png"));
+       fastSaveAction->setCheckable(false);
+       connect(fastSaveAction, SIGNAL(triggered()), this, SLOT(fastSavef()));
+       ///
 
     vertActionGroup = new QActionGroup(this);
     vertActionGroup->setExclusive(true);
@@ -323,6 +330,7 @@ void MainWindow::createToolBars(void)
     leftToolbar->addActions(vertActionGroup->actions());
 
     /////////
+    topToolbar->addAction(fastSaveAction);
     topToolbar->addAction(increase);
     topToolbar->addAction(decrease);
     topToolbar->addAction(flipHoriz);
@@ -431,7 +439,7 @@ void MainWindow::copyf()
         }*/
         // copy
       // int **sA = tabwid->mSelected->getSelectedArray();
-         QVector< QVector<int>> sA = tabwid->mSelected->getSelectedArray();
+         QVector< QVector<int> > sA = tabwid->mSelected->getSelectedArray();
         for ( int i = 0; i < selectedArrayXSize; i ++)
         {
             for ( int j = 0; j < selectedArrayYSize; j ++)
@@ -548,6 +556,12 @@ void MainWindow::savef()
 
 }
 
+void MainWindow::fastSavef()
+{
+    qDebug() << "fast save";
+    bool ret = tabwid->saveAsFile();
+}
+
 void MainWindow::redof()
 {
     tabwid->undoStack->redo();
@@ -646,5 +660,5 @@ void MainWindow::on_actionSaveP_triggered()
 
 void MainWindow::on_actionLoadP_triggered()
 {
-    bool ret = tabwid->loadFromFile();
+    tabwid->loadFromFile();
 }

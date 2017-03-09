@@ -94,16 +94,18 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
    MoveCommand::~MoveCommand()
    {
         qDebug() << "delete move";
-        if ( thisSelectedArray != nullptr )
+        //if ( thisSelectedArray != nullptr )
+        if ( thisSelectedArray.size() != 0 )
         {
-            deleteArray(thisSelectedArray,thisSelectedArrayXSize);
+          //  deleteArray(thisSelectedArray,thisSelectedArrayXSize);
+            deleteVectorContent( thisSelectedArray, thisSelectedArrayXSize );
         /*  for( int i = 0; i < selectedArrayXSize; i++ )
           {
             //  qDebug() << "deleted " << selectedArrayXSize << ' ' << selectedArrayYSize;
                  delete [] selectedArray[i];
            }
             delete selectedArray;*/
-           thisSelectedArray = nullptr;
+          //was  thisSelectedArray = nullptr;
 //           thisSselectedArrayXSize = 0;
   //         selectedArrayYSize = 0;
     //       wasDeleted = true;
@@ -144,7 +146,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        }*/
        // copy
        //int **sA = mSel->getSelectedArray();
-       QVector< QVector<int>> sA = mSel->getSelectedArray();
+       QVector< QVector<int> > sA = mSel->getSelectedArray();
        for ( int i = 0; i < thisSelectedArrayXSize; i ++)
        {
            for ( int j = 0; j < thisSelectedArrayYSize; j ++)
