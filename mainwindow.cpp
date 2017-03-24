@@ -104,8 +104,11 @@ MainWindow::~MainWindow()
     //delete vertActions;
     //if ( selectedArray != nullptr )
     if ( selectedArray.size() != 0 )
+    {
        // deleteArray(selectedArray,selectedArrayXSize);
+        qDebug() << "sele size " << selectedArrayYSize;
         deleteVectorContent( selectedArray,selectedArrayYSize );
+     }
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -439,7 +442,7 @@ void MainWindow::copyf()
         }*/
         // copy
       // int **sA = tabwid->mSelected->getSelectedArray();
-         QVector< QVector<int> > sA = tabwid->mSelected->getSelectedArray();
+         QVector< QVector<int> > sA = *tabwid->mSelected->getSelectedArray();
         for ( int i = 0; i < selectedArrayXSize; i ++)
         {
             for ( int j = 0; j < selectedArrayYSize; j ++)
@@ -469,6 +472,7 @@ void MainWindow::pastef()
     wid->mSelected->pasteSelected(); */
     if (wasCopied)
     {
+        qDebug () << " copied";
         QPointF leftTopZero;
         leftTopZero.setX(0);
         leftTopZero.setY(0);

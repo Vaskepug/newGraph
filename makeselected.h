@@ -21,7 +21,7 @@ class MakeSelected: public QGraphicsItem
 public:
     typedef void DrawFunctions( QPainter *painter,int,int,int,int);
     typedef void (MakeSelected::*DrawFunctionsPtr)(QPainter *painter,int,int,int,int);
-    DrawFunctionsPtr drawFunctions[6];
+    DrawFunctionsPtr drawFunctions[7];
 
     ~MakeSelected();
     //MakeSelected(qreal width, qreal height, int del, TabClass *widget);
@@ -34,7 +34,7 @@ public:
    // bool itemToDraw;
     void setSelected(bool meaning);
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
-                  MakeMiddle, MakeM, MakeBrick};
+                  MakeMiddle, MakeM, MakeBrick,MakeBigElement};
  //   enum ItemBehaviour { NotDraw, Draw, Delete };
 //    Choice choice;
  //   ItemBehaviour itemToDraw;
@@ -75,7 +75,7 @@ public:
     //void setSelectedArray(int **arr);
     void setSelectedArray(QVector< QVector<int> > arr);
     //int ** getSelectedArray();
-    QVector< QVector<int> > getSelectedArray();
+    QVector< QVector<int> > *getSelectedArray();
     void doUpdate();
     void fillSelectedArrayfromOutside(QVector<QVector<int> > array);
     void setItemsCount(int c);
@@ -151,6 +151,7 @@ private:
    DrawFunctions drawMiddle;
    DrawFunctions drawM;
    DrawFunctions drawBrick;
+   DrawFunctions drawBigElement;
 
    //int **selectedArray;
    int selectedArrayXSize;
@@ -173,6 +174,7 @@ private:
    //void showArray(int **array1, int xlen,int ylen );
    void showArray( QVector< QVector<int> > array1, int xlen, int ylen);
    void clearArea(QPainter *painter);
+   void clearCell(QPainter *painter, int xb, int yb, int xe, int ye);
    //void flip(bool);
    //void rotate(bool);
    void showSelectedArray(void);

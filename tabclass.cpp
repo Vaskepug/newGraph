@@ -17,7 +17,7 @@ TabClass::TabClass(QWidget *parent) : QWidget(parent)
 //            stateBox( new StateBox()),
     //qDebug() << "mh " << this->width() << this->height();
     border = -20;
-    mScene->setSceneRect(border,border,300-border,200-border);
+    mScene->setSceneRect(border,border,200-border,300-border);
     horSize = this->mScene->width()-borderForNumbers;
     vertSize = this->mScene->height()-borderForNumbers;
     mGrid = new MakeGrid(horSize,
