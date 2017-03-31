@@ -428,7 +428,7 @@ void MainWindow::copyf()
             qDebug() << "New Array 111";
            // deleteArray(selectedArray,selectedArrayXSize);
             deleteVectorContent( selectedArray,  selectedArrayYSize );
-            selectedArray.clear();
+       //     selectedArray.clear();
         }
 
         //qDebug() << "New Array " << selectedArrayXSize << ' ' << selectedArrayYSize;

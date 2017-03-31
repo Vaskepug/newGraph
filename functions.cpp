@@ -60,8 +60,8 @@ void allocateVector( QVector< QVector<int> > &v, int xlen, int ylen )
 
 void deleteVectorContent( QVector< QVector<int> > &v,  int ylen )
 {
-    if ( v.size() > 0 )
-    {
+  //  if ( v.size() > 0 )
+  //  {
         for (unsigned int i = 0; i < ylen; i ++)
         {
           //  sceneArray[i].reserve(vertCells);
@@ -69,7 +69,8 @@ void deleteVectorContent( QVector< QVector<int> > &v,  int ylen )
           //      sceneArray[i][j] << 0;
             v[i].clear();
         }
-        v.clear();
-    }
+        if ( v.size() > 0 )
+            v.clear();
+   // }
     qDebug() << "deleted" << v.size();
 }

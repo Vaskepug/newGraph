@@ -162,11 +162,16 @@ void MakeSelected::resizeSceneArray(unsigned int h, unsigned int v)
 
 void MakeSelected::fillSceneArray(QVector< QVector<int> > sA)
 {
+    itemsCount = 0;
     qDebug() << "cells " << horizCells << ' '<<vertCells;
     for (int i = 0; i < horizCells; i ++)
     {
         for (int j =0; j < vertCells; j ++)
+        {
             sceneArray[i][j] = sA[i][j];
+            if ( sA[i][j] > 0 && sA[i][j] < 10  )
+                itemsCount ++;
+        }
     }
 }
 
