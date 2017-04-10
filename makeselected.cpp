@@ -460,6 +460,7 @@ void MakeSelected::flip(bool vert)
     if (selectedArray.size() != 0)
     {
         qDebug() << "sel flip";
+        int d1;
         int halfx = selectedArrayXSize / 2;
         int halfy = selectedArrayYSize / 2;
         if (! vert )
@@ -471,8 +472,36 @@ void MakeSelected::flip(bool vert)
                   //   qDebug() << "v "<<i<<' '<<j <<' '<<selectedArrayXSize - j - 1;
                   //   qDebug() << "and " << selectedArray [j][i] << ' ' << selectedArray [selectedArrayXSize - j - 1][i] ;
                     int tmp = selectedArray [j][i];
-                    selectedArray [j][i] =selectedArray [selectedArrayXSize - j - 1][i];
+                 //   if ( tmp > 4 && tmp < 10 ) tmp = 0;
+                 //   if ( tmp > 10 ) tmp = tmp/10;
+                  //  if (tmp > 0)
+                   //  qDebug() << "yt=" << tmp;
+                  //  if (selectedArray [j][i] > 0)
+                 //   qDebug() << "yt=" << selectedArray [j][i];
+
+                    d1 = selectedArray [selectedArrayXSize - j - 1][i];
+                  //  was1 = false;
+                 /*   if ( selectedArray [selectedArrayXSize - j - 1][i] > 10 )
+                    {
+                        d1 = selectedArray [selectedArrayXSize - j - 1][i] /10;
+                        tmp = 0;
+                    }*/
+                    selectedArray [j][i] = d1;
                     selectedArray [selectedArrayXSize - j - 1][i] =  tmp;
+               //     if ( was1 ) selectedArray [selectedArrayXSize - j - 1][i] = 0;
+                    //if (selectedArray [j][i] > 0)
+
+                   // if (selectedArray [j][i] > 10 ) selectedArray [j][i] = selectedArray [j][i] / 10;
+                   // if (selectedArray [j][i] > 4 && selectedArray [j][i] < 10) selectedArray [j][i] = 0;
+                }
+                for (int j = 0; j <selectedArrayXSize-1; j++)
+                {
+                    if (selectedArray [j][i] > 10 )
+                    {
+                        selectedArray [j][i] = selectedArray [j][i] / 10;
+                        selectedArray [j+1][i] = selectedArray [j+1][i] * 10;
+                        j ++;
+                    }
                 }
             }
         }
@@ -1054,7 +1083,7 @@ void MakeSelected::fillSelectedArray()
     int j1 = 0;
     if ( selectedArray.size() == 0  ) qDebug() << "null";
     else qDebug() << "not null " << selectedArrayXSize << ' ' << selectedArrayYSize ;
-    qDebug() << "tut " << begx << ' '<<begy << ' ' << begx+selectedArrayXSize << ' ' <<begy+selectedArrayYSize;
+   // qDebug() << "tut " << begx << ' '<<begy << ' ' << begx+selectedArrayXSize << ' ' <<begy+selectedArrayYSize;
     for ( int i = begx; i < begx + selectedArrayXSize; i ++)
     {
         j1 = 0;
@@ -1397,7 +1426,7 @@ void MakeSelected :: renderSelectedArea(QPainter *painter)
             {
                 if ( dei < 20)
                 {
-                   // qDebug()<< "i=" << i << " j=" << j << " " << dei;
+                 //   qDebug()<< "i=" << i << " j=" << j << " " << dei;
                //     drawCross1(painter,i * del, j * del, i * del + del, j * del + del);
                     int xb = i * del;
                     int yb = j * del;
