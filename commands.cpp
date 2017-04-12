@@ -119,7 +119,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        mSel->setEndPoint(oldEnd);
        mSel->setRenderSelected(true);
        mSel->setSelected(true);
-       mSel->pasteSelected(oldStart);
+       mSel->pasteSelected(oldStart,true);
        // make selected here and delete at the old palce
        // move saved selected to the new place
      //  mSel->update();

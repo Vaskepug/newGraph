@@ -47,7 +47,7 @@ int ** locateArray1(int xlen, int ylen)
 void allocateVector( QVector< QVector<int> > &v, int xlen, int ylen )
 {
     QVector <int> tmp (ylen);
-     qDebug() << "allocated 111" << tmp.size();
+   //  qDebug() << "allocated 111" << tmp.size();
     for (unsigned int i = 0; i < xlen; i ++)
     {
       //  sceneArray[i].reserve(vertCells);

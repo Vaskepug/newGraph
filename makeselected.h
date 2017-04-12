@@ -48,7 +48,7 @@ public:
     void rotateCounterClockWise(void);
     void rotate(bool);
     bool copySelected();
-    void pasteSelected(QPointF point1);
+    void pasteSelected(QPointF point1, bool current);
     void cutSelected();
     void saveAsImage();
     void setWasShift(bool meaning);

@@ -65,7 +65,7 @@ void MainWindow::tabChanged()
     int curr = tabWidget->currentIndex();
     qDebug() << "curr tab " << curr;
     tabwid =dynamic_cast<TabClass *>(tabWidget->widget(curr));
-    setRightTool();
+   //was setRightTool();
   //  MakeSelected::Choice cho;
   //  cho = tabwid ->mSelected->getChoice();
   //  vertActions [(int) cho - 1]->setChecked(true);
@@ -478,7 +478,7 @@ void MainWindow::pastef()
         leftTopZero.setY(0);
         //tabwid->mSelected->pasteSelected(tabwid->topLeft);
         if ( currentTab ==  tabWidget->currentIndex())
-            tabwid->mSelected->pasteSelected(leftTopZero);
+            tabwid->mSelected->pasteSelected(leftTopZero,true);
         else
         {
             //if ( tabwid->mSelected->selectedArray != nullptr )
@@ -490,7 +490,7 @@ void MainWindow::pastef()
                 tabwid->mSelected->deleteSelectedArray();
                 tabwid->mSelected->doUpdate();
             }
-            qDebug() << "in other tab";
+            tabwid->mSelected->deleteSelectedArray();
             tabwid->mSelected->setSelectedArrayXSize(selectedArrayXSize);
             tabwid->mSelected->setSelectedArrayYSize(selectedArrayYSize);
             tabwid->mSelected->fillSelectedArrayfromOutside(selectedArray);
@@ -498,7 +498,7 @@ void MainWindow::pastef()
             tabwid->mSelected->setCopied (true);
             tabwid ->mSelected->setChoice(MakeSelected::Choice(0));
             setRightTool();
-            tabwid->mSelected->pasteSelected(leftTopZero);
+            tabwid->mSelected->pasteSelected(leftTopZero,false);
         }
      }
 }
