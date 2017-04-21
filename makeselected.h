@@ -65,6 +65,7 @@ public:
     void setHorizCells(int h);
     int getVertCells();
     void setVertCells(int v);
+    int getDel();
     QVector<QVector<int> > *getSceneArray();
     void setSceneArray(QVector< QVector<int> >);
     int getSelectedArrayXSize();
@@ -78,7 +79,9 @@ public:
     QVector< QVector<int> > *getSelectedArray();
     void doUpdate();
     void fillSelectedArrayfromOutside(QVector<QVector<int> > array);
+    void makeSelectedArray(void);
     void setItemsCount(int c);
+    int getItemsCount(void);
     QPointF getStartPoint();
     QPointF getEndPoint();
     QPointF getOldStartPoint();

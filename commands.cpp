@@ -122,7 +122,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        mSel->pasteSelected(oldStart,true);
        // make selected here and delete at the old palce
        // move saved selected to the new place
-     //  mSel->update();
+       mSel->update();
     //   mSel->setSelected(false);
        qDebug() << "Move undo";
    }
@@ -134,7 +134,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        mSel->setRenderSelected(true);
        mSel->setSelected( true );
        mSel->update();
-       //qDebug() << "Move redo "<< newEnd.x();
+       qDebug() << "Move redo ";
    }
 
    void MoveCommand::copySelectedArray()
@@ -185,6 +185,8 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
       mSel = ms;
       pStart = mSel->getStartPoint();
       pEnd = mSel->getEndPoint();
+      thisSelectedArrayXSize = mSel->getSelectedArrayXSize();
+      thisSelectedArrayYSize = mSel->getSelectedArrayYSize();
       qDebug() << "Select added";
    //   thisSelectedArray = mSel->selectedArray;
     //  oldStart = mSel->getOldStartPoint();
@@ -224,6 +226,9 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
         mSel->setStartPoint(pStart);
         mSel->setEndPoint(pEnd);
         mSel->setSelected(true);
+        mSel->setSelectedArrayXSize(thisSelectedArrayXSize);
+        mSel->setSelectedArrayYSize(thisSelectedArrayYSize);
+        mSel->makeSelectedArray();
         mSel->update();
         qDebug() << "Select redo";
     }

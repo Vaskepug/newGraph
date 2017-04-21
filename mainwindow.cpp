@@ -169,14 +169,23 @@ void MainWindow::createToolBars(void)
 {
     select = new QAction("Select",this);
     vertActions[0] = select;
-    select->setIcon(QIcon(":/icons/select.png"));
+    QIcon *icoSelect = new QIcon();
+    icoSelect->addPixmap(QPixmap(":/icons/select.png"),QIcon::Normal,QIcon::On);
+    icoSelect->addPixmap(QPixmap(":/icons/dselect.png"),QIcon::Normal,QIcon::Off);
+    select->setIcon(*icoSelect);
+   // select->setIcon(QIcon(":/icons/select.png"));
     select->setCheckable(true);
     connect (select, SIGNAL(triggered()), this, SLOT(selectf()));
    //////////
     makeCross = new QAction("Make Cross",this);
     vertActions[1] = makeCross;
     makeCross->setData(int(MakeSelected::MakeCross));
-    makeCross->setIcon(QIcon(":/icons/cross.png"));
+    // icontest
+    QIcon *icoCross = new QIcon();
+    icoCross->addPixmap(QPixmap(":/icons/cross.png"),QIcon::Normal,QIcon::On);
+    icoCross->addPixmap(QPixmap(":/icons/dcross.png"),QIcon::Normal,QIcon::Off);
+    makeCross->setIcon(*icoCross);
+    //makeCross->setIcon(QIcon(":/icons/cross.png"));
 
     makeCross->setCheckable(true);
     //makeCross->setChecked(true);
@@ -184,33 +193,56 @@ void MainWindow::createToolBars(void)
   //  connect(makeCross, SIGNAL(triggered()), this, SLOT(makeCrossf()));
     makeCircle = new QAction("Make Circle",this);
     vertActions[2] = makeCircle;
-    makeCircle->setIcon(QIcon(":/icons/circle.png"));
+    QIcon *icoCircle = new QIcon();
+    icoCircle->addPixmap(QPixmap(":/icons/circle.png"),QIcon::Normal,QIcon::On);
+    icoCircle->addPixmap(QPixmap(":/icons/dcircle.png"),QIcon::Normal,QIcon::Off);
+    makeCircle->setIcon(*icoCircle);
+    //makeCircle->setIcon(QIcon(":/icons/circle.png"));
     makeCircle->setData(int(MakeSelected::MakeCorn));
     makeCircle->setCheckable(true);
   //  connect(makeCircle, SIGNAL(triggered()), this, SLOT(makeCirclef()));
 
     makeM = new QAction("Make M",this);
     vertActions[5] = makeM;
-    makeM->setIcon(QIcon(":/icons/m.png"));
+    QIcon *icoM = new QIcon();
+    icoM->addPixmap(QPixmap(":/icons/m.png"),QIcon::Normal,QIcon::On);
+    icoM->addPixmap(QPixmap(":/icons/dm.png"),QIcon::Normal,QIcon::Off);
+    makeM->setIcon(*icoM);
+   // makeM->setIcon(QIcon(":/icons/m.png"));
     makeM->setData(int(MakeSelected::MakeM));
     makeM->setCheckable(true);
 
+    ////////////
     makeMiddle = new QAction("Make Middle",this);
     vertActions[4] = makeMiddle;
-    makeMiddle->setIcon(QIcon(":/icons/middle.png"));
+    QIcon *icoMiddle = new QIcon();
+    icoMiddle->addPixmap(QPixmap(":/icons/middle.png"),QIcon::Normal,QIcon::On);
+    icoMiddle->addPixmap(QPixmap(":/icons/dmiddle.png"),QIcon::Normal,QIcon::Off);
+    makeMiddle->setIcon(*icoMiddle);
+    //makeMiddle->setIcon(QIcon(":/icons/middle.png"));
     makeMiddle->setData(int(MakeSelected::MakeMiddle));
     makeMiddle->setCheckable(true);
 
+    //////////////
+
     makeCrossed = new QAction("Make Crossed",this);
     vertActions[3] = makeCrossed;
-    makeCrossed->setIcon(QIcon(":/icons/crossed.png"));
+    QIcon *icoCrossed = new QIcon();
+    icoCrossed->addPixmap(QPixmap(":/icons/crossed.png"),QIcon::Normal,QIcon::On);
+    icoCrossed->addPixmap(QPixmap(":/icons/dcrossed.png"),QIcon::Normal,QIcon::Off);
+    makeCrossed->setIcon(*icoCrossed);
+   // makeCrossed->setIcon(QIcon(":/icons/crossed.png"));
     makeCrossed->setData(int(MakeSelected::MakeCrossed));
     makeCrossed->setCheckable(true);
 
-
+    ////////
     makeBrick = new QAction("Make Brick",this);
     vertActions[6] = makeBrick;
-    makeBrick->setIcon(QIcon(":/icons/brick.png"));
+    QIcon *icoBrick = new QIcon();
+    icoBrick->addPixmap(QPixmap(":/icons/brick.png"),QIcon::Normal,QIcon::On);
+    icoBrick->addPixmap(QPixmap(":/icons/dbrick.png"),QIcon::Normal,QIcon::Off);
+    makeBrick->setIcon(*icoBrick);
+  //  makeBrick->setIcon(QIcon(":/icons/brick.png"));
     makeBrick->setData(int(MakeSelected::MakeBrick));
     makeBrick->setCheckable(true);
 
@@ -473,9 +505,23 @@ void MainWindow::pastef()
     if (wasCopied)
     {
         qDebug () << " copied";
+        ///////
+       // QRectF sceneRect1 = tabwid->mView->mapToScene( mapToScene(tabwid->mView->rect())).boundingRect();
+        QRectF sceneRect1 = tabwid->mView->mapToScene( tabwid->mView->rect()).boundingRect();
+        qreal x1, y1,x2,y2;
+        sceneRect1.getCoords(&x1,&y1,&x2,&y2);
+        int del = tabwid->mSelected->getDel();
+        x1 = setToGridCommon(x1,del);
+        x2 = setToGridCommon(x2,del);
+        y1 = setToGridCommon(y1,del);
+        y2 = setToGridCommon(y2,del);
+        qDebug() << "coords " << x1 << ' ' << y1;
+        ///
         QPointF leftTopZero;
-        leftTopZero.setX(0);
-        leftTopZero.setY(0);
+        if ( x1 < 0 ) x1 = -x1;
+        if ( y1 < 0 ) y1 = -y1;
+        leftTopZero.setX(x1);
+        leftTopZero.setY(y1);
         //tabwid->mSelected->pasteSelected(tabwid->topLeft);
         if ( currentTab ==  tabWidget->currentIndex())
             tabwid->mSelected->pasteSelected(leftTopZero,true);

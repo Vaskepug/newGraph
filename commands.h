@@ -89,6 +89,8 @@ class SelectCommand : public QUndoCommand
     MakeSelected *mSel;
     QPointF pStart;
     QPointF pEnd;
+    int thisSelectedArrayXSize;
+    int thisSelectedArrayYSize;
      void undo();
      void redo();
 

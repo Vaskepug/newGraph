@@ -55,7 +55,7 @@ void allocateVector( QVector< QVector<int> > &v, int xlen, int ylen )
       //      sceneArray[i][j] << 0;
         v.append(tmp);
     }
-    qDebug() << "allocated " << v.size();
+    //qDebug() << "allocated " << v.size();
 }
 
 void deleteVectorContent( QVector< QVector<int> > &v,  int ylen )
@@ -72,5 +72,14 @@ void deleteVectorContent( QVector< QVector<int> > &v,  int ylen )
         if ( v.size() > 0 )
             v.clear();
    // }
-    qDebug() << "deleted" << v.size();
+    //qDebug() << "deleted" << v.size();
+}
+
+int setToGridCommon( qreal t , int del)
+{
+    int s;
+    s = int ( t / del ) *del;
+    //s = round( s );
+   // return s;
+     return (int) floor(s + 0.5);
 }

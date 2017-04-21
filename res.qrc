@@ -24,5 +24,12 @@
         <file>icons/undo.png</file>
         <file>icons/resize.png</file>
         <file>icons/save1.png</file>
+        <file>icons/dcross.png</file>
+        <file>icons/dselect.png</file>
+        <file>icons/dcircle.png</file>
+        <file>icons/dbrick.png</file>
+        <file>icons/dcrossed.png</file>
+        <file>icons/dm.png</file>
+        <file>icons/dmiddle.png</file>
     </qresource>
 </RCC>

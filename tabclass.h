@@ -70,6 +70,7 @@ private:
     int borderForNumbers;
     int border;
     bool newFile;
+
     QString loadedFileName;
     QHBoxLayout *mLayout;
     void setHorNumber(int);
