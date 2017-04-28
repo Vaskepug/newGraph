@@ -59,6 +59,7 @@ class MoveCommand : public QUndoCommand
      QPointF oldEnd;
      void copySelectedArray();
      void pasteSelectedArray();
+     void clearOldSelectedArray();
  };
 
 class FlipRotateCommand : public QUndoCommand

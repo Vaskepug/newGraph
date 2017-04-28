@@ -116,14 +116,27 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
    void MoveCommand::undo()
    {
        mSel->setStartPoint(oldStart);
+       mSel->setStartPoint(oldStart);
        mSel->setEndPoint(oldEnd);
        mSel->setRenderSelected(true);
        mSel->setSelected(true);
-       mSel->pasteSelected(oldStart,true);
-       // make selected here and delete at the old palce
-       // move saved selected to the new place
+        ///
+       if ( mSel->getSelectedArrayXSize() == 0 && mSel->getSelectedArrayYSize() == 0 )
+       {
+           mSel->setSelectedArrayXSize(thisSelectedArrayXSize);
+           mSel->setSelectedArrayYSize(thisSelectedArrayYSize);
+           mSel->fillSelectedArrayfromOutside(thisSelectedArray);
+           clearOldSelectedArray();
+            // mSel->setSelected(true);
+         // was  mSel->setCopied (true);
+       }
+         ///
+
+     //was  mSel->pasteSelected(oldStart,false);
+         // make selected here and delete at the old palce
+         // move saved selected to the new place
        mSel->update();
-    //   mSel->setSelected(false);
+  //   mSel->setSelected(false);
        qDebug() << "Move undo";
    }
 
@@ -170,6 +183,13 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
 
 
    }
+
+   void MoveCommand::clearOldSelectedArray()
+   {
+       mSel->clearSelected(newStart);
+       qDebug() << "new St " << newStart << ' ' << oldStart;
+   }
+
    void MoveCommand::pasteSelectedArray()
    {
      //  QPointF tmp;
@@ -308,7 +328,8 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
       {
           if ( typeA )
           {
-             mSel->flip(!dir);
+              qDebug() << "flip undo";
+             mSel->flip(dir);
           }
           else
           {

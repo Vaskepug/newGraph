@@ -49,6 +49,7 @@ public:
     void rotate(bool);
     bool copySelected();
     void pasteSelected(QPointF point1, bool current);
+    void clearSelected(QPointF point1);
     void cutSelected();
     void saveAsImage();
     void setWasShift(bool meaning);

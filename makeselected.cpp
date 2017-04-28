@@ -377,12 +377,47 @@ void MakeSelected::flipVertically()
    // flip(true);
 }
 
+void MakeSelected::clearSelected(QPointF point1)
+{
+    if (selectedArray.size() == 0)
+    {
+        qDebug () << "in clear nulllll";
+     //   return false;
+    }
+    qDebug () << "in clear " << startPoint.x() <<' '<<selectedArrayXSize ;
+    MakeSelected::coord1 cc = getNumberInArray(point1);
+    int sx = cc.i;
+    int sy = cc.j;
+    int i1 = 0;
+    int j1 = 0;
+    for (int i = sx; i < sx + selectedArrayXSize; i ++)
+    {
+        j1 = 0;
+        for (int j = sy; j < sy + selectedArrayYSize; j ++)
+        {
+            if ( selectedArray[i1][j1] > 0 )// && sceneArray[i][j] == 0 )
+            {
+                sceneArray[i][j] = 0;
+                int etype = selectedArray[i1][j1];
+                if ( etype  <10 )
+                {
+                    itemsCount --;
+                }
+            }
+            //else
+            j1 ++;
+        }
+        i1 ++;
+    }
+    renderSelected = false;
+      // return true;
+}
 
 void MakeSelected::pasteSelected(QPointF point1, bool current)
 {
     if ( copied )
     {
-        qDebug () << "copied true ";
+      //  qDebug () << "copied true ";
         if ( current )
             addSelectedArray(); // only for current
 
@@ -1151,7 +1186,7 @@ QVector<QVector<int> > *MakeSelected::getSelectedArray()
 
 bool MakeSelected::locateSelectedArray()
 {
-   // qDebug() << "locate " << selectedArrayXSize << ' ' << selectedArrayYSize ;
+   // qDebug() << "locate!!! " << selectedArrayXSize << ' ' << selectedArrayYSize ;
     if ( selectedArrayXSize == 0 ) return false;
     if ( selectedArrayYSize == 0 ) return false;
     //if ( itemsCount > 0 && selectedArray == nullptr )
@@ -1182,7 +1217,7 @@ void MakeSelected::fillSelectedArrayfromOutside(QVector< QVector<int> > array)
     bool located = locateSelectedArray();
     if ( located )
     {
-        qDebug() << "true loca " << selectedArrayXSize << ' ' <<selectedArrayYSize << selectedArray.size() ;
+       // qDebug() << "true loca " << selectedArrayXSize << ' ' <<selectedArrayYSize << selectedArray.size() ;
        // QVector< QVector<int> > sA = *tabwid->mSelected->getSelectedArray();
        for ( int i = 0; i < selectedArrayXSize; i ++)
        {
@@ -1193,7 +1228,7 @@ void MakeSelected::fillSelectedArrayfromOutside(QVector< QVector<int> > array)
            }
        }
     }
-    else  qDebug() << "false loca";
+   // else  qDebug() << "false loca";
     /* was selectedArray = new int *[selectedArrayXSize];
     for (int i = 0; i < selectedArrayXSize; i ++)
     {
@@ -1269,6 +1304,7 @@ void MakeSelected::paint (QPainter *painter,
    //  qDebug() << " in paint ";
     if ( selected )
     {
+        qDebug() << " in selected ";
         if ( endPoint.x() > width )
         {
             endPoint.setX(width);
@@ -1293,7 +1329,7 @@ void MakeSelected::paint (QPainter *painter,
         QPointF bottomRight ( endPoint);
         QRectF rect (topLeft, bottomRight);
         painter->setPen(QPen(Qt::red, 2, Qt::DashDotLine, Qt::RoundCap));
-       // qDebug() << "in paint " << startPoint.x() << ' ' << endPoint.x();
+       // qDebug() << "in paint " << startPoint.x() << ' ' << endPoint.x() << ' ' << selectedArray.size();
          //painter->drawRoundRect(rect,25,25);
       //  qDebug() << "was deleted in paint" <<  endPoint.x() << ' ' <<  endPoint.y() <<
      //              startPoint.x() << ' ' <<  startPoint.y() ;
@@ -1340,7 +1376,7 @@ void MakeSelected::paint (QPainter *painter,
         renderSelectedArea(painter); // here pay attention to shift
 
     }
-   // else qDebug() << "no selected array";
+    else qDebug() << "no selected array";
      //renderArea(painter);
  }
 
@@ -1361,7 +1397,7 @@ bool MakeSelected ::addSelectedArray(void)
     //if (selectedArray == nullptr)
     if (selectedArray.size() == 0)
     {
-        qDebug () << "in add nulllll";
+       // qDebug () << "in add nulllll";
         return false;
     }
     qDebug () << "in add " << startPoint.x() <<' '<<selectedArrayXSize ;
