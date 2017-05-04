@@ -118,9 +118,9 @@ void MakeSelected::fillSceneArray(QVector< QVector<int> > sA)
 {
     itemsCount = 0;
     qDebug() << "cells " << horizCells << ' '<<vertCells;
-    for (int i = 0; i < horizCells; i ++)
+    for (unsigned int i = 0; i < horizCells; i ++)
     {
-        for (int j =0; j < vertCells; j ++)
+        for (unsigned int j =0; j < vertCells; j ++)
         {
             sceneArray[i][j] = sA[i][j];
             if ( sA[i][j] > 0 && sA[i][j] < 10  )
@@ -694,7 +694,7 @@ void MakeSelected::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 
 
-            bool empty =  checkSelectedArrayEmpty();
+            //bool empty =  checkSelectedArrayEmpty();
             bool leftP = false;
             bool rightP = false;
             for (int i = y1; i < y2; i++)
@@ -1624,9 +1624,11 @@ void MakeSelected ::drawBrick(QPainter *painter, int xb, int yb, int xe, int ye)
 void MakeSelected ::drawBigElement(QPainter *painter, int xb, int yb, int xe, int ye)
 {
     // here I wll
-   // xe = 0;
-  //  ye = 0;
-   //  painter->fillRect(xb+1,yb + 1,2 * del - 2, del - 2,Qt::white);
+    xe = 0;
+    ye = 0;
+    xb = 0;
+    yb = 0;
+     painter->fillRect(xb+1,yb + 1,2 * del - 2, del - 2,Qt::white);
     // painter->fillRect(startPoint.x()+1,startPoint.y() + 1,2 * del - 2, del - 2,Qt::white);
 }
 

@@ -76,7 +76,15 @@ class FlipRotateCommand : public QUndoCommand
      bool dir;
      bool typeA;
      MakeSelected *mSel;
-
+     QPointF newStart;
+     QPointF newEnd;
+     QPointF oldStart;
+     QPointF oldEnd;
+     QVector< QVector<int> > thisSelectedArray;
+     int thisSelectedArrayXSize;
+     int thisSelectedArrayYSize;
+    void copySelectedArray();
+    void clearOldSelectedArray();
  };
 
 class SelectCommand : public QUndoCommand

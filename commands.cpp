@@ -127,8 +127,6 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
            mSel->setSelectedArrayYSize(thisSelectedArrayYSize);
            mSel->fillSelectedArrayfromOutside(thisSelectedArray);
            clearOldSelectedArray();
-            // mSel->setSelected(true);
-         // was  mSel->setCopied (true);
        }
          ///
 
@@ -307,8 +305,13 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
                  QUndoCommand *parent) : QUndoCommand(parent)
      {
         mSel = ms;
+        oldStart = mSel->getOldStartPoint();
+        oldEnd = mSel->getOldEndPoint();
+        newStart = mSel->getStartPoint();
+        newEnd = mSel->getEndPoint();
         dir = direction;
         typeA = typeOfAction;
+        copySelectedArray();
      /*   if ( typeA )
         {
            mSel->flip(dir);
@@ -321,31 +324,81 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
 
       FlipRotateCommand::~FlipRotateCommand()
       {
-
+          if ( thisSelectedArray.size() != 0 )
+          {
+              deleteVectorContent( thisSelectedArray, thisSelectedArrayXSize );
+           }
       }
 
       void FlipRotateCommand::undo()
       {
-          if ( typeA )
+        // mSel->setStartPoint(oldStart);
+       //  mSel->setEndPoint(oldEnd);
+         mSel->setStartPoint(newStart);
+         mSel->setEndPoint(newEnd);
+         mSel->setRenderSelected(true);
+         mSel->setSelected(true);
+          ///
+         if ( mSel->getSelectedArrayXSize() == 0 && mSel->getSelectedArrayYSize() == 0 )
+         {
+             mSel->setSelectedArrayXSize(thisSelectedArrayXSize);
+             mSel->setSelectedArrayYSize(thisSelectedArrayYSize);
+             mSel->fillSelectedArrayfromOutside(thisSelectedArray);
+             clearOldSelectedArray();
+         }
+           ///
+
+       //was  mSel->pasteSelected(oldStart,false);
+           // make selected here and delete at the old palce
+           // move saved selected to the new place
+         mSel->update();
+    //   mSel->setSelected(false);
+         qDebug() << "flip undo";
+         /* was if ( typeA )
           {
               qDebug() << "flip undo";
              mSel->flip(dir);
           }
           else
           {
-              mSel->rotate(!dir);
-          }
+              mSel->rotate(dir);
+          }*/
       }
 
       void FlipRotateCommand::redo()
       {
-          if ( typeA )
+        mSel->setStartPoint(newStart);
+        mSel->setEndPoint(newEnd);
+        mSel->setRenderSelected(true);
+        mSel->setSelected( true );
+        mSel->update();
+        qDebug() << "flip redo ";
+        /*  if ( typeA )
           {
              mSel->flip(dir);
           }
           else
           {
               mSel->rotate(dir);
-          }
+          }*/
       }
 
+      void FlipRotateCommand::copySelectedArray()
+      {
+          thisSelectedArrayXSize = mSel->getSelectedArrayXSize();
+          thisSelectedArrayYSize = mSel->getSelectedArrayYSize();
+          allocateVector( thisSelectedArray, thisSelectedArrayXSize, thisSelectedArrayYSize );
+          QVector< QVector<int> > sA = *mSel->getSelectedArray();
+          for ( int i = 0; i < thisSelectedArrayXSize; i ++)
+          {
+              for ( int j = 0; j < thisSelectedArrayYSize; j ++)
+              {
+                  thisSelectedArray[i][j] = sA[i][j];
+              }
+          }
+       }
+      void FlipRotateCommand::clearOldSelectedArray()
+      {
+          mSel->clearSelected(newStart);
+          qDebug() << "new St " << newStart << ' ' << oldStart;
+      }
