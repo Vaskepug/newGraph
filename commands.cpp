@@ -1,7 +1,10 @@
 #include "commands.h"
 #include "functions.h"
 #include <QDebug>
-//AddCommand::AddCommand(MakeSelected::Choice cho, MakeSelected::coord1 cc,  QUndoCommand *parent)
+
+
+
+
 AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand *parent)
      : QUndoCommand(parent)
  {
@@ -78,8 +81,9 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
   }
 
 
-  MoveCommand::MoveCommand(MakeSelected *ms,
-              QUndoCommand *parent) : QUndoCommand(parent)
+ // MoveCommand::MoveCommand(MakeSelected *ms)
+  //    : QUndoCommand(parent)
+  MoveCommand::MoveCommand(MakeSelected *ms)
   {
      mSel = ms;
      //thisSelectedArray = mSel->getSelectedArray();
@@ -89,7 +93,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
      newStart = mSel->getStartPoint();
      newEnd = mSel->getEndPoint();
      copySelectedArray();
-     // qDebug() << "added move " <<  oldEnd.x() << ' ' << newEnd.x();
+     qDebug() << "added move " <<  oldEnd.x() << ' ' << newEnd.x();
   }
 
    MoveCommand::~MoveCommand()
@@ -115,7 +119,6 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
 
    void MoveCommand::undo()
    {
-       mSel->setStartPoint(oldStart);
        mSel->setStartPoint(oldStart);
        mSel->setEndPoint(oldEnd);
        mSel->setRenderSelected(true);
@@ -148,7 +151,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        qDebug() << "Move redo ";
    }
 
-   void MoveCommand::copySelectedArray()
+ /*  void MoveCommand::copySelectedArray()
    {
        thisSelectedArrayXSize = mSel->getSelectedArrayXSize();
        thisSelectedArrayYSize = mSel->getSelectedArrayYSize();
@@ -163,37 +166,31 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
        }
        // locate
        // was locateArray(thisSelectedArray,thisSelectedArrayXSize,thisSelectedArrayYSize);
-     /*  thisSelectedArray = new int *[mSel->getSelectedArrayXSize()];
-       for (int i = 0; i < thisSelectedArrayXSize; i ++)
-       {
-           thisSelectedArray[i] = new int [mSel->getSelectedArrayYSize()];
-       }*/
+     //  thisSelectedArray = new int *[mSel->getSelectedArrayXSize()];
+      // for (int i = 0; i < thisSelectedArrayXSize; i ++)
+       //{
+         //  thisSelectedArray[i] = new int [mSel->getSelectedArrayYSize()];
+      // }
        // copy
        //int **sA = mSel->getSelectedArray();
-    /*   QVector< QVector<int> > sA = mSel->getSelectedArray();
-       for ( int i = 0; i < thisSelectedArrayXSize; i ++)
-       {
-           for ( int j = 0; j < thisSelectedArrayYSize; j ++)
-           {
-               thisSelectedArray[i][j] = sA[i][j];
-           }
-       }*/
+    //   QVector< QVector<int> > sA = mSel->getSelectedArray();
+    //   for ( int i = 0; i < thisSelectedArrayXSize; i ++)
+     //  {
+     //      for ( int j = 0; j < thisSelectedArrayYSize; j ++)
+     //      {
+     //          thisSelectedArray[i][j] = sA[i][j];
+     //      }
+      // }
 
 
-   }
+   } */
 
-   void MoveCommand::clearOldSelectedArray()
+  /* void MoveCommand::clearOldSelectedArray()
    {
        mSel->clearSelected(newStart);
        qDebug() << "new St " << newStart << ' ' << oldStart;
-   }
+   }*/
 
-   void MoveCommand::pasteSelectedArray()
-   {
-     //  QPointF tmp;
-     //  tmp.setX();
-      //  mSel->pasteSelected(leftTopZero);
-   }
 
    ///////////
 
@@ -301,12 +298,19 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
           qDebug() << "Select redo";
       }
 
-    FlipRotateCommand::FlipRotateCommand(MakeSelected *ms, bool direction, bool typeOfAction,
-                 QUndoCommand *parent) : QUndoCommand(parent)
+
+    MyCommand::MyCommand(MakeSelected *ms)
+    {
+        mSel = ms;
+    }
+
+    FlipRotateCommand::FlipRotateCommand(MakeSelected *ms, bool direction, bool typeOfAction)
+     // FlipRotateCommand::FlipRotateCommand(MakeSelected *ms, bool direction, bool typeOfAction,
+     //                 MyCommand *parent) : MyCommand(parent)
      {
         mSel = ms;
-        oldStart = mSel->getOldStartPoint();
-        oldEnd = mSel->getOldEndPoint();
+     //   oldStart = mSel->getOldStartPoint();
+     //   oldEnd = mSel->getOldEndPoint();
         newStart = mSel->getStartPoint();
         newEnd = mSel->getEndPoint();
         dir = direction;
@@ -354,7 +358,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
          mSel->update();
     //   mSel->setSelected(false);
          qDebug() << "flip undo";
-         /* was if ( typeA )
+          if ( typeA )
           {
               qDebug() << "flip undo";
              mSel->flip(dir);
@@ -362,7 +366,7 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
           else
           {
               mSel->rotate(dir);
-          }*/
+          }
       }
 
       void FlipRotateCommand::redo()
@@ -373,17 +377,18 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
         mSel->setSelected( true );
         mSel->update();
         qDebug() << "flip redo ";
-        /*  if ( typeA )
+          if ( typeA )
           {
              mSel->flip(dir);
           }
           else
           {
               mSel->rotate(dir);
-          }*/
+          }
       }
 
-      void FlipRotateCommand::copySelectedArray()
+      //void FlipRotateCommand::copySelectedArray()
+      void MyCommand::copySelectedArray()
       {
           thisSelectedArrayXSize = mSel->getSelectedArrayXSize();
           thisSelectedArrayYSize = mSel->getSelectedArrayYSize();
@@ -397,8 +402,8 @@ DeleteCommand::DeleteCommand(MakeSelected *ms, MakeSelected::coord1 cc,
               }
           }
        }
-      void FlipRotateCommand::clearOldSelectedArray()
+     // void FlipRotateCommand::clearOldSelectedArray()
+       void MyCommand::clearOldSelectedArray()
       {
           mSel->clearSelected(newStart);
-          qDebug() << "new St " << newStart << ' ' << oldStart;
       }

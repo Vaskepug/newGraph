@@ -366,6 +366,7 @@ void MakeSelected::flipHorizontally()
 {
    // flip(false);
     QUndoCommand *flipCommand = new FlipRotateCommand(this,false,true);
+   // MyCommand *flipCommand = new FlipRotateCommand(this,false,true);
     qst ->push(flipCommand);
 }
 
@@ -1302,9 +1303,9 @@ void MakeSelected::paint (QPainter *painter,
     //int cellX = 0;
     //int cellY = 0;
    //  qDebug() << " in paint ";
-    if ( selected )
+    if ( selected ) // it s for the move command  && selectedArray.size() > 0 )
     {
-        qDebug() << " in selected ";
+        qDebug() << " in selected " << ' '<< selectedArray.size() ;
         if ( endPoint.x() > width )
         {
             endPoint.setX(width);
@@ -1364,7 +1365,7 @@ void MakeSelected::paint (QPainter *painter,
      else
     {
         // not selected
-      //  qDebug() << "cleared";
+        qDebug() << "cleared";
        // clearArea(painter); why is this here
 
     }
@@ -1372,8 +1373,9 @@ void MakeSelected::paint (QPainter *painter,
     renderArea(painter);
     if ( selectedArray.size() != 0 )
     {
-      //  qDebug() << "shift in paint and render where selected";
+        qDebug() << "shift in paint and render where selected";
         renderSelectedArea(painter); // here pay attention to shift
+        qDebug() << "shift ttttttt";
 
     }
     else qDebug() << "no selected array";
@@ -1455,7 +1457,7 @@ bool MakeSelected ::addSelectedArray(void)
 
 void MakeSelected :: renderSelectedArea(QPainter *painter)
 {
-  //  qDebug() << "render selected area";
+    qDebug() << "render selected area";
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap));
     //int begx= startPoint.x();
     //int begy= startPoint.y();
@@ -1493,7 +1495,7 @@ void MakeSelected :: renderSelectedArea(QPainter *painter)
                  //   painter->drawLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
                  //   painter->drawLine(endPoint.x(),startPoint.y(),startPoint.x(),endPoint.y());
                 }
-                else;// qDebug() << "other";
+                else qDebug() << "other";
             }
             j1 ++;
         }

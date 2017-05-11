@@ -4,6 +4,27 @@
  #include <QUndoCommand>
 #include "makeselected.h"
 
+class MyCommand : public QUndoCommand
+{
+public:
+    MyCommand() {};
+    MyCommand(MakeSelected *ms);
+    ~MyCommand() {};
+
+   // virtual void undo();
+   // virtual void redo();
+protected:
+    MakeSelected *mSel;
+    QVector< QVector<int> > thisSelectedArray;
+    int thisSelectedArrayXSize;
+    int thisSelectedArrayYSize;
+    QPointF newStart;
+    QPointF newEnd;
+    void copySelectedArray();
+    void clearOldSelectedArray();
+};
+
+
 class AddCommand : public QUndoCommand
  {
  public:
@@ -37,36 +58,37 @@ class DeleteCommand : public QUndoCommand
 
  };
 
-class MoveCommand : public QUndoCommand
+//class MoveCommand : public QUndoCommand
+class MoveCommand : public MyCommand
  {
  public:
-     MoveCommand(MakeSelected *ms,
-                 QUndoCommand *parent = 0);
+     MoveCommand(MakeSelected *ms);
+    // MoveCommand(MakeSelected *ms);
      ~MoveCommand();
 
      void undo();
      void redo();
-    friend void deleteArray(int **array1, int xlen);
+
  private:
-     MakeSelected *mSel;
+  //   MakeSelected *mSel;
      //int **thisSelectedArray;
-     QVector< QVector<int> > thisSelectedArray;
-     int thisSelectedArrayXSize;
-     int thisSelectedArrayYSize;
-     QPointF newStart;
-     QPointF newEnd;
+ //    QVector< QVector<int> > thisSelectedArray;
+ //    int thisSelectedArrayXSize;
+ //    int thisSelectedArrayYSize;
+ //    QPointF newStart;
+ //    QPointF newEnd;
      QPointF oldStart;
      QPointF oldEnd;
-     void copySelectedArray();
-     void pasteSelectedArray();
-     void clearOldSelectedArray();
+  //   void copySelectedArray();
+  //   void clearOldSelectedArray();
  };
 
-class FlipRotateCommand : public QUndoCommand
+//class FlipRotateCommand : public QUndoCommand
+class FlipRotateCommand : public MyCommand
  {
  public:
      FlipRotateCommand(MakeSelected *ms, bool direction,
-                       bool typeOfAction, QUndoCommand *parent = 0);
+                       bool typeOfAction);
      ~FlipRotateCommand();
 
      void undo();
@@ -75,16 +97,14 @@ class FlipRotateCommand : public QUndoCommand
  private:
      bool dir;
      bool typeA;
-     MakeSelected *mSel;
+ /*    MakeSelected *mSel;
      QPointF newStart;
      QPointF newEnd;
-     QPointF oldStart;
-     QPointF oldEnd;
      QVector< QVector<int> > thisSelectedArray;
      int thisSelectedArrayXSize;
      int thisSelectedArrayYSize;
     void copySelectedArray();
-    void clearOldSelectedArray();
+    void clearOldSelectedArray();*/
  };
 
 class SelectCommand : public QUndoCommand
