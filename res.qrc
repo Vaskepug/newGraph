@@ -31,5 +31,7 @@
         <file>icons/dcrossed.png</file>
         <file>icons/dm.png</file>
         <file>icons/dmiddle.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/deraser.png</file>
     </qresource>
 </RCC>

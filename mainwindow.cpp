@@ -80,6 +80,7 @@ MainWindow::~MainWindow()
     delete makeCross;
     delete makeCircle;
     delete makeM;
+    delete erase;
     delete makeBrick;
     delete makeCrossed;
     delete makeMiddle;
@@ -202,16 +203,17 @@ void MainWindow::createToolBars(void)
     makeCircle->setCheckable(true);
   //  connect(makeCircle, SIGNAL(triggered()), this, SLOT(makeCirclef()));
 
-    makeM = new QAction("Make M",this);
-    vertActions[5] = makeM;
-    QIcon *icoM = new QIcon();
-    icoM->addPixmap(QPixmap(":/icons/m.png"),QIcon::Normal,QIcon::On);
-    icoM->addPixmap(QPixmap(":/icons/dm.png"),QIcon::Normal,QIcon::Off);
-    makeM->setIcon(*icoM);
-   // makeM->setIcon(QIcon(":/icons/m.png"));
-    makeM->setData(int(MakeSelected::MakeM));
-    makeM->setCheckable(true);
+    //////////////
 
+    makeCrossed = new QAction("Make Crossed",this);
+    vertActions[3] = makeCrossed;
+    QIcon *icoCrossed = new QIcon();
+    icoCrossed->addPixmap(QPixmap(":/icons/crossed.png"),QIcon::Normal,QIcon::On);
+    icoCrossed->addPixmap(QPixmap(":/icons/dcrossed.png"),QIcon::Normal,QIcon::Off);
+    makeCrossed->setIcon(*icoCrossed);
+   // makeCrossed->setIcon(QIcon(":/icons/crossed.png"));
+    makeCrossed->setData(int(MakeSelected::MakeCrossed));
+    makeCrossed->setCheckable(true);
     ////////////
     makeMiddle = new QAction("Make Middle",this);
     vertActions[4] = makeMiddle;
@@ -224,20 +226,30 @@ void MainWindow::createToolBars(void)
     makeMiddle->setCheckable(true);
 
     //////////////
+    erase = new QAction("Erase",this);
+    vertActions[5] = erase;
+    QIcon *icoE = new QIcon();
+    icoE->addPixmap(QPixmap(":/icons/eraser.png"),QIcon::Normal,QIcon::On);
+    icoE->addPixmap(QPixmap(":/icons/deraser.png"),QIcon::Normal,QIcon::Off);
+    erase->setIcon(*icoE);
+   // makeM->setIcon(QIcon(":/icons/m.png"));
+    erase->setData(int(MakeSelected::Erase));
+    erase->setCheckable(true);
 
-    makeCrossed = new QAction("Make Crossed",this);
-    vertActions[3] = makeCrossed;
-    QIcon *icoCrossed = new QIcon();
-    icoCrossed->addPixmap(QPixmap(":/icons/crossed.png"),QIcon::Normal,QIcon::On);
-    icoCrossed->addPixmap(QPixmap(":/icons/dcrossed.png"),QIcon::Normal,QIcon::Off);
-    makeCrossed->setIcon(*icoCrossed);
-   // makeCrossed->setIcon(QIcon(":/icons/crossed.png"));
-    makeCrossed->setData(int(MakeSelected::MakeCrossed));
-    makeCrossed->setCheckable(true);
+    ////////////////
+    makeM = new QAction("Make M",this);
+    vertActions[6] = makeM;
+    QIcon *icoM = new QIcon();
+    icoM->addPixmap(QPixmap(":/icons/m.png"),QIcon::Normal,QIcon::On);
+    icoM->addPixmap(QPixmap(":/icons/dm.png"),QIcon::Normal,QIcon::Off);
+    makeM->setIcon(*icoM);
+   // makeM->setIcon(QIcon(":/icons/m.png"));
+    makeM->setData(int(MakeSelected::MakeM));
+    makeM->setCheckable(true);
 
     ////////
     makeBrick = new QAction("Make Brick",this);
-    vertActions[6] = makeBrick;
+    vertActions[7] = makeBrick;
     QIcon *icoBrick = new QIcon();
     icoBrick->addPixmap(QPixmap(":/icons/brick.png"),QIcon::Normal,QIcon::On);
     icoBrick->addPixmap(QPixmap(":/icons/dbrick.png"),QIcon::Normal,QIcon::Off);
@@ -340,6 +352,7 @@ void MainWindow::createToolBars(void)
     vertActionGroup->addAction(makeCircle);
     vertActionGroup->addAction(makeCrossed);
     vertActionGroup->addAction(makeMiddle);
+    vertActionGroup->addAction(erase);
     vertActionGroup->addAction(makeM);
     vertActionGroup->addAction(makeBrick);
   //  vertActionGroup->addAction(makeCrossed);

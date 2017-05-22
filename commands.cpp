@@ -32,8 +32,17 @@ AddCommand::AddCommand(MakeSelected *ms, MakeSelected::coord1 cc,  QUndoCommand 
  void AddCommand::redo()
  {
      mSel->setChoiceSimple(ch1);
-     mSel->drawElement(cc1);
-     qDebug() << "redo add";
+    /* if ( ch1 == 5)
+     {
+         qDebug() << "here goes 5";
+         mSel->removeElement(cc1);
+     }
+     else
+     {*/
+      //  mSel->setChoiceSimple(ch1);
+        mSel->drawElement(cc1);
+  //   }
+     qDebug() << "redo add " << ch1 ;
  }
 
  ////////////////////////

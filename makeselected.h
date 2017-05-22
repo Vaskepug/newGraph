@@ -21,7 +21,7 @@ class MakeSelected: public QGraphicsItem
 public:
     typedef void DrawFunctions( QPainter *painter,int,int,int,int);
     typedef void (MakeSelected::*DrawFunctionsPtr)(QPainter *painter,int,int,int,int);
-    DrawFunctionsPtr drawFunctions[7];
+    DrawFunctionsPtr drawFunctions[8];
 
     ~MakeSelected();
     //MakeSelected(qreal width, qreal height, int del, TabClass *widget);
@@ -34,7 +34,7 @@ public:
    // bool itemToDraw;
     void setSelected(bool meaning);
     enum Choice { Nothing, MakeCross, MakeCorn, MakeCrossed,
-                  MakeMiddle, MakeM, MakeBrick,MakeBigElement};
+                  MakeMiddle,Erase, Choice_Double, MakeM, MakeBrick,MakeBigElement};
  //   enum ItemBehaviour { NotDraw, Draw, Delete };
 //    Choice choice;
  //   ItemBehaviour itemToDraw;
@@ -112,6 +112,7 @@ private:
     QPointF oldStartPoint;
     QPointF oldEndPoint;
     QPointF whereClickedWithShift;
+    int thisPressedMouse;
 
     int delX;
     int delY;
@@ -124,6 +125,7 @@ private:
     virtual void paint (QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *); // must be
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    //virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
     int setToGrid( qreal t );
@@ -155,6 +157,8 @@ private:
    DrawFunctions drawMiddle;
    DrawFunctions drawM;
    DrawFunctions drawBrick;
+   DrawFunctions erase;
+   DrawFunctions empty;
    DrawFunctions drawBigElement;
 
    //int **selectedArray;

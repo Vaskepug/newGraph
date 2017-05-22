@@ -35,6 +35,7 @@ public:
     QAction* makeCircle;
     QAction* makeM;
     QAction* makeCrossed;
+    QAction* erase;
     QAction* makeMiddle;
     QAction* makeBrick;
     QAction* setGrid;
@@ -86,7 +87,7 @@ private:
     TWidget *tabWidget;
     TabClass *tabwid;
     int indexNewTabs;
-    QAction* vertActions[7];
+    QAction* vertActions[8];
     void setRightTool(void);
     bool wasCopied;
     int currentTab;
